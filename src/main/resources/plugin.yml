@@ -1,0 +1,4 @@
+name: PrimaxCore
+version: '1.0.0'
+main: net.primaxstudios.primaxcore.PrimaxCore
+api-version: '1.21'
