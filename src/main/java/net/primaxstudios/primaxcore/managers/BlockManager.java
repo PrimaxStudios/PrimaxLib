@@ -12,7 +12,6 @@ import net.primaxstudios.primaxcore.listeners.BlockListener;
 import net.primaxstudios.primaxcore.pdc.PersistentTypes;
 import net.primaxstudios.primaxcore.registries.BlockRegistry;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
-import net.primaxstudios.primaxcore.utils.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

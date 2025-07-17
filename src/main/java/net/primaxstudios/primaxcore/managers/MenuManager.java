@@ -11,8 +11,6 @@ import net.primaxstudios.primaxcore.menus.ReferenceMenu;
 import net.primaxstudios.primaxcore.placeholders.objects.PlaceholderComponent;
 import net.primaxstudios.primaxcore.registries.MenuRegistry;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
-import net.primaxstudios.primaxcore.utils.Key;
-import net.primaxstudios.primaxcore.utils.Operation;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;

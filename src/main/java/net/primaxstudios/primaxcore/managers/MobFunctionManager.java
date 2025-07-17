@@ -4,7 +4,6 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.primaxstudios.primaxcore.functions.MobFunction;
 import net.primaxstudios.primaxcore.registries.MobFunctionRegistry;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
-import net.primaxstudios.primaxcore.utils.Key;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

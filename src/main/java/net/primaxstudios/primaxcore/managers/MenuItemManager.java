@@ -7,7 +7,6 @@ import net.primaxstudios.primaxcore.menus.item.MenuItem;
 import net.primaxstudios.primaxcore.menus.item.MultiSlotMenuItem;
 import net.primaxstudios.primaxcore.menus.item.SingleSlotMenuItem;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
-import net.primaxstudios.primaxcore.utils.Operation;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

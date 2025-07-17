@@ -2,17 +2,14 @@ package net.primaxstudios.primaxcore;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-import net.primaxstudios.primaxcore.managers.BlockManager;
+import net.primaxstudios.primaxcore.locale.Locale;
 import net.primaxstudios.primaxcore.configs.core.Configs;
 import net.primaxstudios.primaxcore.managers.ActionManager;
 import net.primaxstudios.primaxcore.managers.ItemManager;
 import lombok.Getter;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
-import net.primaxstudios.primaxcore.managers.MenuManager;
 import net.primaxstudios.primaxcore.managers.RequirementManager;
-import net.primaxstudios.primaxcore.managers.MobManager;
 import net.primaxstudios.primaxcore.managers.RandomizerManager;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,6 +22,7 @@ public final class PrimaxCore extends JavaPlugin {
     private Permission permission;
     private HeadDatabaseAPI headDatabaseAPI;
     private Configs configs;
+    private Locale locale;
     private ActionManager actionManager;
     private RequirementManager requirementManager;
     private ItemManager itemManager;
@@ -53,23 +51,10 @@ public final class PrimaxCore extends JavaPlugin {
 
         itemManager = new ItemManager();
 
-        menuManager = new MenuManager();
-
-        blockManager = new BlockManager();
-
-        mobManager = new MobManager();
-
         randomizerManager = new RandomizerManager();
 
         commandManager = new CoreCommandManager();
         commandManager.register();
-
-        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
-
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-            CoreEnableEvent event = new CoreEnableEvent();
-            event.callEvent();
-        });
     }
 
     public void reload() {

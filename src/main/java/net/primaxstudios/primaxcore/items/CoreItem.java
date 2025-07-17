@@ -9,7 +9,6 @@ import net.primaxstudios.primaxcore.placeholders.Placeholder;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
 import lombok.Setter;
-import net.primaxstudios.primaxcore.utils.Key;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 

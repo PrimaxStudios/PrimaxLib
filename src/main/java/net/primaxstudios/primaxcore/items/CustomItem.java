@@ -3,7 +3,6 @@ package net.primaxstudios.primaxcore.items;
 import lombok.Getter;
 import lombok.Setter;
 import net.primaxstudios.primaxcore.utils.ItemUtils;
-import net.primaxstudios.primaxcore.utils.Keyed;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

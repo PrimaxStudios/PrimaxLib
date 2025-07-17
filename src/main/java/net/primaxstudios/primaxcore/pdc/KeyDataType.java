@@ -1,6 +1,5 @@
 package net.primaxstudios.primaxcore.pdc;
 
-import net.primaxstudios.primaxcore.utils.Key;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;

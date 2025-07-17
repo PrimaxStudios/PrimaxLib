@@ -5,7 +5,6 @@ import lombok.Getter;
 import net.primaxstudios.primaxcore.functions.MenuFunction;
 import net.primaxstudios.primaxcore.registries.MenuFunctionRegistry;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
-import net.primaxstudios.primaxcore.utils.Key;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

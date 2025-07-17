@@ -10,7 +10,6 @@ import net.primaxstudios.primaxcore.mobs.ReferencedMob;
 import net.primaxstudios.primaxcore.placeholders.objects.PlaceholderComponent;
 import net.primaxstudios.primaxcore.registries.MobRegistry;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
-import net.primaxstudios.primaxcore.utils.Key;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;

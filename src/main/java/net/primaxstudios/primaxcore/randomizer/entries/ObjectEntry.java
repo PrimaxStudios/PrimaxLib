@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 public class ObjectEntry<T> extends RandomizerEntry<T> {
 
-    private T object;
+    private final T object;
 
     public ObjectEntry(double weight, T object) {
         super(weight);

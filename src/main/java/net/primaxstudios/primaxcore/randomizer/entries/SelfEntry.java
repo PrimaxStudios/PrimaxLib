@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 public class SelfEntry<T> extends RandomizerEntry<T> {
 
-    private Randomizer<T> randomizer;
+    private final Randomizer<T> randomizer;
 
     public SelfEntry(double weight, Randomizer<T> randomizer) {
         super(weight);

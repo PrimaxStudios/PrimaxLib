@@ -5,7 +5,6 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
 import net.primaxstudios.primaxcore.registries.ItemFunctionRegistry;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
-import net.primaxstudios.primaxcore.utils.Key;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
