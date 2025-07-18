@@ -12,7 +12,7 @@ import java.io.File;
 
 public class CustomModelDataProperty implements ItemProperty {
 
-    public static final String ID = "custom-model-data";
+    public static final String ID = "custom_model_data";
     private static final Logger logger = LoggerFactory.getLogger(CustomModelDataProperty.class);
 
     @Override

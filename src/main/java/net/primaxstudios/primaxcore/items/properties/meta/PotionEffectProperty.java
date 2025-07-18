@@ -16,7 +16,7 @@ import java.util.List;
 
 public class PotionEffectProperty implements ItemProperty {
 
-    public static final String ID = "potion-effects";
+    public static final String ID = "potion_effects";
     private static final Logger logger = LoggerFactory.getLogger(PotionEffectProperty.class);
 
     @Override

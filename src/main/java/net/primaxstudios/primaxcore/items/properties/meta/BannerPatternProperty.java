@@ -21,7 +21,7 @@ import java.util.List;
 
 public class BannerPatternProperty implements ItemProperty {
 
-    public static final String ID = "banner-patterns";
+    public static final String ID = "banner_patterns";
     private static final Logger logger = LoggerFactory.getLogger(BannerPatternProperty.class);
 
     private List<Pattern> createPatterns(Section section, Object sectionName, File file) {

@@ -2,38 +2,40 @@ package net.primaxstudios.primaxcore.currencies;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.primaxstudios.primaxcore.placeholders.Placeholder;
-import net.primaxstudios.primaxcore.placeholders.objects.PlaceholderString;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
 public class CustomCurrency extends Currency {
 
-    private final PlaceholderString depositCommand;
-    private final PlaceholderString withdrawCommand;
-    private final PlaceholderString balancePlaceholder;
+    private final String depositCommand;
+    private final String withdrawCommand;
+    private final String balancePlaceholder;
 
     public CustomCurrency(Section section) {
         super(section);
-        this.depositCommand = new PlaceholderString(section.getString("deposit-command"));
-        this.withdrawCommand = new PlaceholderString(section.getString("withdraw-command"));
-        this.balancePlaceholder = new PlaceholderString(section.getString("balance-placeholder"));
+        this.depositCommand = section.getString("deposit-command");
+        this.withdrawCommand = section.getString("withdraw-command");
+        this.balancePlaceholder = section.getString("balance-placeholder");
     }
 
     @Override
     public boolean deposit(OfflinePlayer offlinePlayer, double amount) {
-        runCommand(depositCommand.getObject(getPlaceholder(offlinePlayer, amount)));
+        Placeholder placeholder = getPlaceholder(offlinePlayer, amount);
+        runCommand(placeholder.setPlaceholders(depositCommand));
         return true;
     }
 
     @Override
     public boolean withdraw(OfflinePlayer offlinePlayer, double amount) {
-        runCommand(withdrawCommand.getObject(getPlaceholder(offlinePlayer, amount)));
-        return false;
+        Placeholder placeholder = getPlaceholder(offlinePlayer, amount);
+        runCommand(placeholder.setPlaceholders(withdrawCommand));
+        return true;
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        return Double.parseDouble(balancePlaceholder.getObject(new Placeholder(offlinePlayer)));
+        Placeholder placeholder = new Placeholder(offlinePlayer);
+        return Double.parseDouble(placeholder.setPlaceholders(balancePlaceholder));
     }
 
     private void runCommand(String command) {

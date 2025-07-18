@@ -19,7 +19,7 @@ import java.util.Locale;
 
 public class PersistentDataProperty implements ItemProperty {
 
-    public static final String ID = "persistent-data";
+    public static final String ID = "persistent_data";
     private static final Logger logger = LoggerFactory.getLogger(PersistentDataProperty.class);
 
     private List<PersistentObject> createObjects(Section section) {

@@ -13,7 +13,7 @@ import java.io.File;
 
 public class AxolotlProperty implements ItemProperty {
 
-    public static final String ID = "axolotl-variant";
+    public static final String ID = "axolotl_variant";
     private static final Logger logger = LoggerFactory.getLogger(AxolotlProperty.class);
 
     @Override

@@ -1,17 +1,13 @@
 package net.primaxstudios.primaxcore.managers;
 
 import net.primaxstudios.primaxcore.PrimaxCore;
-import net.primaxstudios.primaxcore.hooks.item.EcoItemsHook;
+import net.primaxstudios.primaxcore.hooks.EcoItemsHook;
+import net.primaxstudios.primaxcore.items.CoreItem;
 import net.primaxstudios.primaxcore.items.CustomItem;
-import net.primaxstudios.primaxcore.hooks.item.ExecutableItemsHook;
-import net.primaxstudios.primaxcore.hooks.item.HeadDatabaseHook;
-import net.primaxstudios.primaxcore.hooks.item.ItemsAdderHook;
+import net.primaxstudios.primaxcore.hooks.ExecutableItemsHook;
+import net.primaxstudios.primaxcore.hooks.HeadDatabaseHook;
+import net.primaxstudios.primaxcore.hooks.ItemsAdderHook;
 import net.primaxstudios.primaxcore.items.properties.ItemProperty;
-import net.primaxstudios.primaxcore.items.properties.item.LoreProperty;
-import net.primaxstudios.primaxcore.items.properties.item.NameProperty;
-import net.primaxstudios.primaxcore.listeners.ItemListener;
-import net.primaxstudios.primaxcore.pdc.PersistentTypes;
-import net.primaxstudios.primaxcore.registries.ItemRegistry;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import com.ssomar.score.api.executableitems.ExecutableItemsAPI;
 import com.ssomar.score.api.executableitems.config.ExecutableItemInterface;
@@ -20,10 +16,10 @@ import com.willfp.ecoitems.items.EcoItems;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.lone.itemsadder.api.CustomStack;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,61 +32,36 @@ public class ItemManager {
 
     private static final Logger logger = LoggerFactory.getLogger(ItemManager.class);
     private final ItemPropertyManager propertyManager = new ItemPropertyManager();
-    private final ItemFunctionManager functionManager = new ItemFunctionManager();
-    private final ItemRegistry registry = new ItemRegistry();
 
-    public ItemManager() {
-        Bukkit.getServer().getPluginManager().registerEvents(new ItemListener(this), PrimaxCore.inst());
-    }
-
-    public CustomItem getItem(ItemStack item) {
+    public String getKey(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
             return null;
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        Key key = container.get(PrimaxCore.IDENTIFIER_KEY, PersistentTypes.KEY);
-        if (key == null) {
-            return null;
-        }
-        return registry.getObject(key);
+        return container.get(PrimaxCore.IDENTIFIER_KEY, PersistentDataType.STRING);
     }
 
-    public CustomItem getItem(JavaPlugin plugin, Section section) {
-        if (section.contains("reference")) {
-            return new ReferenceItem(ConfigUtils.parseKey(section, "reference"));
+    public CustomItem getItem(Section section) {
+        CustomItem hookItem = createHookItem(section);
+        if (hookItem != null) {
+            return hookItem;
         }
-        CustomItem customItem = createHookItem(section);
-        if (customItem == null) {
-            customItem = createCoreItem(plugin, section);
-        }
-        if (section.contains("functions")) {
-            customItem.setFunctions(functionManager.getFunctions(plugin, section.getSection("functions")));
-        }
-        if (customItem.containsKey()) {
-            registry.register(customItem.getKey(), customItem);
-        }
-        return customItem;
+        return createCoreItem(section);
     }
 
-    private CoreItem createCoreItem(JavaPlugin plugin, Section section) {
+    private CoreItem createCoreItem(Section section) {
         ItemStack item = propertyManager.getRegistry().getMaterialProperty().getItem(section);
         if (item == null) {
             logger.warn("Failed to create ItemStack from section '{}' of '{}'", section.getName(), section.getRoot().getFile());
             throw new RuntimeException();
         }
         CoreItem coreItem = section.contains("id")
-                ? new CoreItem(new Key(plugin, section.getString("id")), item)
+                ? new CoreItem(section.getString("id"), item)
                 : new CoreItem(item);
 
         for (ItemProperty property : propertyManager.getProperties(section)) {
             coreItem.setProperty(property, section);
-        }
-        if (section.contains(NameProperty.ID)) {
-            coreItem.setNameProperty(new NameProperty(section));
-        }
-        if (section.contains(LoreProperty.ID)) {
-            coreItem.setLoreProperty(new LoreProperty(section));
         }
         return coreItem;
     }
@@ -121,22 +92,22 @@ public class ItemManager {
 
     public List<CustomItem> load(JavaPlugin plugin, String folder) {
         File newFolder = new File(plugin.getDataFolder() + "/" + folder);
-        return getItems(plugin, ConfigUtils.listFilesDeep(newFolder));
+        return getItems(ConfigUtils.listFilesDeep(newFolder));
     }
 
-    public CustomItem getItem(JavaPlugin plugin, File file) {
-        return getItem(plugin, ConfigUtils.load(file));
+    public CustomItem getItem(File file) {
+        return getItem(ConfigUtils.load(file));
     }
 
-    public List<CustomItem> getItems(JavaPlugin plugin, Section objectsSection) {
+    public List<CustomItem> getItems(Section objectsSection) {
         return objectsSection.getRoutesAsStrings(false).stream()
-                .map((route) -> getItem(plugin, objectsSection.getSection(route)))
+                .map((route) -> getItem(objectsSection.getSection(route)))
                 .toList();
     }
 
-    public List<CustomItem> getItems(JavaPlugin plugin, List<File> files) {
+    public List<CustomItem> getItems(List<File> files) {
         return files.stream()
-                .map(file -> getItem(plugin, file))
+                .map(this::getItem)
                 .toList();
     }
 }

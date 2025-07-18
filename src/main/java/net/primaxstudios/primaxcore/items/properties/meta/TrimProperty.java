@@ -18,7 +18,7 @@ import java.io.File;
 
 public class TrimProperty implements ItemProperty {
 
-    public static final String ID = "armor-trim";
+    public static final String ID = "armor_trim";
     private static final Logger logger = LoggerFactory.getLogger(TrimProperty.class);
 
     @Override

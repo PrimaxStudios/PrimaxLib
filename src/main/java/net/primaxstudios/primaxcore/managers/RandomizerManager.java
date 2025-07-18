@@ -2,12 +2,8 @@ package net.primaxstudios.primaxcore.managers;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.primaxstudios.primaxcore.PrimaxCore;
-import net.primaxstudios.primaxcore.blocks.CustomBlock;
 import net.primaxstudios.primaxcore.items.CustomItem;
-import net.primaxstudios.primaxcore.menus.CustomMenu;
-import net.primaxstudios.primaxcore.mobs.CustomMob;
 import net.primaxstudios.primaxcore.randomizer.Randomizer;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.function.Function;
 
@@ -37,19 +33,7 @@ public class RandomizerManager {
         return randomizer;
     }
 
-    public Randomizer<CustomItem> getCustomItemRandomizer(JavaPlugin plugin, Section randomizerSection) {
-        return getRandomizer(randomizerSection, section -> PrimaxCore.inst().getItemManager().getItem(plugin, section));
-    }
-
-    public Randomizer<CustomMenu> getMenuRandomizer(JavaPlugin plugin, Section randomizerSection) {
-        return getRandomizer(randomizerSection, section -> PrimaxCore.inst().getMenuManager().getMenu(plugin, section));
-    }
-
-    public Randomizer<CustomBlock> getCustomBlockRandomizer(JavaPlugin plugin, Section randomizerSection) {
-        return getRandomizer(randomizerSection, section -> PrimaxCore.inst().getBlockManager().getBlock(plugin, section));
-    }
-
-    public Randomizer<CustomMob> getCustomMobRandomizer(JavaPlugin plugin, Section randomizerSection) {
-        return getRandomizer(randomizerSection, section -> PrimaxCore.inst().getMobManager().getMob(plugin, section));
+    public Randomizer<CustomItem> getCustomItemRandomizer(Section randomizerSection) {
+        return getRandomizer(randomizerSection, section -> PrimaxCore.inst().getItemManager().getItem(section));
     }
 }

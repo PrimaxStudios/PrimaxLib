@@ -17,7 +17,7 @@ import java.io.File;
 
 public class BlockDataProperty implements ItemProperty {
 
-    public static final String ID = "block-data";
+    public static final String ID = "block_data";
     private static final Logger logger = LoggerFactory.getLogger(BlockDataProperty.class);
 
     @Override

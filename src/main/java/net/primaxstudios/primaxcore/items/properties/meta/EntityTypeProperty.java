@@ -15,7 +15,7 @@ import java.io.File;
 
 public class EntityTypeProperty implements ItemProperty {
 
-    public static final String ID = "entity-type";
+    public static final String ID = "entity_type";
     private static final Logger logger = LoggerFactory.getLogger(EntityTypeProperty.class);
 
     @Override
