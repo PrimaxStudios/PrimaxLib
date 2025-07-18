@@ -60,6 +60,7 @@ repositories {
         name = "nightexpressdev"
         url = 'https://repo.nightexpressdev.com/releases'
     }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
