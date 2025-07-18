@@ -123,23 +123,6 @@ public final class ConfigUtils {
         }
     }
 
-    public static Key parseKey(Section section, String route) {
-        Object sectionName = section.getName();
-        File filePath = section.getRoot().getFile();
-
-        String key = section.getString(route);
-        if (key == null) {
-            logger.warn("Missing '{}' key in section '{}' of '{}'", route, sectionName, filePath);
-            throw new RuntimeException();
-        }
-        try {
-            return Key.fromString(key);
-        }catch (Exception e) {
-            logger.warn("Invalid namespaced key '{}' in section '{}' of '{}'", key, sectionName, filePath, e);
-            throw new RuntimeException();
-        }
-    }
-
     public static PotionEffect parsePotionEffect(Section section) {
         Object sectionName = section.getName();
         File filePath = section.getRoot().getFile();

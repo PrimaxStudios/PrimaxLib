@@ -7,6 +7,7 @@ import net.primaxstudios.primaxcore.configs.core.Configs;
 import net.primaxstudios.primaxcore.managers.ItemManager;
 import lombok.Getter;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
+import net.primaxstudios.primaxcore.managers.MenuManager;
 import net.primaxstudios.primaxcore.managers.RandomizerManager;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -23,9 +24,8 @@ public final class PrimaxCore extends JavaPlugin {
     private HeadDatabaseAPI headDatabaseAPI;
     private Configs configs;
     private Locale locale;
-    private ActionManager actionManager;
-    private RequirementManager requirementManager;
     private ItemManager itemManager;
+    private MenuManager menuManager;
     private RandomizerManager randomizerManager;
 
     @Override
@@ -45,16 +45,11 @@ public final class PrimaxCore extends JavaPlugin {
         locale = new Locale();
         locale.reload(this);
 
-        actionManager = new ActionManager();
-
-        requirementManager = new RequirementManager();
-
         itemManager = new ItemManager();
 
-        randomizerManager = new RandomizerManager();
+        menuManager = new MenuManager();
 
-        commandManager = new CoreCommandManager();
-        commandManager.register();
+        randomizerManager = new RandomizerManager();
     }
 
     public void reload() {
