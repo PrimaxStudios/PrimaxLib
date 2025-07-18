@@ -1,27 +1,25 @@
 package net.primaxstudios.primaxcore.items;
 
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
-import lombok.Setter;
+import net.primaxstudios.primaxcore.PrimaxCore;
+import net.primaxstudios.primaxcore.items.properties.ItemProperty;
 import net.primaxstudios.primaxcore.utils.ItemUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
-@Getter @Setter
-public abstract class CustomItem implements Keyed {
+import java.util.Objects;
 
-    private final ItemStack bukkitItem;
+@Getter
+public abstract class CustomItem {
 
-    public CustomItem(ItemStack bukkitItem) {
-        this.bukkitItem = bukkitItem;
-    }
 
-    public abstract int getAmount();
 
-    public abstract boolean isItem(ItemStack item, boolean ignoreAmount);
 
-    protected abstract ItemStack getItem();
 
     public boolean isItem(ItemStack item) {
         return isItem(item, false);

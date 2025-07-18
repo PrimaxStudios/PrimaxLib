@@ -10,6 +10,7 @@ import lombok.Getter;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import net.primaxstudios.primaxcore.managers.RequirementManager;
 import net.primaxstudios.primaxcore.managers.RandomizerManager;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class PrimaxCore extends JavaPlugin {
 
     public static final String NAMESPACE = "primaxcore";
+    public static final NamespacedKey IDENTIFIER_KEY = new NamespacedKey(NAMESPACE, "key");
     private static PrimaxCore instance;
     private Economy economy;
     private Permission permission;

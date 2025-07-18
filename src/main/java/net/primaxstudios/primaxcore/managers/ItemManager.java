@@ -2,14 +2,13 @@ package net.primaxstudios.primaxcore.managers;
 
 import net.primaxstudios.primaxcore.PrimaxCore;
 import net.primaxstudios.primaxcore.hooks.item.EcoItemsHook;
-import net.primaxstudios.primaxcore.items.CoreItem;
 import net.primaxstudios.primaxcore.items.CustomItem;
 import net.primaxstudios.primaxcore.hooks.item.ExecutableItemsHook;
 import net.primaxstudios.primaxcore.hooks.item.HeadDatabaseHook;
 import net.primaxstudios.primaxcore.hooks.item.ItemsAdderHook;
 import net.primaxstudios.primaxcore.items.properties.ItemProperty;
-import net.primaxstudios.primaxcore.items.properties.placeholder.LoreProperty;
-import net.primaxstudios.primaxcore.items.properties.placeholder.NameProperty;
+import net.primaxstudios.primaxcore.items.properties.item.LoreProperty;
+import net.primaxstudios.primaxcore.items.properties.item.NameProperty;
 import net.primaxstudios.primaxcore.listeners.ItemListener;
 import net.primaxstudios.primaxcore.pdc.PersistentTypes;
 import net.primaxstudios.primaxcore.registries.ItemRegistry;

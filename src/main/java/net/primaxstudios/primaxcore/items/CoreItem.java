@@ -2,30 +2,26 @@ package net.primaxstudios.primaxcore.items;
 
 import net.primaxstudios.primaxcore.PrimaxCore;
 import net.primaxstudios.primaxcore.items.properties.ItemProperty;
-import net.primaxstudios.primaxcore.items.properties.placeholder.LoreProperty;
-import net.primaxstudios.primaxcore.items.properties.placeholder.NameProperty;
-import net.primaxstudios.primaxcore.pdc.PersistentTypes;
-import net.primaxstudios.primaxcore.placeholders.Placeholder;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Objects;
 
-@Getter @Setter
-public class CoreItem extends CustomItem  {
+@Getter
+public class CoreItem extends CustomItem {
 
-    private final Key key;
+    private final String key;
     private final ItemStack bukkitItem;
-    private NameProperty nameProperty;
-    private LoreProperty loreProperty;
 
-    public CoreItem(Key key, ItemStack bukkitItem) {
+    public CoreItem(String key, ItemStack bukkitItem) {
         this.key = key;
         this.bukkitItem = bukkitItem;
-        attachIdentifier();
+        if (key != null) {
+            attachIdentifier();
+        }
     }
 
     public CoreItem(ItemStack bukkitItem) {
@@ -40,7 +36,7 @@ public class CoreItem extends CustomItem  {
         if (meta == null) {
             return;
         }
-        meta.getPersistentDataContainer().set(PrimaxCore.IDENTIFIER_KEY, PersistentTypes.KEY, key);
+        meta.getPersistentDataContainer().set(PrimaxCore.IDENTIFIER_KEY, PersistentDataType.STRING, key);
         bukkitItem.setItemMeta(meta);
     }
 
@@ -49,16 +45,11 @@ public class CoreItem extends CustomItem  {
         if (meta == null) {
             return false;
         }
-        Key key = meta.getPersistentDataContainer().get(PrimaxCore.IDENTIFIER_KEY, PersistentTypes.KEY);
+        String key = meta.getPersistentDataContainer().get(PrimaxCore.IDENTIFIER_KEY, PersistentDataType.STRING);
         if (!Objects.equals(this.key, key)) {
             return false;
         }
         return ignoreAmount || item.getAmount() == getAmount();
-    }
-
-    @Override
-    public int getAmount() {
-        return Math.max(bukkitItem.getAmount(), 1);
     }
 
     @Override
@@ -68,21 +59,19 @@ public class CoreItem extends CustomItem  {
         }
         if (ignoreAmount) {
             return getItem().isSimilar(item);
-        }else {
+        } else {
             return getItem().equals(item);
         }
     }
 
     @Override
-    protected ItemStack getItemAbstract(Placeholder placeholder) {
-        ItemStack item = bukkitItem.clone();
-        if (nameProperty != null) {
-            nameProperty.setProperty(item, placeholder);
-        }
-        if (loreProperty != null) {
-            loreProperty.setProperty(item, placeholder);
-        }
-        return item;
+    public int getAmount() {
+        return Math.max(bukkitItem.getAmount(), 1);
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return bukkitItem.clone();
     }
 
     public void setProperty(ItemProperty property, Section section) {
