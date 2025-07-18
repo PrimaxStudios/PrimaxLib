@@ -20,7 +20,7 @@ public class MenuHolder implements InventoryHolder {
         this.uniqueId = uniqueId;
         this.player = player;
         this.customMenu = customMenu;
-        this.inventory = customMenu.createInventory();
+        this.inventory = customMenu.createInventory(player);
         customMenu.refresh(inventory);
     }
 
