@@ -2,6 +2,7 @@ package net.primaxstudios.primaxcore.menus;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.primaxstudios.primaxcore.utils.Metadata;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Getter @Setter
 public class MenuHolder implements InventoryHolder {
 
+    private final Metadata meta = new Metadata();
     private final UUID uniqueId;
     private final Player player;
     private final CustomMenu customMenu;
