@@ -266,4 +266,12 @@ public final class ConfigUtils {
         }
         return files;
     }
+
+    public File getFile(JavaPlugin plugin, String fileName) {
+        File file = new File(plugin.getDataFolder(), fileName);
+        if (!file.exists()) {
+            plugin.saveResource(fileName, false);
+        }
+        return file;
+    }
 }
