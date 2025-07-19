@@ -15,6 +15,7 @@ import org.bukkit.inventory.Inventory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 @Getter
@@ -56,19 +57,39 @@ public class MenuManager {
     }
 
     public SingleSlotMenuItem getSingleSlotMenuItem(Section section) {
+        return getSingleSlotMenuItem(section, SingleSlotMenuItem.class);
+    }
+
+    public <T extends SingleSlotMenuItem> T getSingleSlotMenuItem(Section section, Class<T> aClass) {
         CustomItem customItem = PrimaxCore.inst().getItemManager().getItem(section);
         if (!section.contains("slot")) {
             logger.warn("Missing 'slot' key in section '{}' of '{}'", section.getName(), section.getRoot().getFile());
             throw new RuntimeException();
         }
         int slot = section.getInt("slot");
-        return new SingleSlotMenuItem(customItem, slot);
+
+        try {
+            Constructor<T> constructor = aClass.getDeclaredConstructor(CustomItem.class, Integer.class);
+            return constructor.newInstance(customItem, slot);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public MultiSlotMenuItem getMultiSlotMenuItem(Section section) {
+        return getMultiSlotMenuItem(section, MultiSlotMenuItem.class);
+    }
+
+    public <T> T getMultiSlotMenuItem(Section section, Class<T> aClass) {
         CustomItem customItem = PrimaxCore.inst().getItemManager().getItem(section);
         List<Integer> slots = ConfigUtils.parseSlots(section, "slots");
-        return new MultiSlotMenuItem(customItem, slots);
+
+        try {
+            Constructor<T> constructor = aClass.getDeclaredConstructor(CustomItem.class, List.class);
+            return constructor.newInstance(customItem, slots);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<MenuItem> getMenuItems(Section itemsSection) {
