@@ -2,7 +2,7 @@ package net.primaxstudios.primaxcore.menus.item;
 
 import lombok.Getter;
 import net.primaxstudios.primaxcore.items.CustomItem;
-import org.bukkit.inventory.Inventory;
+import net.primaxstudios.primaxcore.menus.MenuHolder;
 
 @Getter
 public class SingleSlotMenuItem extends MenuItem {
@@ -20,7 +20,7 @@ public class SingleSlotMenuItem extends MenuItem {
     }
 
     @Override
-    public void setItem(Inventory inventory) {
-        inventory.setItem(slot, getCustomItem().getItem());
+    public void setItem(MenuHolder holder) {
+        holder.getInventory().setItem(slot, getCustomItem().getItem());
     }
 }

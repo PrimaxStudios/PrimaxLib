@@ -2,7 +2,7 @@ package net.primaxstudios.primaxcore.menus.item;
 
 import lombok.Getter;
 import net.primaxstudios.primaxcore.items.CustomItem;
-import org.bukkit.inventory.Inventory;
+import net.primaxstudios.primaxcore.menus.MenuHolder;
 
 @Getter
 public abstract class MenuItem {
@@ -15,5 +15,5 @@ public abstract class MenuItem {
 
     public abstract boolean isSlot(int slot);
 
-    public abstract void setItem(Inventory inventory);
+    public abstract void setItem(MenuHolder holder);
 }

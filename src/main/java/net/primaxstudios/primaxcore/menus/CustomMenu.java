@@ -5,9 +5,11 @@ import org.bukkit.inventory.Inventory;
 
 public abstract class CustomMenu implements MenuHandler {
 
-    protected abstract Inventory createInventory(Player player);
+    public abstract MenuHolder createHolder(Player player);
 
-    protected abstract void refresh(Inventory inventory);
+    public abstract Inventory createInventory(MenuHolder holder);
+
+    public abstract void refresh(MenuHolder holder);
 
     public abstract void reload();
 }
