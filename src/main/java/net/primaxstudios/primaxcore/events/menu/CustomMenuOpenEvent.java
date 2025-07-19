@@ -2,7 +2,6 @@ package net.primaxstudios.primaxcore.events.menu;
 
 import lombok.Getter;
 import net.primaxstudios.primaxcore.menus.MenuHolder;
-import net.primaxstudios.primaxcore.placeholders.Placeholder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
@@ -14,11 +13,9 @@ public class CustomMenuOpenEvent extends CustomMenuEvent implements Cancellable 
 
     private static final HandlerList HANDLER_LIST = new HandlerList();
     private final InventoryOpenEvent originalEvent;
-    private final Placeholder placeholder;
 
     public CustomMenuOpenEvent(Player player, MenuHolder holder, InventoryOpenEvent originalEvent) {
         super(player, holder);
-        this.placeholder = new Placeholder(player);
         this.originalEvent = originalEvent;
     }
 

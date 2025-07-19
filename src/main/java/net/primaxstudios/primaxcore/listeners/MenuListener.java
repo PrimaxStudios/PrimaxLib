@@ -1,7 +1,12 @@
 package net.primaxstudios.primaxcore.listeners;
 
+import net.primaxstudios.primaxcore.events.menu.CustomMenuClickEvent;
+import net.primaxstudios.primaxcore.events.menu.CustomMenuCloseEvent;
+import net.primaxstudios.primaxcore.events.menu.CustomMenuDragEvent;
+import net.primaxstudios.primaxcore.events.menu.CustomMenuOpenEvent;
 import net.primaxstudios.primaxcore.managers.MenuManager;
 import net.primaxstudios.primaxcore.menus.MenuHolder;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
@@ -23,7 +28,12 @@ public class MenuListener implements Listener {
         if (holder == null) {
             return;
         }
-        holder.getCustomMenu().onOpen(e);
+        CustomMenuOpenEvent openEvent = new CustomMenuOpenEvent((Player) e.getPlayer(), holder, e);
+        openEvent.callEvent();
+        if (openEvent.isCancelled()) {
+            return;
+        }
+        holder.getCustomMenu().onOpen(openEvent);
     }
 
     @EventHandler
@@ -39,7 +49,12 @@ public class MenuListener implements Listener {
         if (holder == null) {
             return;
         }
-        holder.getCustomMenu().onClick(e);
+        CustomMenuClickEvent clickEvent = new CustomMenuClickEvent((Player) e.getWhoClicked(), holder, e);
+        clickEvent.callEvent();
+        if (clickEvent.isCancelled()) {
+            return;
+        }
+        holder.getCustomMenu().onClick(clickEvent);
     }
 
     @EventHandler
@@ -51,7 +66,12 @@ public class MenuListener implements Listener {
         if (holder == null) {
             return;
         }
-        holder.getCustomMenu().onDrag(e);
+        CustomMenuDragEvent dragEvent = new CustomMenuDragEvent((Player) e.getWhoClicked(), holder, e);
+        dragEvent.callEvent();
+        if (dragEvent.isCancelled()) {
+            return;
+        }
+        holder.getCustomMenu().onDrag(dragEvent );
     }
 
     @EventHandler
@@ -60,6 +80,8 @@ public class MenuListener implements Listener {
         if (holder == null) {
             return;
         }
-        holder.getCustomMenu().onClose(e);
+        CustomMenuCloseEvent closeEvent = new CustomMenuCloseEvent((Player) e.getPlayer(), holder, e);
+        closeEvent.callEvent();
+        holder.getCustomMenu().onClose(closeEvent);
     }
 }
