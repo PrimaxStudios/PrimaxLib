@@ -76,8 +76,6 @@ dependencies {
     annotationProcessor("co.aikar:acf-paper:0.5.1-SNAPSHOT")
     implementation("com.github.cryptomorin:XSeries:13.3.1")
     implementation("de.tr7zw:item-nbt-api:2.15.1")
-    implementation("de.rapha149.signgui:signgui:2.5.3")
-    implementation("net.wesjd:anvilgui:1.10.7-SNAPSHOT")
     compileOnly("com.jeff-media:custom-block-data:2.2.3")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7") { exclude group: "org.bukkit", module: "bukkit" }
     compileOnly("me.clip:placeholderapi:2.11.6")
@@ -113,8 +111,6 @@ tasks {
         relocate("co.aikar.commands", "net.primaxstudios.primaxcore.libs.acf")
         relocate("co.aikar.locales", "net.primaxstudios.primaxcore.libs.locales")
         relocate("de.tr7zw.changeme.nbtapi", "net.primaxstudios.primaxcore.libs.nbtapi")
-        relocate("de.rapha149.signgui", "net.primaxstudios.primaxcore.libs.signgui")
-        relocate("net.wesjd.anvilgui", "net.primaxstudios.primaxcore.libs.anvilgui")
         relocate("com.jeff_media.customblockdata", "net.primaxstudios.primaxcore.libs.customblockdata")
         relocate("com.zaxxer.hikari", "net.primaxstudios.primaxcore.libs.hikari")
         relocate("com.mongodb", "net.primaxstudios.primaxcore.libs.mongodb")
