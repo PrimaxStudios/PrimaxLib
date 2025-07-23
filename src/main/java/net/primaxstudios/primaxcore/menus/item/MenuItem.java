@@ -1,20 +1,21 @@
 package net.primaxstudios.primaxcore.menus.item;
 
-import lombok.Getter;
-import net.primaxstudios.primaxcore.items.CustomItem;
-import net.primaxstudios.primaxcore.menus.MenuHandler;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.primaxstudios.primaxcore.menus.MenuHolder;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
-@Getter
-public abstract class MenuItem implements MenuHandler {
+public interface MenuItem {
 
-    private final CustomItem customItem;
+    String getId();
 
-    public MenuItem(CustomItem customItem) {
-        this.customItem = customItem;
-    }
+    boolean isEnabled();
 
-    public abstract boolean isSlot(int slot);
+    void reload(Section section);
 
-    public abstract void setItem(MenuHolder holder);
+    boolean isSlot(int slot);
+
+    void setItem(Inventory inventory, ItemStack item);
+
+    void setItem(MenuHolder holder);
 }
