@@ -18,16 +18,14 @@ public abstract class CustomMenu implements MenuHandler {
 
     private final List<MenuItem> menuItems = new ArrayList<>();
 
-    public CustomMenu(MenuSettings settings, MenuItem... menuItems) {
-        if (settings.isAddFiller()) {
+    public CustomMenu(MenuItem... menuItems) {
+        if (getSettings().isAddFiller()) {
             this.menuItems.add(new FillerItem());
         }
         this.menuItems.addAll(Arrays.asList(menuItems));
     }
 
     public abstract Inventory createInventory(MenuHolder holder);
-
-    public
 
     public MenuSettings getSettings() {
         return new MenuSettings();

@@ -4,10 +4,6 @@ import net.primaxstudios.primaxcore.events.menu.CustomMenuClickEvent;
 import net.primaxstudios.primaxcore.events.menu.CustomMenuCloseEvent;
 import net.primaxstudios.primaxcore.events.menu.CustomMenuDragEvent;
 import net.primaxstudios.primaxcore.events.menu.CustomMenuOpenEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 
 public interface MenuHandler {
 
