@@ -12,6 +12,7 @@ public interface PaginatedItem<T> extends MenuItem {
 
     List<Integer> getDisplaySlots(MenuHolder holder);
 
+    @Override
     default void setItem(MenuHolder holder) {
         List<T> items = getPageItems(holder);
         List<Integer> slots = getDisplaySlots(holder);
