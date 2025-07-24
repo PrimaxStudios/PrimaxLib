@@ -82,4 +82,13 @@ public abstract class CustomMenu implements MenuHandler {
             }
         }
     }
+
+    public <T extends MenuItem> T getMenuItem(Class<T> itemClass) {
+        for (MenuItem menuItem : menuItems) {
+            if (menuItem.getClass().equals(itemClass)) {
+                return (T) menuItem;
+            }
+        }
+        return null;
+    }
 }
