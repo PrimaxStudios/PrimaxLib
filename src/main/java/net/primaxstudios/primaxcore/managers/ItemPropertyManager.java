@@ -14,7 +14,7 @@ public class ItemPropertyManager {
     private final ItemPropertyRegistry registry = new ItemPropertyRegistry();
 
     private ItemProperty getProperty(String key) {
-        return registry.getObject(key);
+        return registry.get(key);
     }
 
     public List<ItemProperty> getProperties(Section section) {

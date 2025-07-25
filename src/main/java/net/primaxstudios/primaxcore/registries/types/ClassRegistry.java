@@ -7,12 +7,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class IdRegistry<V> extends AbstractMap<String, V> {
+public class ClassRegistry<V> extends AbstractMap<Class<V>, V> {
 
-    private final Set<Entry<String, V>> entries = new HashSet<>();
+    private final Set<Map.Entry<Class<V>, V>> entries = new HashSet<>();
 
     @Override
-    public @NotNull Set<Map.Entry<String, V>> entrySet() {
+    public @NotNull Set<Entry<Class<V>, V>> entrySet() {
         return entries;
     }
 }

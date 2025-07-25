@@ -8,8 +8,7 @@ import net.primaxstudios.primaxcore.items.properties.item.persistentdata.Persist
 import net.primaxstudios.primaxcore.items.properties.meta.*;
 import net.primaxstudios.primaxcore.registries.types.IdRegistry;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 @Getter
 public final class ItemPropertyRegistry extends IdRegistry<ItemProperty> {
@@ -17,33 +16,29 @@ public final class ItemPropertyRegistry extends IdRegistry<ItemProperty> {
     private final MaterialProperty materialProperty = new MaterialProperty();
 
     public ItemPropertyRegistry() {
-        register(DisplayNameProperty.ID, new DisplayNameProperty());
-        register(LoreProperty.ID, new LoreProperty());
-        register(CustomModelDataProperty.ID, new CustomModelDataProperty());
-        register(EnchantProperty.ID, new EnchantProperty());
-        register(GlowProperty.ID, new GlowProperty());
-        register(FlagProperty.ID, new FlagProperty());
-        register(UnbreakableProperty.ID, new UnbreakableProperty());
-        register(PersistentDataProperty.ID, new PersistentDataProperty());
-        register(AxolotlProperty.ID, new AxolotlProperty());
-        register(BannerPatternProperty.ID, new BannerPatternProperty());
-        register(BlockDataProperty.ID, new BlockDataProperty());
-        register(ColorProperty.ID, new ColorProperty());
-        register(DurabilityProperty.ID, new DurabilityProperty());
-        register(EntityTypeProperty.ID, new EntityTypeProperty());
-        register(PotionEffectProperty.ID, new PotionEffectProperty());
-        register(TrimProperty.ID, new TrimProperty());
+        put(DisplayNameProperty.ID, new DisplayNameProperty());
+        put(LoreProperty.ID, new LoreProperty());
+        put(CustomModelDataProperty.ID, new CustomModelDataProperty());
+        put(EnchantProperty.ID, new EnchantProperty());
+        put(GlowProperty.ID, new GlowProperty());
+        put(FlagProperty.ID, new FlagProperty());
+        put(UnbreakableProperty.ID, new UnbreakableProperty());
+        put(PersistentDataProperty.ID, new PersistentDataProperty());
+        put(AxolotlProperty.ID, new AxolotlProperty());
+        put(BannerPatternProperty.ID, new BannerPatternProperty());
+        put(BlockDataProperty.ID, new BlockDataProperty());
+        put(ColorProperty.ID, new ColorProperty());
+        put(DurabilityProperty.ID, new DurabilityProperty());
+        put(EntityTypeProperty.ID, new EntityTypeProperty());
+        put(PotionEffectProperty.ID, new PotionEffectProperty());
+        put(TrimProperty.ID, new TrimProperty());
     }
 
-    public List<ItemProperty> getProperties() {
-        return super.getObjects();
+    public Collection<ItemProperty> getProperties() {
+        return values();
     }
 
     public ItemProperty getProperty(String id) {
-        return super.getObject(id);
-    }
-
-    public Map<String, ItemProperty> getPropertyById() {
-        return super.getObjectById();
+        return get(id);
     }
 }

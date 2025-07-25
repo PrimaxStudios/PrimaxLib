@@ -8,7 +8,7 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.38/57f8f5e02e92a30fd21b80cbd426a4172b5f8e29/lombok-1.18.38.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/co.aikar/acf-paper/0.5.1-SNAPSHOT/7ab98cabf3c655825286ea5ff9821070c61cd747/acf-paper-0.5.1-SNAPSHOT.jar" />
         </processorPath>
-        <module name="net.primaxstudios.primaxcore.PrimaxCore.main" />
+        <module name="PrimaxCore.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="21" />

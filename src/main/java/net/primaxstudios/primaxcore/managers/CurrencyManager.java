@@ -26,7 +26,7 @@ public class CurrencyManager {
 
     public Currency getCurrency(Section section) {
         String type = section.getString("type");
-        Class<? extends Currency> clazz = registry.getClass(type);
+        Class<? extends Currency> clazz = registry.get(type);
         return getCurrency(section, clazz);
     }
 }
