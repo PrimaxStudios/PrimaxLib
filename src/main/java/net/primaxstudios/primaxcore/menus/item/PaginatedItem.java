@@ -15,7 +15,7 @@ public interface PaginatedItem<T> extends MenuItem, ClickableItem {
 
     Map<Integer, T> getObjectBySlot(MenuHolder holder);
 
-    void setOrderIdBySlot(MenuHolder holder, Map<Integer, T> objectBySlot);
+    void setObjectBySlot(MenuHolder holder, Map<Integer, T> objectBySlot);
 
     List<T> getObjects();
 
@@ -33,7 +33,7 @@ public interface PaginatedItem<T> extends MenuItem, ClickableItem {
             setItem(holder, slots.get(i), object);
         }
 
-        setOrderIdBySlot(holder, objectBySlot);
+        setObjectBySlot(holder, objectBySlot);
     }
 
     @Override
