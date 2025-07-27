@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "net.primaxstudios.primaxcore"
-version = "1.0.0"
+version = "1.0.1"
 description = "My Paper Plugin"
 
 def targetJavaVersion = 21
