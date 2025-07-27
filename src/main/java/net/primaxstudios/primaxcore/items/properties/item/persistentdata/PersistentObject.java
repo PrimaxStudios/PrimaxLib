@@ -1,6 +1,8 @@
     package net.primaxstudios.primaxcore.items.properties.item.persistentdata;
 
+    import dev.dejvokep.boostedyaml.block.implementation.Section;
     import lombok.Getter;
+    import net.primaxstudios.primaxcore.configs.Config;
     import org.bukkit.NamespacedKey;
     import org.bukkit.persistence.PersistentDataContainer;
     import org.bukkit.persistence.PersistentDataType;
@@ -21,7 +23,7 @@
             this.value = value;
         }
 
-        public void setData(PersistentDataContainer container) {
+        public void setData(PersistentDataContainer container, Section section) {
             try {
                 if (type.equals(PersistentDataType.DOUBLE)) {
                     container.set(key, PersistentDataType.DOUBLE, Double.parseDouble(value));
@@ -33,15 +35,9 @@
                     container.set(key, PersistentDataType.INTEGER, Integer.parseInt(value));
                 } else if (type.equals(PersistentDataType.LONG)) {
                     container.set(key, PersistentDataType.LONG, Long.parseLong(value));
-                } else {
-                    logger.warn("Unsupported PersistentDataType '{}' for key '{}'", type, key);
                 }
             } catch (NumberFormatException e) {
-                logger.warn("Invalid number format for key '{}': value='{}'", key, value, e);
-                throw new RuntimeException();
-            } catch (Exception e) {
-                logger.warn("Failed to set persistent data for key '{}': value='{}'", key, value, e);
-                throw new RuntimeException();
+                Config.warn(logger, section, "Invalid number format for key '{}': value='{}'", key, value);
             }
         }
     }

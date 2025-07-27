@@ -1,18 +1,5 @@
 package net.primaxstudios.primaxcore.registries.types;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.*;
 
-import java.util.AbstractMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-public class IdRegistry<V> extends AbstractMap<String, V> {
-
-    private final Set<Entry<String, V>> entries = new HashSet<>();
-
-    @Override
-    public @NotNull Set<Map.Entry<String, V>> entrySet() {
-        return entries;
-    }
-}
+public class IdRegistry<V> extends HashMap<String, V> {}

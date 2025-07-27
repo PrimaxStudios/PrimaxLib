@@ -1,11 +1,12 @@
 package net.primaxstudios.primaxcore.items.properties.meta;
 
-import net.primaxstudios.primaxcore.items.properties.ItemProperty;
+import net.primaxstudios.primaxcore.configs.Config;
+import net.primaxstudios.primaxcore.items.properties.AdvancedMetaProperty;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
+import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
@@ -14,56 +15,36 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-
-public class TrimProperty implements ItemProperty {
+public class TrimProperty extends AdvancedMetaProperty<ArmorMeta> {
 
     public static final String ID = "armor_trim";
     private static final Logger logger = LoggerFactory.getLogger(TrimProperty.class);
 
-    @Override
-    public void setProperty(@NotNull ItemStack item, @NotNull Section section) {
-        Object sectionName = section.getName();
-        File file = section.getRoot().getFile();
-
-        if (!(item.getItemMeta() instanceof ArmorMeta meta)) {
-            logger.warn("Item '{}' in section '{}' of '{}' does not support ArmorMeta. Cannot apply armor trim.",
-                    item.getType(), sectionName, file);
-            throw new IllegalArgumentException("ArmorMeta not supported on item.");
-        }
-
-        try {
-            ArmorTrim trim = createTrim(section, sectionName, file);
-            meta.setTrim(trim);
-            item.setItemMeta(meta);
-        } catch (Exception e) {
-            logger.error("Failed to apply ArmorTrim in section '{}' of '{}': {}", sectionName, file, e.getMessage(), e);
-            throw e;
-        }
+    public TrimProperty() {
+        super(logger, ArmorMeta.class);
     }
 
-    private ArmorTrim createTrim(Section section, Object sectionName, File filePath) {
-        String materialKey = section.getString("material");
-        String patternKey = section.getString("pattern");
+    @Override
+    public void setProperty(@NotNull ArmorMeta meta, @NotNull Section section) {
+        NamespacedKey materialKey = ConfigUtils.parseNamespacedKey(section, "material");
+        if (materialKey == null) return;
 
-        if (materialKey == null || patternKey == null) {
-            logger.warn("Missing 'material' or 'pattern' keys in section '{}' of '{}'", sectionName, filePath);
-            throw new IllegalArgumentException("Missing material or pattern keys.");
-        }
+        NamespacedKey patternKey = ConfigUtils.parseNamespacedKey(section, "pattern");
+        if (patternKey == null) return;
 
         TrimMaterial material = RegistryAccess.registryAccess()
                 .getRegistry(RegistryKey.TRIM_MATERIAL)
-                .get(NamespacedKey.minecraft(materialKey));
+                .get(materialKey);
         TrimPattern pattern = RegistryAccess.registryAccess()
                 .getRegistry(RegistryKey.TRIM_PATTERN)
-                .get(NamespacedKey.minecraft(patternKey));
-
+                .get(patternKey);
         if (material == null || pattern == null) {
-            logger.warn("Invalid material or pattern '{}' / '{}' in section '{}' of '{}'",
-                    materialKey, patternKey, sectionName, filePath);
-            throw new IllegalArgumentException("Invalid trim material or pattern.");
+            Config.warn(logger, section, "Invalid material or pattern '{}' / '{}'", materialKey, patternKey);
+            return;
         }
 
-        return new ArmorTrim(material, pattern);
+        ArmorTrim trim = new ArmorTrim(material, pattern);
+
+        meta.setTrim(trim);
     }
 }

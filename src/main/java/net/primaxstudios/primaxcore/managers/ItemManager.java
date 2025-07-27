@@ -25,6 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -90,12 +92,12 @@ public class ItemManager {
         return null;
     }
 
-    public List<CustomItem> load(JavaPlugin plugin, String folder) {
+    public List<CustomItem> load(JavaPlugin plugin, String folder) throws IOException {
         File newFolder = new File(plugin.getDataFolder() + "/" + folder);
         return getItems(ConfigUtils.listFilesDeep(newFolder));
     }
 
-    public CustomItem getItem(File file) {
+    public CustomItem getItem(File file) throws IOException {
         return getItem(ConfigUtils.load(file));
     }
 
@@ -105,9 +107,11 @@ public class ItemManager {
                 .toList();
     }
 
-    public List<CustomItem> getItems(List<File> files) {
-        return files.stream()
-                .map(this::getItem)
-                .toList();
+    public List<CustomItem> getItems(List<File> files) throws IOException {
+        List<CustomItem> items = new ArrayList<>();
+        for (File file : files) {
+            items.add(getItem(file));
+        }
+        return items;
     }
 }

@@ -17,9 +17,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Getter @Setter
 public abstract class CustomMenu implements MenuHandler {
@@ -50,18 +52,24 @@ public abstract class CustomMenu implements MenuHandler {
     }
 
     public void reload() {
-        File file = getFile();
-        
-        YamlDocument document = ConfigUtils.load(file);
+        try {
+            File file = Objects.requireNonNull(getFile(), "File cannot be null");
 
-        menuTitle = ColorUtils.getComponent(document.getString("menu_title"));
+            YamlDocument document = ConfigUtils.load(file);
 
-        menuType = PrimaxCore.inst().getMenuManager().getMenuType(document);
+            menuTitle = ColorUtils.getComponent(Objects.requireNonNull(document.getString("menu_title"), "Menu title is missing"));
 
-        Section itemsSection = document.getSection("items");
-        for (MenuItem item : menuItems) {
-            Section section = itemsSection.getSection(item.getId());
-            item.reload(section);
+            menuType = Objects.requireNonNull(PrimaxCore.inst().getMenuManager().getMenuType(document), "Menu Type is missing");
+
+            Section itemsSection = document.getSection("items");
+            if (!menuItems.isEmpty()) Objects.requireNonNull(itemsSection, "'items' section is missing");
+
+            for (MenuItem item : menuItems) {
+                Section section = Objects.requireNonNull(itemsSection.getSection(item.getId()), "'" + item.getId() + "'" + "section is missing");
+                item.reload(section);
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 

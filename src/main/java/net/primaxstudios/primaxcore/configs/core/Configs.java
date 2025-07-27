@@ -13,7 +13,11 @@ public class Configs {
     private final YamlDocument config;
 
     public Configs() {
-        this.config = ConfigUtils.loadDefault(PrimaxCore.inst(), "config.yml");
+        try {
+            this.config = ConfigUtils.loadDefault(PrimaxCore.inst(), "config.yml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         ConfigUtils.saveDefaults(PrimaxCore.inst(), "locale", "en.yml");
     }
 

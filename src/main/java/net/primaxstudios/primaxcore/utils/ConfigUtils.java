@@ -8,8 +8,8 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
+import net.primaxstudios.primaxcore.configs.Config;
 import org.bukkit.*;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -30,32 +30,20 @@ public final class ConfigUtils {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
     }
 
-    public static YamlDocument load(File file) {
-        try {
-            return YamlDocument.create(file);
-        }catch (IOException e) {
-            logger.error("Failed to load config", e);
-            throw new RuntimeException();
-        }
+    public static YamlDocument load(File file) throws IOException {
+        return YamlDocument.create(file);
     }
 
-    public static YamlDocument load(JavaPlugin plugin, String fileName) {
+    public static YamlDocument load(JavaPlugin plugin, String fileName) throws IOException {
         return load(new File(plugin.getDataFolder(), fileName));
     }
 
-    public static YamlDocument loadDefault(JavaPlugin plugin, String fileName) {
+    public static YamlDocument loadDefault(JavaPlugin plugin, String fileName) throws IOException {
         File file = saveDefault(plugin, fileName);
         InputStream defaults = Objects.requireNonNull(plugin.getResource(fileName));
-        try {
-            return YamlDocument.create(file, defaults,
-                    LOADER_SETTINGS,
-                    UpdaterSettings.builder()
-                            .setVersioning(new BasicVersioning("config-version"))
-                            .build());
-        } catch (IOException e) {
-            logger.error("Failed to load config", e);
-            throw new RuntimeException();
-        }
+        return YamlDocument.create(file, defaults, LOADER_SETTINGS, UpdaterSettings.builder()
+                .setVersioning(new BasicVersioning("config_version"))
+                .build());
     }
 
     public static File saveDefault(JavaPlugin plugin, String fileName) {
@@ -93,55 +81,69 @@ public final class ConfigUtils {
         return list;
     }
 
+    public static <T extends Enum<T>> T parseEnum(Section section, String route, Class<T> eClass) {
+        String value = section.getString(route);
+        if (value == null) {
+            Config.warn(logger, section, "'{}' is missing", route);
+            return null;
+        }
+
+        try {
+            return Enum.valueOf(eClass, value);
+        }catch (IllegalArgumentException ex) {
+            Config.warn(logger, section, "Invalid enum value '{}'", value);
+            return null;
+        }
+    }
+
     public static <T extends Enum<T>> List<T> parseEnumList(Section section, String route, Class<T> aClass) {
         return section.getStringList(route).stream()
                 .map(line -> {
                     try {
                         return Enum.valueOf(aClass, line.toUpperCase(Locale.ROOT));
                     } catch (IllegalArgumentException e) {
-                        logger.warn("Invalid enum value '{}' in section '{}' of '{}'", line, section.getName(), section.getRoot().getFile(), e);
-                        throw new RuntimeException();
+                        Config.warn(logger, section, "Invalid enum value '{}'", line);
+                        return null;
                     }
                 })
+                .filter(Objects::nonNull)
                 .toList();
     }
 
     public static NamespacedKey parseNamespacedKey(Section section, String route) {
-        Object sectionName = section.getName();
-        File filePath = section.getRoot().getFile();
-
         String key = section.getString(route);
         if (key == null) {
-            logger.warn("Missing '{}' key in section '{}' of '{}'", route, sectionName, filePath);
-            throw new RuntimeException();
+            Config.warn(logger, section, "Missing '{}' key", route);
+            return null;
         }
+
         try {
             return NamespacedKey.fromString(key);
         }catch (Exception e) {
-            logger.warn("Invalid namespaced key '{}' in section '{}' of '{}'", key, sectionName, filePath, e);
-            throw new RuntimeException();
+            Config.warn(logger, section, "Invalid namespaced key '{}'", key);
+            return null;
         }
     }
 
     public static PotionEffect parsePotionEffect(Section section) {
-        Object sectionName = section.getName();
-        File filePath = section.getRoot().getFile();
+        NamespacedKey key = parseNamespacedKey(section, "key");
+        if (key == null) return null;
 
-        PotionEffectType type = RegistryAccess.registryAccess().getRegistry(RegistryKey.MOB_EFFECT).get(parseNamespacedKey(section, "key"));
+        PotionEffectType type = RegistryAccess.registryAccess().getRegistry(RegistryKey.MOB_EFFECT).get(key);
         if (type == null) {
-            logger.warn("Unknown potion effect key '{}' in section '{}' of '{}'", section.getString("key"), sectionName, filePath);
-            throw new RuntimeException();
+            Config.warn(logger, section, "Unknown potion effect key '{}'", key);
+            return null;
         }
 
         if (!section.contains("duration")) {
-            logger.warn("Missing 'duration' key in section '{}' of '{}'", sectionName, filePath);
-            throw new RuntimeException();
+            Config.warn(logger, section, "Missing 'duration' key");
+            return null;
         }
         int duration = section.getInt("duration");
 
         if (!section.contains("amplifier")) {
-            logger.warn("Missing 'amplifier' key in section '{}' of '{}'", sectionName, filePath);
-            throw new RuntimeException();
+            Config.warn(logger, section, "Missing 'amplifier' key");
+            return null;
         }
         int amplifier = section.getInt("amplifier");
 
@@ -149,19 +151,16 @@ public final class ConfigUtils {
     }
 
     public static Location parseLocation(Section section) {
-        Object sectionName = section.getName();
-        File filePath = section.getRoot().getFile();
-
         String worldName = section.getString("world");
         if (worldName == null) {
-            logger.warn("Missing 'world' key in section '{}' of '{}'", sectionName, filePath);
-            throw new RuntimeException();
+            Config.warn(logger, section, "Missing 'world' key");
+            return null;
         }
         World world = Bukkit.getWorld(worldName);
 
         if (!section.contains("x") || !section.contains("y") || !section.contains("z")) {
-            logger.warn("Missing 'x', 'y' or 'z' key in section '{}' of '{}'", sectionName, filePath);
-            throw new RuntimeException();
+            Config.warn(logger, section, "Missing 'x', 'y' or 'z' key");
+            return null;
         }
         double x = section.getDouble("x");
         double y = section.getDouble("y");
@@ -174,29 +173,26 @@ public final class ConfigUtils {
     }
 
     public static List<Integer> parseSlots(Section section, String route) {
-        Object sectionName = section.getName();
-        File filePath = section.getRoot().getFile();
-
         List<String> rawSlots = section.getStringList(route);
         if (rawSlots == null || rawSlots.isEmpty()) {
-            logger.warn("Missing '{}' key in section '{}' of '{}'", route, sectionName, filePath);
-            throw new RuntimeException();
+            Config.warn(logger, section, "Missing '{}' key");
+            return null;
         }
 
         List<Integer> slots = new ArrayList<>();
         for (String rawSlot : rawSlots) {
-            slots.addAll(parseSlots(rawSlot, sectionName, filePath));
+            slots.addAll(parseSlots(rawSlot, section));
         }
         return slots;
     }
 
-    private static List<Integer> parseSlots(String rawSlot, Object sectionName, File filePath) {
+    private static List<Integer> parseSlots(String rawSlot, Section section) {
         List<Integer> slots = new ArrayList<>();
         if (rawSlot.contains("-")) {
             String[] parts = rawSlot.split("-");
             if (parts.length != 2) {
-                logger.warn("Invalid slot range format '{}' in section '{}' of '{}'. Expected format: 'start-end'", rawSlot, sectionName, filePath);
-                throw new RuntimeException();
+                Config.warn(logger, section, "Invalid slot range format '{}'", rawSlot);
+                return new ArrayList<>();
             }
 
             int startingNum;
@@ -205,8 +201,8 @@ public final class ConfigUtils {
                 startingNum = Integer.parseInt(parts[0]);
                 endingNum = Integer.parseInt(parts[1]);
             }catch (NumberFormatException e) {
-                logger.warn("Non-numeric value in slot range '{}' in section '{}' of '{}'. Start: '{}', End: '{}'", rawSlot, sectionName, filePath, parts[0], parts[1], e);
-                throw new RuntimeException();
+                Config.warn(logger, section, "Non-numeric value in slot range '{}'", rawSlot);
+                return new ArrayList<>();
             }
 
             for (int slot = startingNum; slot <= endingNum; slot++) {
@@ -217,15 +213,36 @@ public final class ConfigUtils {
             try {
                 slot = Integer.parseInt(rawSlot);
             }catch (NumberFormatException e) {
-                logger.warn("Invalid numeric slot '{}' in section '{}' of '{}'. Must be a valid integer", rawSlot, sectionName, filePath, e);
-                throw new RuntimeException();
+                Config.warn(logger, section, "Invalid numeric slot '{}'", rawSlot);
+                return new ArrayList<>();
             }
             slots.add(slot);
         }
         return slots;
     }
 
-    public static void serialize(Location location, ConfigurationSection section) {
+    public static Color parseRGBColor(Section section, String route) {
+        String value = section.getString(route);
+        if (value == null) {
+            Config.warn(logger, section, "Missing key '{}'", route);
+            return null;
+        }
+
+        String[] split = value.split(",");
+        if (split.length != 3) {
+            Config.warn(logger, section, "Invalid rgb format '{}'. Valid Format: 'r,g,b'", value);
+            return null;
+        }
+
+        try {
+            return Color.fromRGB(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+        } catch (NumberFormatException e) {
+            Config.warn(logger, section, "Invalid rgb value '{}'. Values must be integers.", value);
+            return null;
+        }
+    }
+
+    public static void serialize(Location location, Section section) {
         section.set("world", location.getWorld().getName());
         section.set("x", location.getX());
         section.set("y", location.getY());
@@ -234,7 +251,7 @@ public final class ConfigUtils {
         section.set("yaw", location.getYaw());
     }
 
-    public static Location deserialize(ConfigurationSection section) {
+    public static Location deserialize(Section section) {
         World world = Bukkit.getWorld(Objects.requireNonNull(section.getString("world")));
         double x = section.getDouble("x");
         double y = section.getDouble("y");
@@ -242,11 +259,6 @@ public final class ConfigUtils {
         float pitch = section.getInt("pitch");
         float yaw = section.getInt("yaw");
         return new Location(world, x, y, z, pitch, yaw);
-    }
-
-    public static Color parseColor(String value) {
-        String[] split = value.split(",");
-        return Color.fromRGB(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
     }
 
     public static List<File> listFilesDeep(File folder) {

@@ -10,6 +10,7 @@ import net.primaxstudios.primaxcore.databases.connectors.MySqlConnector;
 import net.primaxstudios.primaxcore.databases.connectors.SqliteConnector;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public final class DatabaseUtils {
@@ -18,7 +19,7 @@ public final class DatabaseUtils {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
     }
 
-    public static DatabaseConnector getConnector(JavaPlugin plugin) {
+    public static DatabaseConnector getConnector(JavaPlugin plugin) throws IOException {
         Section config = ConfigUtils.load(plugin, "database.yml");
         return getConnector(plugin, config.getSection("database"));
     }
@@ -71,7 +72,7 @@ public final class DatabaseUtils {
         return new PoolSettings(maximumPoolSize, minimumIdle, maximumLifetime, keepaliveTime, connectionTimeout);
     }
 
-    public static Redis getRedis(JavaPlugin plugin) {
+    public static Redis getRedis(JavaPlugin plugin) throws IOException {
         Section config = ConfigUtils.load(plugin, "database.yml");
         return getRedis(config.getSection("redis"));
     }
