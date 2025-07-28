@@ -39,7 +39,7 @@ public final class ConfigUtils {
     }
 
     public static YamlDocument loadDefault(JavaPlugin plugin, String fileName) throws IOException {
-        File file = saveDefault(plugin, fileName);
+        File file = new File(plugin.getDataFolder(), fileName);
         InputStream defaults = Objects.requireNonNull(plugin.getResource(fileName));
         return YamlDocument.create(file, defaults, LOADER_SETTINGS, UpdaterSettings.builder()
                 .setVersioning(new BasicVersioning("config_version"))
