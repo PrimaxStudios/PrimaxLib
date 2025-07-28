@@ -7,19 +7,18 @@ import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Getter
 public abstract class Config {
 
-    private final Map<Class<? extends Settings>, Settings> settingsByClass = new HashMap<>();
+    private final Map<Class<? extends Settings>, Settings> settingsByClass;
 
     public Config(Settings... settingsList) {
-        for (Settings settings : settingsList) {
-            settingsByClass.put(settings.getClass(), settings);
-        }
+        this.settingsByClass = Arrays.stream(settingsList).collect(Collectors.toMap(Settings::getClass, settings -> settings));
     }
 
     public abstract YamlDocument getDocument() throws IOException;
@@ -29,16 +28,20 @@ public abstract class Config {
             YamlDocument document = getDocument();
 
             for (Settings settings : settingsByClass.values()) {
-                Section section = document.getSection(settings.getPath());
-                if (section == null) return;
-
-                settings.reload(section);
+                String path = settings.getPath();
+                if (path != null) {
+                    Section section = Config.requireNonNull(document.getSection(path), document);
+                    settings.reload(section);
+                }else {
+                    settings.reload(document);
+                }
             }
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends Settings> T getSettings(Class<T> aClass) {
         return (T) settingsByClass.get(aClass);
     }

@@ -90,7 +90,7 @@ public final class ConfigUtils {
 
         try {
             return Enum.valueOf(eClass, value.toUpperCase(Locale.ROOT));
-        }catch (IllegalArgumentException ex) {
+        }catch (IllegalArgumentException | NullPointerException ex) {
             Config.warn(logger, section, "Invalid enum value '{}'", value);
             return null;
         }
@@ -101,7 +101,7 @@ public final class ConfigUtils {
                 .map(line -> {
                     try {
                         return Enum.valueOf(aClass, line.toUpperCase(Locale.ROOT));
-                    } catch (IllegalArgumentException e) {
+                    } catch (IllegalArgumentException | NullPointerException e) {
                         Config.warn(logger, section, "Invalid enum value '{}'", line);
                         return null;
                     }
