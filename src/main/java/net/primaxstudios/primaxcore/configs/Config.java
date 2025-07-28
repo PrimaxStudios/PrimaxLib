@@ -3,7 +3,6 @@ package net.primaxstudios.primaxcore.configs;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
-import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -23,13 +22,11 @@ public abstract class Config {
         }
     }
 
-    public abstract File getFile();
+    public abstract YamlDocument getDocument() throws IOException;
 
     public void reload() {
         try {
-            File file = getFile();
-
-            YamlDocument document = ConfigUtils.load(file);
+            YamlDocument document = getDocument();
 
             for (Settings settings : settingsByClass.values()) {
                 Section section = document.getSection(settings.getPath());
@@ -55,10 +52,12 @@ public abstract class Config {
 
     private static String createCause(Section section) {
         Object sectionName = section.getName();
-        File filePath = section.getRoot().getFile();
+        File file = section.getRoot().getFile();
 
-        return formatMessage("in section '{}' of file '{}'", sectionName, filePath);
-//        return " in section '" + sectionName + "' of file '" + filePath;
+        String filePath = file != null ? file.getAbsolutePath() : "Unknown File";
+        String normalizedPath = filePath.replace(File.separatorChar, '/');
+
+        return formatMessage(" in section '{}' of file '{}'", sectionName, normalizedPath);
     }
 
     public static <T> T requireNonNull(T object, Section section, String message, Object... objects) {

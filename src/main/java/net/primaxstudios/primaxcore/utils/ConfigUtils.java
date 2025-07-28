@@ -89,7 +89,7 @@ public final class ConfigUtils {
         }
 
         try {
-            return Enum.valueOf(eClass, value);
+            return Enum.valueOf(eClass, value.toUpperCase(Locale.ROOT));
         }catch (IllegalArgumentException ex) {
             Config.warn(logger, section, "Invalid enum value '{}'", value);
             return null;
