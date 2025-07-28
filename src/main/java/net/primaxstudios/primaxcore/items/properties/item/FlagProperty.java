@@ -22,9 +22,10 @@ public class FlagProperty extends MetaProperty {
     }
 
     @Override
-    public void setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
         Set<ItemFlag> flags = createFlags(section);
         flags.forEach(meta::addItemFlags);
+        return true;
     }
 
     public Set<ItemFlag> createFlags(Section section) {
@@ -41,10 +42,5 @@ public class FlagProperty extends MetaProperty {
             flags.add(flag);
         }
         return flags;
-    }
-
-    @Override
-    public Logger getLogger() {
-        return logger;
     }
 }

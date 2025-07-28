@@ -18,13 +18,14 @@ public class DurabilityProperty extends AdvancedMetaProperty<Damageable> {
     }
 
     @Override
-    public void setProperty(@NotNull Damageable meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull Damageable meta, @NotNull Section section) {
         int durability = section.getInt(ID, -1);
         if (durability < 0) {
             Config.warn(logger, section, "Invalid or missing '{}' value '{}'. Durability must be 0 or greater.", ID, durability);
-            return;
+            return false;
         }
 
         meta.setDamage(durability);
+        return true;
     }
 }

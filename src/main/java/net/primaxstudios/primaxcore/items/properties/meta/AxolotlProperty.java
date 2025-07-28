@@ -20,19 +20,20 @@ public class AxolotlProperty extends AdvancedMetaProperty<AxolotlBucketMeta> {
     }
 
     @Override
-    public void setProperty(@NotNull AxolotlBucketMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull AxolotlBucketMeta meta, @NotNull Section section) {
         String variantStr = section.getString(ID);
         if (variantStr == null) {
             Config.warn(logger, section, "Missing '{}' key");
-            return;
+            return false;
         }
 
         Axolotl.Variant variant = ConfigUtils.parseEnum(section, ID, Axolotl.Variant.class);
         if (variant == null) {
             Config.warn(logger, section, "Invalid axolotl variant '{}'", variantStr);
-            return;
+            return false;
         }
 
         meta.setVariant(variant);
+        return true;
     }
 }

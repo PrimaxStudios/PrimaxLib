@@ -25,6 +25,15 @@ public class PersistentDataProperty extends MetaProperty {
         super(logger);
     }
 
+    @Override
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        for (PersistentObject object : createObjects(section)) {
+            object.setData(container, section);
+        }
+        return true;
+    }
+
     private List<PersistentObject> createObjects(Section section) {
         List<PersistentObject> objects = new ArrayList<>();
 
@@ -70,13 +79,5 @@ public class PersistentDataProperty extends MetaProperty {
             case "double" -> PersistentDataType.DOUBLE;
             default -> null;
         };
-    }
-
-    @Override
-    public void setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        for (PersistentObject object : createObjects(section)) {
-            object.setData(container, section);
-        }
     }
 }

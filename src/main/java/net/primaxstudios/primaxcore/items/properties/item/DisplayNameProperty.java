@@ -19,18 +19,14 @@ public class DisplayNameProperty extends MetaProperty {
     }
 
     @Override
-    public void setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
         String displayName = section.getString(ID);
         if (displayName == null) {
             Config.warn(logger, section, "Missing '{}' key", ID);
-            return;
+            return false;
         }
 
         meta.displayName(ColorUtils.getComponent(displayName));
-    }
-
-    @Override
-    public Logger getLogger() {
-        return logger;
+        return true;
     }
 }

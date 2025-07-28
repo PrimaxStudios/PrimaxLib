@@ -28,9 +28,10 @@ public class BannerPatternProperty extends AdvancedMetaProperty<BannerMeta> {
     }
 
     @Override
-    public void setProperty(@NotNull BannerMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull BannerMeta meta, @NotNull Section section) {
         List<Pattern> patterns = createPatterns(section);
         patterns.forEach(meta::addPattern);
+        return true;
     }
 
     public List<Pattern> createPatterns(Section section) {

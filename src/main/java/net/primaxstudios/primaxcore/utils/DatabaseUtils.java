@@ -1,5 +1,6 @@
 package net.primaxstudios.primaxcore.utils;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.primaxstudios.primaxcore.caches.Redis;
 import net.primaxstudios.primaxcore.databases.Credentials;
@@ -20,8 +21,9 @@ public final class DatabaseUtils {
     }
 
     public static DatabaseConnector getConnector(JavaPlugin plugin) throws IOException {
-        Section config = ConfigUtils.load(plugin, "database.yml");
-        return getConnector(plugin, config.getSection("database"));
+        ConfigUtils.saveDefault(plugin, "database.yml");
+        YamlDocument document = ConfigUtils.load(plugin, "database.yml");
+        return getConnector(plugin, document.getSection("database"));
     }
 
     public static DatabaseConnector getConnector(JavaPlugin plugin, Section section) {
@@ -29,12 +31,12 @@ public final class DatabaseUtils {
             return null;
         }
         String type = Objects.requireNonNull(section.getString("type")).toLowerCase();
-        PoolSettings poolSettings = getPoolSettings(section.getSection("pool-settings"));
+        PoolSettings poolSettings = getPoolSettings(section.getSection("pool_settings"));
         Credentials credentials = getCredentials(section.getSection("credentials"));
         return switch (type) {
             case "sqlite" -> getSqliteConnector(plugin, poolSettings);
             case "mysql" -> getMySqlConnector(poolSettings, credentials);
-            case "mongodb" -> getMongoDBConnector(credentials, section.getSection("mongodb-settings"));
+            case "mongodb" -> getMongoDBConnector(credentials, section.getSection("mongodb_settings"));
             default -> null;
         };
     }
@@ -64,11 +66,11 @@ public final class DatabaseUtils {
     }
 
     private static PoolSettings getPoolSettings(Section section) {
-        int maximumPoolSize = section.getInt("maximum-pool-size");
-        int minimumIdle = section.getInt("minimum-idle");
-        int maximumLifetime = section.getInt("maximum-lifetime");
-        int keepaliveTime = section.getInt("keepalive-time");
-        int connectionTimeout = section.getInt("connection-timeout");
+        int maximumPoolSize = section.getInt("maximum_pool_size");
+        int minimumIdle = section.getInt("minimum_idle");
+        int maximumLifetime = section.getInt("maximum_lifetime");
+        int keepaliveTime = section.getInt("keepalive_time");
+        int connectionTimeout = section.getInt("connection_timeout");
         return new PoolSettings(maximumPoolSize, minimumIdle, maximumLifetime, keepaliveTime, connectionTimeout);
     }
 
@@ -84,7 +86,7 @@ public final class DatabaseUtils {
         String host = section.getString("host");
         int port = section.getInt("port");
         String password = section.getString("password");
-        boolean useSSL = section.getBoolean("use-ssl");
+        boolean useSSL = section.getBoolean("use_ssl");
         return new Redis(host, port, password, useSSL);
     }
 }

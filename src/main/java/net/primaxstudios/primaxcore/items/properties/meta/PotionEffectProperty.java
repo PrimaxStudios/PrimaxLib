@@ -22,9 +22,10 @@ public class PotionEffectProperty extends AdvancedMetaProperty<PotionMeta> {
     }
 
     @Override
-    public void setProperty(@NotNull PotionMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull PotionMeta meta, @NotNull Section section) {
         List<PotionEffect> effects = createEffects(section);
         effects.forEach(effect -> meta.addCustomEffect(effect, true));
+        return true;
     }
 
     public List<PotionEffect> createEffects(Section section) {

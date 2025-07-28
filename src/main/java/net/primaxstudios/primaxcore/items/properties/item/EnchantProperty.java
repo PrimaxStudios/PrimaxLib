@@ -25,9 +25,10 @@ public class EnchantProperty extends MetaProperty {
     }
 
     @Override
-    public void setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
         Map<Enchantment, Integer> enchantments = createEnchantments(section);
         enchantments.forEach((enchant, level) -> meta.addEnchant(enchant, level, true));
+        return true;
     }
 
     public Map<Enchantment, Integer> createEnchantments(Section section) {
@@ -65,10 +66,5 @@ public class EnchantProperty extends MetaProperty {
             enchantments.put(enchantment, level);
         }
         return enchantments;
-    }
-
-    @Override
-    public Logger getLogger() {
-        return logger;
     }
 }

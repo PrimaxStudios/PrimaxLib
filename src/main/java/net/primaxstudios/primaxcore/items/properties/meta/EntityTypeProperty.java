@@ -22,17 +22,18 @@ public class EntityTypeProperty extends AdvancedMetaProperty<BlockStateMeta> {
     }
 
     @Override
-    public void setProperty(@NotNull BlockStateMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull BlockStateMeta meta, @NotNull Section section) {
         BlockState state = meta.getBlockState();
         if (!(state instanceof CreatureSpawner spawner)) {
             Config.warn(logger, section, "BlockState is not a CreatureSpawner. Cannot set entity type.");
-            return;
+            return false;
         }
 
         EntityType type = ConfigUtils.parseEnum(section, ID, EntityType.class);
-        if (type == null) return;
+        if (type == null) return false;
 
         spawner.setSpawnedType(type);
         meta.setBlockState(spawner);
+        return true;
     }
 }

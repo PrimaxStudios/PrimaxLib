@@ -6,5 +6,5 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ItemProperty {
 
-    void setProperty(@NotNull ItemStack item, @NotNull Section section);
+    boolean setProperty(@NotNull ItemStack item, @NotNull Section section);
 }

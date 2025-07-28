@@ -14,13 +14,14 @@ public class AmountProperty implements ItemProperty {
     private static final Logger logger = LoggerFactory.getLogger(AmountProperty.class);
 
     @Override
-    public void setProperty(@NotNull ItemStack item, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemStack item, @NotNull Section section) {
         int amount = section.getInt(ID, -1);
         if (amount <= 0 || amount > item.getMaxStackSize()) {
             Config.warn(logger, section, "Invalid amount '{}' for item '{}'", amount, item.getType());
-            return;
+            return false;
         }
 
         item.setAmount(amount);
+        return true;
     }
 }

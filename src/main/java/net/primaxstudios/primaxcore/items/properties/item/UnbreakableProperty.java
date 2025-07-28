@@ -17,13 +17,9 @@ public class UnbreakableProperty extends MetaProperty {
     }
 
     @Override
-    public void setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
         boolean unbreakable = section.getBoolean(ID);
         meta.setUnbreakable(unbreakable);
-    }
-
-    @Override
-    public Logger getLogger() {
-        return logger;
+        return true;
     }
 }

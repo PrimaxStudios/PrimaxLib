@@ -25,12 +25,12 @@ public class TrimProperty extends AdvancedMetaProperty<ArmorMeta> {
     }
 
     @Override
-    public void setProperty(@NotNull ArmorMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull ArmorMeta meta, @NotNull Section section) {
         NamespacedKey materialKey = ConfigUtils.parseNamespacedKey(section, "material");
-        if (materialKey == null) return;
+        if (materialKey == null) return false;
 
         NamespacedKey patternKey = ConfigUtils.parseNamespacedKey(section, "pattern");
-        if (patternKey == null) return;
+        if (patternKey == null) return false;
 
         TrimMaterial material = RegistryAccess.registryAccess()
                 .getRegistry(RegistryKey.TRIM_MATERIAL)
@@ -40,11 +40,12 @@ public class TrimProperty extends AdvancedMetaProperty<ArmorMeta> {
                 .get(patternKey);
         if (material == null || pattern == null) {
             Config.warn(logger, section, "Invalid material or pattern '{}' / '{}'", materialKey, patternKey);
-            return;
+            return false;
         }
 
         ArmorTrim trim = new ArmorTrim(material, pattern);
 
         meta.setTrim(trim);
+        return true;
     }
 }

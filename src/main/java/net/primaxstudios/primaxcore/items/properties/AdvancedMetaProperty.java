@@ -15,25 +15,28 @@ public abstract class AdvancedMetaProperty<T extends ItemMeta> implements ItemPr
     private final Class<T> metaClass;
 
     public AdvancedMetaProperty(Logger logger, Class<T> metaClass) {
-        this.logger = logger;
+        this.logger =  logger;
         this.metaClass = metaClass;
     }
 
-    public abstract void setProperty(@NotNull T meta, @NotNull Section section);
+    public abstract boolean setProperty(@NotNull T meta, @NotNull Section section);
 
     @Override
-    public void setProperty(@NotNull ItemStack item, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemStack item, @NotNull Section section) {
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta == null) {
             Config.warn(logger, section, "ItemMeta is null for item '{}'", item.getType());
-            return;
+            return false;
         }
+
         if (!itemMeta.getClass().equals(metaClass)) {
             Config.warn(logger, section, "ItemMeta is not {}", metaClass.getName());
-            return;
+            return false;
         }
         T meta = metaClass.cast(itemMeta);
-        setProperty(meta, section);
+
+        boolean value = setProperty(meta, section);
         item.setItemMeta(meta);
+        return value;
     }
 }

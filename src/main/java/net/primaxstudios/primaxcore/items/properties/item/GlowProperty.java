@@ -17,13 +17,9 @@ public class GlowProperty extends MetaProperty {
     }
 
     @Override
-    public void setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
         boolean glow = section.getBoolean(ID);
         meta.setEnchantmentGlintOverride(glow);
-    }
-
-    @Override
-    public Logger getLogger() {
-        return logger;
+        return true;
     }
 }

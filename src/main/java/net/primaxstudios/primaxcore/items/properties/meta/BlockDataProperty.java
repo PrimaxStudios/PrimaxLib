@@ -23,11 +23,11 @@ public class BlockDataProperty extends MetaProperty {
     }
 
     @Override
-    public void setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
         String blockDataString = section.getString(ID);
         if (blockDataString == null) {
             Config.warn(logger, section, "Missing or empty '{}' value", ID);
-            return;
+            return false;
         }
 
         BlockData blockData;
@@ -35,7 +35,7 @@ public class BlockDataProperty extends MetaProperty {
             blockData = Bukkit.createBlockData(blockDataString);
         } catch (IllegalArgumentException e) {
             Config.warn(logger, section, "Invalid block data string '{}'", blockDataString);
-            return;
+            return false;
         }
 
         if (meta instanceof BlockDataMeta blockDataMeta) {
@@ -46,6 +46,8 @@ public class BlockDataProperty extends MetaProperty {
             blockStateMeta.setBlockState(blockState);
         }else {
             Config.warn(logger, section, "Unsupported ItemMeta type for '{}'", ID);
+            return false;
         }
+        return true;
     }
 }

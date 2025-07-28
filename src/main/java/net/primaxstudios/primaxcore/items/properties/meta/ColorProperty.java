@@ -21,10 +21,10 @@ public class ColorProperty extends MetaProperty {
     }
 
     @Override
-    public void setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
         Color color = ConfigUtils.parseRGBColor(section, ID);
         if (color == null) {
-            return;
+            return false;
         }
 
         switch (meta) {
@@ -34,5 +34,6 @@ public class ColorProperty extends MetaProperty {
             case MapMeta mapMeta -> mapMeta.setColor(color);
             default -> Config.warn(logger, section, "Unsupported ItemMeta type for '{}'", ID);
         }
+        return true;
     }
 }

@@ -18,13 +18,14 @@ public class CustomModelDataProperty extends MetaProperty {
     }
 
     @Override
-    public void setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
         int customModelData = section.getInt(ID, -1);
         if (customModelData < 0) {
             Config.warn(logger, section, "Invalid or missing '{}' value", ID);
-            return;
+            return false;
         }
 
         meta.setCustomModelData(customModelData);
+        return true;
     }
 }
