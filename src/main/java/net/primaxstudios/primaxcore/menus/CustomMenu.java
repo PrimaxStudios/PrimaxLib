@@ -73,6 +73,14 @@ public abstract class CustomMenu implements MenuHandler {
         }
     }
 
+    public void refresh(MenuHolder holder, Class<? extends MenuItem> mClass) {
+        for (MenuItem item : getMenuItems(mClass)) {
+            if (item.isEnabled()) {
+                item.setItem(holder);
+            }
+        }
+    }
+
     public void refresh(MenuHolder holder) {
         for (MenuItem item : menuItems) {
             if (item.isEnabled()) {
@@ -91,6 +99,7 @@ public abstract class CustomMenu implements MenuHandler {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends MenuItem> T getMenuItem(Class<T> itemClass) {
         for (MenuItem menuItem : menuItems) {
             if (menuItem.getClass().equals(itemClass)) {
@@ -98,5 +107,16 @@ public abstract class CustomMenu implements MenuHandler {
             }
         }
         return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends MenuItem> List<T> getMenuItems(Class<T> itemClass) {
+        List<T> items = new ArrayList<>();
+        for (MenuItem menuItem : menuItems) {
+            if (menuItem.getClass().equals(itemClass)) {
+                items.add((T) menuItem);
+            }
+        }
+        return items;
     }
 }
