@@ -1,10 +1,8 @@
 package net.primaxstudios.primaxcore.utils;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -13,23 +11,6 @@ public final class ItemUtils {
 
     private ItemUtils() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
-    }
-
-    public static void formatLore(ItemStack item) {
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) return;
-
-        List<Component> lore = meta.lore();
-        if (lore == null) return;
-
-        List<Component> formattedLore = lore.stream()
-                .map(ColorUtils::color)
-                .flatMap(s -> Arrays.stream(s.split("\\n")))
-                .map(ColorUtils::getComponent)
-                .toList();
-
-        meta.lore(formattedLore);
-        item.setItemMeta(meta);
     }
 
     public static String serialize(ItemStack item) {
