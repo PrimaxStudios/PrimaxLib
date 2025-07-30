@@ -1,6 +1,7 @@
 package net.primaxstudios.primaxcore.utils;
 
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,6 +74,15 @@ public class Metadata {
     }
 
     @SuppressWarnings("unchecked")
+    public <T> T getObject(String key) {
+        Object value = objectByKey.get(key);
+        if (value != null) {
+            return (T) value;
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
     public <T> T getObject(String key, Class<T> clazz) {
         Object value = objectByKey.get(key);
         if (clazz.isInstance(value)) {
@@ -82,7 +92,7 @@ public class Metadata {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getOrDefault(String key, T def) {
+    public <T> T getOrDefault(String key, @NotNull T def) {
         Object value = objectByKey.get(key);
         if (def.getClass().isInstance(value)) {
             return (T) value;
