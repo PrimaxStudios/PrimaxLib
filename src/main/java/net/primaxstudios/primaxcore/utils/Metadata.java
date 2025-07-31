@@ -121,4 +121,11 @@ public class Metadata {
     public int size() {
         return objectByKey.size();
     }
+
+    public void transfer(Metadata data, String key) {
+        Object object = getObject(key);
+        if (object == null) return;
+
+        data.setObject(key, object);
+    }
 }

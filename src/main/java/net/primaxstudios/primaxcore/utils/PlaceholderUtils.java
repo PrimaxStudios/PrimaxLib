@@ -81,6 +81,8 @@ public final class PlaceholderUtils {
 
     public static void setPlaceholder(ItemStack item, Placeholder placeholder) {
         ItemMeta meta = item.getItemMeta();
+        if (meta == null) return;
+
         Component name = meta.displayName();
         if (name != null) {
             meta.displayName(ColorUtils.getComponent(placeholder.setPlaceholders(ColorUtils.color(name))));
