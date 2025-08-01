@@ -43,6 +43,8 @@ public class MenuHolder implements InventoryHolder {
     }
 
     public void open() {
+        System.out.println("Open 1: " + inventory.getHolder());
         player.openInventory(inventory);
+        System.out.println("Open 2: " + inventory.getHolder());
     }
 }

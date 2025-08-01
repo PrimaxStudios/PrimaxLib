@@ -1,5 +1,6 @@
 package net.primaxstudios.primaxcore.utils;
 
+import net.primaxstudios.primaxcore.placeholders.ComponentPlaceholder;
 import net.primaxstudios.primaxcore.placeholders.Placeholder;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
@@ -92,6 +93,22 @@ public final class PlaceholderUtils {
             lore.replaceAll(line -> ColorUtils.getComponent(placeholder.setPlaceholders(ColorUtils.color(line))));
             meta.lore(lore);
         }
+        item.setItemMeta(meta);
+    }
+
+    public static void setPlaceholders(ItemStack item, ComponentPlaceholder placeholder) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return;
+
+        if (meta.hasDisplayName()) {
+            meta.displayName(placeholder.setPlaceholders(meta.displayName()));
+        }
+
+        List<Component> lore = meta.lore();
+        if (lore != null) {
+            meta.lore(placeholder.setPlaceholders(lore));
+        }
+
         item.setItemMeta(meta);
     }
 }

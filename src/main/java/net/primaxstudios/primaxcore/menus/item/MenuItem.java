@@ -9,8 +9,6 @@ public interface MenuItem {
 
     String getId();
 
-    boolean isEnabled();
-
     void reload(Section section);
 
     boolean isSlot(int slot);

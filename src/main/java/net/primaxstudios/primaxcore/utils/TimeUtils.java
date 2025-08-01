@@ -5,11 +5,66 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public final class TimeUtils {
 
     private TimeUtils() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+
+    public static String formatSmartDuration(Duration duration, String pattern) {
+        long totalSeconds = duration.getSeconds();
+
+        LinkedHashMap<String, Long> unitSeconds = new LinkedHashMap<>();
+        unitSeconds.put("years", 365L * 24 * 60 * 60);
+        unitSeconds.put("months", 30L * 24 * 60 * 60);
+        unitSeconds.put("days", 24L * 60 * 60);
+        unitSeconds.put("hours", 60L * 60);
+        unitSeconds.put("minutes", 60L);
+        unitSeconds.put("seconds", 1L);
+
+        // Calculate all unit values from largest to smallest
+        Map<String, Long> allValues = new LinkedHashMap<>();
+        for (String unit : unitSeconds.keySet()) {
+            long value = totalSeconds / unitSeconds.get(unit);
+            totalSeconds %= unitSeconds.get(unit);
+            allValues.put(unit, value);
+        }
+
+        // Now collapse units not in pattern into the next smaller unit that *is* in the pattern
+        String finalPattern = pattern;
+        Set<String> unitsInPattern = unitSeconds.keySet().stream()
+                .filter(u -> finalPattern.contains("{" + u + "}"))
+                .collect(Collectors.toSet());
+
+        List<String> unitsList = new ArrayList<>(unitSeconds.keySet());
+        for (int i = 0; i < unitsList.size(); i++) {
+            String unit = unitsList.get(i);
+            if (!unitsInPattern.contains(unit)) {
+                // Add this unit's value to the next smaller unit present in pattern
+                long valueToCollapse = allValues.get(unit);
+                allValues.put(unit, 0L);
+
+                // Find next smaller unit that is in pattern
+                for (int j = i + 1; j < unitsList.size(); j++) {
+                    String nextUnit = unitsList.get(j);
+                    if (unitsInPattern.contains(nextUnit)) {
+                        long convertedValue = valueToCollapse * (unitSeconds.get(unit) / unitSeconds.get(nextUnit));
+                        allValues.put(nextUnit, allValues.get(nextUnit) + convertedValue);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Now replace placeholders only for units present in the pattern
+        for (String unit : unitsInPattern) {
+            pattern = pattern.replace("{" + unit + "}", String.valueOf(allValues.get(unit)));
+        }
+
+        return pattern;
     }
 
     public static double getSeconds(@NotNull String message) {

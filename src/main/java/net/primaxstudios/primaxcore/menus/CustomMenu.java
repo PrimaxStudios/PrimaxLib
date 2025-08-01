@@ -7,9 +7,11 @@ import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.primaxstudios.primaxcore.PrimaxCore;
 import net.primaxstudios.primaxcore.events.menu.CustomMenuClickEvent;
+import net.primaxstudios.primaxcore.events.menu.CustomMenuDragEvent;
 import net.primaxstudios.primaxcore.menus.item.ClickableItem;
 import net.primaxstudios.primaxcore.menus.item.FillerItem;
 import net.primaxstudios.primaxcore.menus.item.MenuItem;
+import net.primaxstudios.primaxcore.menus.item.OptionalItem;
 import net.primaxstudios.primaxcore.menus.types.MenuType;
 import net.primaxstudios.primaxcore.utils.ColorUtils;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
@@ -75,17 +77,15 @@ public abstract class CustomMenu implements MenuHandler {
 
     public void refresh(MenuHolder holder, Class<? extends MenuItem> mClass) {
         for (MenuItem item : getMenuItems(mClass)) {
-            if (item.isEnabled()) {
-                item.setItem(holder);
-            }
+            if (item instanceof OptionalItem optional && !optional.isEnabled()) continue;
+            item.setItem(holder);
         }
     }
 
     public void refresh(MenuHolder holder) {
         for (MenuItem item : menuItems) {
-            if (item.isEnabled()) {
-                item.setItem(holder);
-            }
+            if (item instanceof OptionalItem optional && !optional.isEnabled()) continue;
+            item.setItem(holder);
         }
     }
 
@@ -93,10 +93,15 @@ public abstract class CustomMenu implements MenuHandler {
     public void onClick(CustomMenuClickEvent e) {
         e.setCancelled(true);
         for (MenuItem item : menuItems) {
-            if (item.isEnabled() && item instanceof ClickableItem clickable && item.isSlot(e.getOriginalEvent().getSlot())) {
-                clickable.onClick(e);
-            }
+            if (item instanceof OptionalItem optional && !optional.isEnabled()) continue;
+            if (!(item instanceof ClickableItem clickable) || !item.isSlot(e.getOriginalEvent().getSlot())) continue;
+            clickable.onClick(e);
         }
+    }
+
+    @Override
+    public void onDrag(CustomMenuDragEvent e) {
+        e.setCancelled(true);
     }
 
     @SuppressWarnings("unchecked")

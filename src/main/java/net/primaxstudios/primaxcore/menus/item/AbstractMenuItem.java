@@ -10,13 +10,9 @@ import net.primaxstudios.primaxcore.menus.MenuHolder;
 @Getter @Setter
 public abstract class AbstractMenuItem implements MenuItem {
 
-    private boolean enabled;
     private CustomItem customItem;
 
     public void reload(Section section) {
-        enabled = section.getBoolean("enabled", true);
-        if (!enabled) return;
-
         customItem = PrimaxCore.inst().getItemManager().getItem(section);
     }
 
