@@ -4,12 +4,9 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import net.primaxstudios.primaxcore.locale.Locale;
 import net.primaxstudios.primaxcore.configs.core.Configs;
-import net.primaxstudios.primaxcore.managers.CurrencyManager;
-import net.primaxstudios.primaxcore.managers.ItemManager;
+import net.primaxstudios.primaxcore.managers.*;
 import lombok.Getter;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
-import net.primaxstudios.primaxcore.managers.MenuManager;
-import net.primaxstudios.primaxcore.managers.RandomizerManager;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +22,7 @@ public final class PrimaxCore extends JavaPlugin {
     private HeadDatabaseAPI headDatabaseAPI;
     private Configs configs;
     private Locale locale;
+    private DatabaseManager databaseManager;
     private RandomizerManager randomizerManager;
     private CurrencyManager currencyManager;
     private ItemManager itemManager;
@@ -46,6 +44,8 @@ public final class PrimaxCore extends JavaPlugin {
 
         locale = new Locale();
         locale.reload(this);
+
+        databaseManager = new DatabaseManager();
 
         randomizerManager = new RandomizerManager();
 

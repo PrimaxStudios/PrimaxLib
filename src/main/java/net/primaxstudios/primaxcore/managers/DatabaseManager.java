@@ -1,4 +1,4 @@
-package net.primaxstudios.primaxcore.utils;
+package net.primaxstudios.primaxcore.managers;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -9,27 +9,22 @@ import net.primaxstudios.primaxcore.databases.PoolSettings;
 import net.primaxstudios.primaxcore.databases.connectors.MongodbConnector;
 import net.primaxstudios.primaxcore.databases.connectors.MySqlConnector;
 import net.primaxstudios.primaxcore.databases.connectors.SqliteConnector;
+import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.util.Objects;
 
-public final class DatabaseUtils {
+public class DatabaseManager {
 
-    private DatabaseUtils() {
-        throw new UnsupportedOperationException("Utility class cannot be instantiated");
-    }
-
-    public static DatabaseConnector getConnector(JavaPlugin plugin) throws IOException {
-        ConfigUtils.saveDefault(plugin, "database.yml");
+    public DatabaseConnector getConnector(JavaPlugin plugin) throws IOException {
         YamlDocument document = ConfigUtils.load(plugin, "database.yml");
         return getConnector(plugin, document.getSection("database"));
     }
 
-    public static DatabaseConnector getConnector(JavaPlugin plugin, Section section) {
-        if (section.contains("enabled") && !section.getBoolean("enabled")) {
-            return null;
-        }
+    public DatabaseConnector getConnector(JavaPlugin plugin, Section section) {
+        if (section.contains("enabled") && !section.getBoolean("enabled")) return null;
+
         String type = Objects.requireNonNull(section.getString("type")).toLowerCase();
         PoolSettings poolSettings = getPoolSettings(section.getSection("pool_settings"));
         Credentials credentials = getCredentials(section.getSection("credentials"));
@@ -41,21 +36,21 @@ public final class DatabaseUtils {
         };
     }
 
-    public static SqliteConnector getSqliteConnector(JavaPlugin plugin, PoolSettings poolSettings) {
+    public SqliteConnector getSqliteConnector(JavaPlugin plugin, PoolSettings poolSettings) {
         return new SqliteConnector(poolSettings, plugin.getDataFolder());
     }
 
-    public static MySqlConnector getMySqlConnector(PoolSettings poolSettings, Credentials credentials) {
+    public MySqlConnector getMySqlConnector(PoolSettings poolSettings, Credentials credentials) {
         return new MySqlConnector(poolSettings, credentials);
     }
 
-    public static MongodbConnector getMongoDBConnector(Credentials credentials, Section section) {
+    public MongodbConnector getMongoDBConnector(Credentials credentials, Section section) {
         boolean atlas = section.getBoolean("atlas");
         credentials.setParameters(section.getString("parameters"));
         return new MongodbConnector(credentials, atlas);
     }
 
-    private static Credentials getCredentials(Section section) {
+    private Credentials getCredentials(Section section) {
         String host = section.getString("host");
         int port = section.getInt("port");
         String database = section.getString("database");
@@ -65,7 +60,7 @@ public final class DatabaseUtils {
         return new Credentials(host, port, database, username, password, parameters);
     }
 
-    private static PoolSettings getPoolSettings(Section section) {
+    private PoolSettings getPoolSettings(Section section) {
         int maximumPoolSize = section.getInt("maximum_pool_size");
         int minimumIdle = section.getInt("minimum_idle");
         int maximumLifetime = section.getInt("maximum_lifetime");
@@ -74,15 +69,14 @@ public final class DatabaseUtils {
         return new PoolSettings(maximumPoolSize, minimumIdle, maximumLifetime, keepaliveTime, connectionTimeout);
     }
 
-    public static Redis getRedis(JavaPlugin plugin) throws IOException {
+    public Redis getRedis(JavaPlugin plugin) throws IOException {
         Section config = ConfigUtils.load(plugin, "database.yml");
         return getRedis(config.getSection("redis"));
     }
 
-    public static Redis getRedis(Section section) {
-        if (section.contains("enabled") && !section.getBoolean("enabled")) {
-            return null;
-        }
+    public Redis getRedis(Section section) {
+        if (section.contains("enabled") && !section.getBoolean("enabled")) return null;
+
         String host = section.getString("host");
         int port = section.getInt("port");
         String password = section.getString("password");
