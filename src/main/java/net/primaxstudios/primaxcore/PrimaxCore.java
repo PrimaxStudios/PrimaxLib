@@ -4,6 +4,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import net.primaxstudios.primaxcore.locale.Locale;
 import net.primaxstudios.primaxcore.configs.core.Configs;
+import net.primaxstudios.primaxcore.managers.CurrencyManager;
 import net.primaxstudios.primaxcore.managers.ItemManager;
 import lombok.Getter;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
@@ -24,9 +25,10 @@ public final class PrimaxCore extends JavaPlugin {
     private HeadDatabaseAPI headDatabaseAPI;
     private Configs configs;
     private Locale locale;
+    private RandomizerManager randomizerManager;
+    private CurrencyManager currencyManager;
     private ItemManager itemManager;
     private MenuManager menuManager;
-    private RandomizerManager randomizerManager;
 
     @Override
     public void onEnable() {
@@ -45,11 +47,13 @@ public final class PrimaxCore extends JavaPlugin {
         locale = new Locale();
         locale.reload(this);
 
+        randomizerManager = new RandomizerManager();
+
+        currencyManager = new CurrencyManager();
+
         itemManager = new ItemManager();
 
         menuManager = new MenuManager();
-
-        randomizerManager = new RandomizerManager();
     }
 
     public void reload() {
