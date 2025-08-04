@@ -14,9 +14,12 @@ import net.primaxstudios.primaxcore.menus.item.MenuItem;
 import net.primaxstudios.primaxcore.menus.item.OptionalItem;
 import net.primaxstudios.primaxcore.menus.types.MenuType;
 import net.primaxstudios.primaxcore.utils.ColorUtils;
+import net.primaxstudios.primaxcore.utils.CommonUtils;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +41,8 @@ public abstract class CustomMenu implements MenuHandler {
         }
         this.menuItems.addAll(Arrays.asList(menuItems));
     }
+
+    public abstract JavaPlugin getPlugin();
 
     public abstract File getFile();
 
@@ -78,14 +83,28 @@ public abstract class CustomMenu implements MenuHandler {
     public void refresh(MenuHolder holder, Class<? extends MenuItem> mClass) {
         for (MenuItem item : getMenuItems(mClass)) {
             if (item instanceof OptionalItem optional && !optional.isEnabled()) continue;
-            item.setItem(holder);
+            try {
+                item.setItem(holder);
+            } catch (Exception ex) {
+                Player player = holder.getPlayer();
+                PrimaxCore.inst().getLocale().sendMessage(player, CommonUtils.getNamespace(getPlugin()), "error_occurred");
+                Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
+                throw new RuntimeException(ex);
+            }
         }
     }
 
     public void refresh(MenuHolder holder) {
         for (MenuItem item : menuItems) {
             if (item instanceof OptionalItem optional && !optional.isEnabled()) continue;
-            item.setItem(holder);
+            try {
+                item.setItem(holder);
+            } catch (Exception ex) {
+                Player player = holder.getPlayer();
+                PrimaxCore.inst().getLocale().sendMessage(player, CommonUtils.getNamespace(getPlugin()), "error_occurred");
+                Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
+                throw new RuntimeException(ex);
+            }
         }
     }
 
@@ -95,7 +114,14 @@ public abstract class CustomMenu implements MenuHandler {
         for (MenuItem item : menuItems) {
             if (item instanceof OptionalItem optional && !optional.isEnabled()) continue;
             if (!(item instanceof ClickableItem clickable) || !item.isSlot(e.getOriginalEvent().getSlot())) continue;
-            clickable.onClick(e);
+            try {
+                clickable.onClick(e);
+            } catch (Exception ex) {
+                Player player = e.getHolder().getPlayer();
+                PrimaxCore.inst().getLocale().sendMessage(player, CommonUtils.getNamespace(getPlugin()), "error_occurred");
+                Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
+                throw new RuntimeException(ex);
+            }
         }
     }
 
