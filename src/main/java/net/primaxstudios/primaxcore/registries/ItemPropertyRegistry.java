@@ -31,6 +31,7 @@ public final class ItemPropertyRegistry extends IdRegistry<ItemProperty> {
         put(DurabilityProperty.ID, new DurabilityProperty());
         put(EntityTypeProperty.ID, new EntityTypeProperty());
         put(PotionEffectProperty.ID, new PotionEffectProperty());
+        put(PotionTypeProperty.ID, new PotionTypeProperty());
         put(TrimProperty.ID, new TrimProperty());
     }
 

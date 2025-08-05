@@ -81,31 +81,35 @@ public abstract class CustomMenu implements MenuHandler {
     }
 
     public void refresh(MenuHolder holder, Class<? extends MenuItem> mClass) {
-        for (MenuItem item : getMenuItems(mClass)) {
-            if (item instanceof OptionalItem optional && !optional.isEnabled()) continue;
-            try {
-                item.setItem(holder);
-            } catch (Exception ex) {
-                Player player = holder.getPlayer();
-                PrimaxCore.inst().getLocale().sendMessage(player, CommonUtils.getNamespace(getPlugin()), "error_occurred");
-                Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
-                throw new RuntimeException(ex);
+        Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), () -> {
+            for (MenuItem item : getMenuItems(mClass)) {
+                if (item instanceof OptionalItem optional && !optional.isEnabled()) continue;
+                try {
+                    item.setItem(holder);
+                } catch (Exception ex) {
+                    Player player = holder.getPlayer();
+                    PrimaxCore.inst().getLocale().sendMessage(player, CommonUtils.getNamespace(getPlugin()), "error_occurred");
+                    Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
+                    throw new RuntimeException(ex);
+                }
             }
-        }
+        });
     }
 
     public void refresh(MenuHolder holder) {
-        for (MenuItem item : menuItems) {
-            if (item instanceof OptionalItem optional && !optional.isEnabled()) continue;
-            try {
-                item.setItem(holder);
-            } catch (Exception ex) {
-                Player player = holder.getPlayer();
-                PrimaxCore.inst().getLocale().sendMessage(player, CommonUtils.getNamespace(getPlugin()), "error_occurred");
-                Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
-                throw new RuntimeException(ex);
+        Bukkit.getScheduler().runTaskAsynchronously(getPlugin(), () -> {
+            for (MenuItem item : menuItems) {
+                if (item instanceof OptionalItem optional && !optional.isEnabled()) continue;
+                try {
+                    item.setItem(holder);
+                } catch (Exception ex) {
+                    Player player = holder.getPlayer();
+                    PrimaxCore.inst().getLocale().sendMessage(player, CommonUtils.getNamespace(getPlugin()), "error_occurred");
+                    Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
+                    throw new RuntimeException(ex);
+                }
             }
-        }
+        });
     }
 
     @Override

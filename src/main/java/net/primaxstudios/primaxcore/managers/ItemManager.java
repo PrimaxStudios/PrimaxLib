@@ -56,7 +56,7 @@ public class ItemManager {
         ItemStack item = propertyManager.getRegistry().getMaterialProperty().getItem(section);
         if (item == null) {
             logger.warn("Failed to create ItemStack from section '{}' of '{}'", section.getName(), section.getRoot().getFile());
-            throw new RuntimeException();
+            return null;
         }
         CoreItem coreItem = section.contains("id")
                 ? new CoreItem(section.getString("id"), item)

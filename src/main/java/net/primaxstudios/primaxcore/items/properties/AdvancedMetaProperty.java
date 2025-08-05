@@ -15,7 +15,7 @@ public abstract class AdvancedMetaProperty<T extends ItemMeta> implements ItemPr
     private final Class<T> metaClass;
 
     public AdvancedMetaProperty(Logger logger, Class<T> metaClass) {
-        this.logger =  logger;
+        this.logger = logger;
         this.metaClass = metaClass;
     }
 
@@ -29,11 +29,13 @@ public abstract class AdvancedMetaProperty<T extends ItemMeta> implements ItemPr
             return false;
         }
 
-        if (!itemMeta.getClass().equals(metaClass)) {
+        T meta;
+        try {
+            meta = metaClass.cast(itemMeta);
+        } catch (ClassCastException e) {
             Config.warn(logger, section, "ItemMeta is not {}", metaClass.getName());
             return false;
         }
-        T meta = metaClass.cast(itemMeta);
 
         boolean value = setProperty(meta, section);
         item.setItemMeta(meta);

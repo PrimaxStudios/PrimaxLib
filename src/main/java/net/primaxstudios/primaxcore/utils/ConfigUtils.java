@@ -126,7 +126,7 @@ public final class ConfigUtils {
     }
 
     public static PotionEffect parsePotionEffect(Section section) {
-        NamespacedKey key = parseNamespacedKey(section, "key");
+        NamespacedKey key = parseNamespacedKey(section, "type");
         if (key == null) return null;
 
         PotionEffectType type = RegistryAccess.registryAccess().getRegistry(RegistryKey.MOB_EFFECT).get(key);

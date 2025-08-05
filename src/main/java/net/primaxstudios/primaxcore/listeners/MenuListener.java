@@ -28,31 +28,24 @@ public class MenuListener implements Listener {
         if (holder == null) return;
 
         CustomMenuOpenEvent openEvent = new CustomMenuOpenEvent((Player) e.getPlayer(), holder, e);
-        openEvent.callEvent();
-        if (openEvent.isCancelled()) return;
+        if (!openEvent.callEvent()) return;
 
         holder.getCustomMenu().onOpen(openEvent);
     }
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        System.out.println("onClick 1");
         if (e.isCancelled() || e.getClickedInventory() == null) return;
 
-        System.out.println("onClick 2");
         InventoryAction action = e.getAction();
         if (action.equals(InventoryAction.NOTHING)) return;
 
-        System.out.println("onClick 3");
         MenuHolder holder = getHolder(e.getInventory(), e.getClickedInventory());
         if (holder == null) return;
 
-        System.out.println("onClick 4");
         CustomMenuClickEvent clickEvent = new CustomMenuClickEvent((Player) e.getWhoClicked(), holder, e);
-        clickEvent.callEvent();
-        if (clickEvent.isCancelled()) return;
+        if (!clickEvent.callEvent()) return;
 
-        System.out.println("onClick 5");
         holder.getCustomMenu().onClick(clickEvent);
     }
 
@@ -72,8 +65,7 @@ public class MenuListener implements Listener {
         if (holder == null) return;
 
         CustomMenuDragEvent dragEvent = new CustomMenuDragEvent((Player) e.getWhoClicked(), holder, e);
-        dragEvent.callEvent();
-        if (dragEvent.isCancelled()) return;
+        if (!dragEvent.callEvent()) return;
 
         holder.getCustomMenu().onDrag(dragEvent);
     }
