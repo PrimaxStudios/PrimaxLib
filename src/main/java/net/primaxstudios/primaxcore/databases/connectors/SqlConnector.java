@@ -33,7 +33,7 @@ public abstract class SqlConnector implements DatabaseConnector {
         this.source = new HikariDataSource(getConfig());
     }
 
-    protected HikariConfig getConfig() {
+    public HikariConfig getConfig() {
         HikariConfig config = new HikariConfig();
         config.setMaximumPoolSize(settings.getMaximumPoolSize());  // Increase the max pool size (default is 10)
         config.setMinimumIdle(settings.getMinimumIdle());       // Maintain some idle connections

@@ -114,7 +114,10 @@ public abstract class CustomMenu implements MenuHandler {
 
     @Override
     public void onClick(CustomMenuClickEvent e) {
-        e.setCancelled(true);
+        if (getSettings().isCancelClickEvent()) {
+            e.setCancelled(true);
+        }
+
         for (MenuItem item : menuItems) {
             if (item instanceof OptionalItem optional && !optional.isEnabled()) continue;
             if (!(item instanceof ClickableItem clickable) || !item.isSlot(e.getOriginalEvent().getSlot())) continue;
@@ -131,7 +134,9 @@ public abstract class CustomMenu implements MenuHandler {
 
     @Override
     public void onDrag(CustomMenuDragEvent e) {
-        e.setCancelled(true);
+        if (getSettings().isCancelDragEvent()) {
+            e.setCancelled(true);
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -67,23 +67,23 @@ public final class TimeUtils {
         return pattern;
     }
 
-    public static double getSeconds(@NotNull String message) {
+    public static long getSeconds(@NotNull String message) {
         if (message.contains("s")) {
-            return Double.parseDouble(message.replace("s", ""));
+            return Long.parseLong(message.replace("s", ""));
         }
         if (message.contains("m")) {
-            double time = Double.parseDouble(message.replace("m", ""));
+            long time = Long.parseLong(message.replace("m", ""));
             return time * 60;
         }
         if (message.contains("h")) {
-            double time = Double.parseDouble(message.replace("h", ""));
+            long time = Long.parseLong(message.replace("h", ""));
             return time * 60 * 60;
         }
         if (message.contains("d")) {
-            double time = Double.parseDouble(message.replace("d", ""));
+            long time = Long.parseLong(message.replace("d", ""));
             return time * 60 * 60 * 24;
         }
-        return Double.parseDouble(message);
+        return Long.parseLong(message);
     }
 
     public static int getYears(@NotNull LocalDateTime from, @NotNull LocalDateTime to) {

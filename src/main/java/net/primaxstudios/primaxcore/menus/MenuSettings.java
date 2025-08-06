@@ -7,7 +7,6 @@ import lombok.Setter;
 public class MenuSettings {
 
     private boolean addFiller = true;
-    private boolean allowClicking;
-    private boolean allowDrag;
-    private boolean etc;
+    private boolean cancelClickEvent = true;
+    private boolean cancelDragEvent = true;
 }

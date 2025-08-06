@@ -20,7 +20,7 @@ public class SqliteConnector extends SqlConnector {
     }
 
     @Override
-    protected HikariConfig getConfig() {
+    public HikariConfig getConfig() {
         HikariConfig config = super.getConfig();
         config.setJdbcUrl(getUrl());
         return config;
