@@ -1,24 +1,30 @@
 package net.primaxstudios.primaxcore.menus.item.slot;
 
-import net.primaxstudios.primaxcore.menus.item.AbstractMenuItem;
+import net.primaxstudios.primaxcore.menus.item.MenuItem;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public abstract class SlotBoundItem extends AbstractMenuItem {
+public interface SlotBoundItem extends MenuItem {
 
-    public abstract List<Integer> getBoundSlots();
+    List<Integer> getSlots();
 
     @Override
-    public boolean isSlot(int slot) {
-        return getBoundSlots().contains(slot);
+    default boolean isSlot(int slot) {
+        return getSlots().contains(slot);
     }
 
     @Override
-    public void setItem(Inventory inventory, ItemStack item) {
-        for (int slot : getBoundSlots()) {
+    default void setItem(Inventory inventory, ItemStack item) {
+        for (int slot : getSlots()) {
             inventory.setItem(slot, item);
+        }
+    }
+
+    default void clear(Inventory inventory) {
+        for (int slot : getSlots()) {
+            inventory.setItem(slot, null);
         }
     }
 }
