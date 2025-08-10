@@ -19,6 +19,7 @@ PrimaxCore provides core utilities and tools for efficient plugin creation.
     <groupId>com.github.PrimaxStudios</groupId>
     <artifactId>PrimaxCore</artifactId>
     <version>VERSION</version> <!-- Replace "VERSION" with the latest version -->
+    <scope>provided</scope>
 </dependency>
 ```
 
@@ -33,6 +34,6 @@ repositories {
 
 ```
 dependencies {
-    implementation 'com.github.PrimaxStudios:PrimaxCore:<VERSION>' // Replace "<VERSION>" with the latest version
+    compileOnly 'com.github.PrimaxStudios:PrimaxCore:<VERSION>' // Replace "<VERSION>" with the latest version
 }
 ```
