@@ -1,4 +1,17 @@
 name: PrimaxCore
 version: ${version}
 main: net.primaxstudios.primaxcore.PrimaxCore
-api-version: '1.21'
+api-version: '1.13'
+softdepend:
+  - PlaceholderAPI
+  - Vault
+  - Essentials
+  - PlayerPoints
+  - CoinsEngine
+  - LuckPerms
+  - HeadsDatabase
+  - ItemsAdder
+  - SCore
+  - ExecutableItems
+  - Eco
+  - EcoItems
