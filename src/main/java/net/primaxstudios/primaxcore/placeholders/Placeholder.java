@@ -1,85 +1,93 @@
 package net.primaxstudios.primaxcore.placeholders;
 
-import net.primaxstudios.primaxcore.utils.PlaceholderUtils;
 import lombok.Getter;
 import lombok.Setter;
+import net.kyori.adventure.text.Component;
+import net.primaxstudios.primaxcore.utils.ColorUtils;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter @Setter
-public class Placeholder {
+public class Placeholder extends HashMap<String, String> {
 
-    private final Map<String, String> replacementByPlaceholder = new HashMap<>();
-    private final List<PlaceholderMethod> methods = new ArrayList<>();
     private OfflinePlayer offlinePlayer;
 
-    public Placeholder() {
-    }
-
-    public Placeholder(Placeholder placeholder) {
-        addPlaceholder(placeholder);
-    }
+    public Placeholder() {}
 
     public Placeholder(String placeholder, String replacement) {
         addReplacement(placeholder, replacement);
     }
 
-    public Placeholder(PlaceholderMethod method) {
-        addMethod(method);
+    public Placeholder(String placeholder, List<String> replacement) {
+        addReplacement(placeholder, replacement);
     }
 
     public Placeholder(OfflinePlayer offlinePlayer) {
         this.offlinePlayer = offlinePlayer;
     }
 
+    public Placeholder(Placeholder placeholder) {
+        addPlaceholder(placeholder);
+    }
+
     public void addReplacement(String placeholder, String replacement) {
-        replacementByPlaceholder.put(placeholder, replacement);
+        put(placeholder, replacement);
+    }
+
+    public void addReplacement(String placeholder, List<String> replacement) {
+        put(placeholder, String.join("\n", replacement));
     }
 
     public void addReplacements(Map<String, String> replacementByPlaceholder) {
-        for (Map.Entry<String, String> entry : replacementByPlaceholder.entrySet()) {
-            addReplacement(entry.getKey(), entry.getValue());
-        }
-    }
-
-    public void addMethod(PlaceholderMethod method) {
-        methods.add(method);
-    }
-
-    public void addMethods(List<PlaceholderMethod> methods) {
-        this.methods.addAll(methods);
-    }
-
-    public String setPlaceholders(String line) {
-        for (Map.Entry<String, String> entry : replacementByPlaceholder.entrySet()) {
-            while (line.contains(entry.getKey())) {
-                line = line.replace(entry.getKey(), entry.getValue());
-            }
-        }
-        for (PlaceholderMethod method : methods) {
-            line = method.setPlaceholders(line);
-        }
-        line = PlaceholderUtils.setPlaceholder(line, offlinePlayer);
-        return line;
-    }
-
-    public List<String> setPlaceholders(List<String> list) {
-        List<String> newList = new ArrayList<>();
-        for (String line : list) {
-            newList.add(setPlaceholders(line));
-        }
-        return newList;
+        putAll(replacementByPlaceholder);
     }
 
     public void addPlaceholder(Placeholder placeholder) {
-        addReplacements(placeholder.getReplacementByPlaceholder());
-        addMethods(placeholder.getMethods());
-        if (offlinePlayer == null) {
-            offlinePlayer = placeholder.getOfflinePlayer();
+        putAll(placeholder);
+    }
+
+    public String setPlaceholders(String text) {
+        for (Map.Entry<String, String> entry : entrySet()) {
+            String placeholder = entry.getKey();
+            while (text.contains(placeholder)) {
+                text = text.replace(placeholder, entry.getValue());
+            }
+        }
+        return text;
+    }
+
+    public List<String> setPlaceholders(List<String> texts) {
+        return texts.stream().map(this::setPlaceholders).collect(Collectors.toList());
+    }
+
+    public void setPlaceholders(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return;
+
+        setPlaceholders(meta);
+        item.setItemMeta(meta);
+    }
+
+    public void setPlaceholders(ItemMeta meta) {
+        if (meta.hasDisplayName()) {
+            String displayName = setPlaceholders(ColorUtils.color(meta.displayName()));
+            meta.displayName(ColorUtils.getComponent(displayName));
+        }
+
+        List<Component> lore = meta.lore();
+        if (lore != null) {
+            List<Component> newLore = lore.stream()
+                    .map(ColorUtils::color)
+                    .map(this::setPlaceholders)
+                    .flatMap(line -> Arrays.stream(line.split("\n")))
+                    .map(ColorUtils::getComponent)
+                    .filter(comp -> !ColorUtils.plainText(comp).isEmpty())
+                    .toList();
+            meta.lore(newLore);
         }
     }
 }

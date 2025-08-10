@@ -1,13 +1,8 @@
 package net.primaxstudios.primaxcore.utils;
 
-import net.primaxstudios.primaxcore.placeholders.ComponentPlaceholder;
-import net.primaxstudios.primaxcore.placeholders.Placeholder;
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -78,37 +73,5 @@ public final class PlaceholderUtils {
             return setPlaceholder(messages);
         }
         return PlaceholderAPI.setPlaceholders(player, messages);
-    }
-
-    public static void setPlaceholder(ItemStack item, Placeholder placeholder) {
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) return;
-
-        Component name = meta.displayName();
-        if (name != null) {
-            meta.displayName(ColorUtils.getComponent(placeholder.setPlaceholders(ColorUtils.color(name))));
-        }
-        List<Component> lore = meta.lore();
-        if (lore != null) {
-            lore.replaceAll(line -> ColorUtils.getComponent(placeholder.setPlaceholders(ColorUtils.color(line))));
-            meta.lore(lore);
-        }
-        item.setItemMeta(meta);
-    }
-
-    public static void setPlaceholders(ItemStack item, ComponentPlaceholder placeholder) {
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null) return;
-
-        if (meta.hasDisplayName()) {
-            meta.displayName(placeholder.setPlaceholders(meta.displayName()));
-        }
-
-        List<Component> lore = meta.lore();
-        if (lore != null) {
-            meta.lore(placeholder.setPlaceholders(lore));
-        }
-
-        item.setItemMeta(meta);
     }
 }
