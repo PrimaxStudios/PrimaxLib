@@ -3,12 +3,18 @@ package net.primaxstudios.primaxcore.menus.item;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
 import lombok.Setter;
-import net.primaxstudios.primaxcore.menus.item.slot.MultiSlotItem;
+import net.primaxstudios.primaxcore.menus.item.slot.SlotBoundItem;
+import net.primaxstudios.primaxcore.utils.ConfigUtils;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 @Getter @Setter
-public class FillerItem extends MultiSlotItem implements OptionalItem {
+public class FillerItem extends AbstractMenuItem implements SlotBoundItem, OptionalItem {
 
     private boolean enabled;
+    private List<Integer> slots;
 
     @Override
     public String getId() {
@@ -21,10 +27,30 @@ public class FillerItem extends MultiSlotItem implements OptionalItem {
         if (!enabled) return;
 
         super.reload(section);
+        if (section.contains("slots")) {
+            slots = ConfigUtils.parseSlots(section, "slots");
+        }
     }
 
     @Override
-    public boolean isEnabled() {
-        return enabled;
+    public void setItem(Inventory inventory, ItemStack item) {
+        if (slots == null || slots.isEmpty()) {
+            for (int i = 0; i < inventory.getSize(); i++) {
+                inventory.setItem(i, item);
+            }
+        }else {
+            slots.forEach(slot -> inventory.setItem(slot, item));
+        }
+    }
+
+    @Override
+    public void clear(Inventory inventory) {
+        if (slots == null || slots.isEmpty()) {
+            for (int i = 0; i < inventory.getSize(); i++) {
+                inventory.setItem(i, null);
+            }
+        } else {
+            slots.forEach(slot -> inventory.setItem(slot, null));
+        }
     }
 }
