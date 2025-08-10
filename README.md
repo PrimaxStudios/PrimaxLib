@@ -16,9 +16,9 @@ PrimaxCore provides core utilities and tools for efficient plugin creation.
 
 ```
 <dependency>
-    <groupId>com.github.ShadedXero</groupId>
+    <groupId>com.github.PrimaxStudios</groupId>
     <artifactId>PrimaxCore</artifactId>
-    <version>1.0.1</version>
+    <version>VERSION</version> <!-- Replace "VERSION" with the latest version -->
 </dependency>
 ```
 
@@ -33,6 +33,6 @@ repositories {
 
 ```
 dependencies {
-    implementation 'com.github.ShadedXero:PrimaxCore:1.0.1' // Replace with latest
+    implementation 'com.github.PrimaxStudios:PrimaxCore:<VERSION>' // Replace "<VERSION>" with the latest version
 }
 ```
