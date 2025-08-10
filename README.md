@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/ShadedXero/PrimaxCore.svg)](https://jitpack.io/#ShadedXero/PrimaxCore)
+[![](https://jitpack.io/v/PrimaxStudios/PrimaxCore.svg)](https://jitpack.io/#PrimaxStudios/PrimaxCore)
 
 A powerful and easy-to-use standalone library designed to simplify Minecraft plugin development.  
 PrimaxCore provides core utilities and tools for efficient plugin creation.
