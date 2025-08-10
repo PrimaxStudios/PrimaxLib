@@ -61,22 +61,24 @@ public abstract class CustomMenu implements MenuHandler {
     public void reload() {
         try {
             File file = Objects.requireNonNull(getFile(), "File cannot be null");
-
             YamlDocument document = ConfigUtils.load(file);
-
-            menuTitle = ColorUtils.getComponent(Objects.requireNonNull(document.getString("menu_title"), "Menu title is missing"));
-
-            menuType = Objects.requireNonNull(PrimaxCore.inst().getMenuManager().getMenuType(document), "Menu Type is missing");
-
-            Section itemsSection = document.getSection("items");
-            if (!menuItems.isEmpty()) Objects.requireNonNull(itemsSection, "'items' section is missing");
-
-            for (MenuItem item : menuItems) {
-                Section section = Objects.requireNonNull(itemsSection.getSection(item.getId()), "'" + item.getId() + "'" + "section is missing");
-                item.reload(section);
-            }
+            reload(document);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
+        }
+    }
+
+    public void reload(Section document) {
+        menuTitle = ColorUtils.getComponent(Objects.requireNonNull(document.getString("menu_title"), "Menu title is missing"));
+
+        menuType = Objects.requireNonNull(PrimaxCore.inst().getMenuManager().getMenuType(document), "Menu Type is missing");
+
+        Section itemsSection = document.getSection("items");
+        if (!menuItems.isEmpty()) Objects.requireNonNull(itemsSection, "'items' section is missing");
+
+        for (MenuItem item : menuItems) {
+            Section section = Objects.requireNonNull(itemsSection.getSection(item.getId()), "'" + item.getId() + "'" + "section is missing");
+            item.reload(section);
         }
     }
 
