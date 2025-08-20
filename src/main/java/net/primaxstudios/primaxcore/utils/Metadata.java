@@ -94,7 +94,7 @@ public class Metadata {
     @SuppressWarnings("unchecked")
     public <T> T getOrDefault(String key, @NotNull T def) {
         Object value = objectByKey.get(key);
-        if (def.getClass().isInstance(value)) {
+        if (value != null) {
             return (T) value;
         }
         return def;
