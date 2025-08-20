@@ -3,6 +3,7 @@ package net.primaxstudios.primaxcore.configs;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -63,11 +64,11 @@ public abstract class Config {
         return formatMessage(" in section '{}' of file '{}'", sectionName, normalizedPath);
     }
 
-    public static <T> T requireNonNull(T object, Section section, String message, Object... objects) {
+    public static @NotNull <T> T requireNonNull(T object, Section section, String message, Object... objects) {
         return Objects.requireNonNull(object, formatMessage(message, objects) + createCause(section));
     }
 
-    public static <T> T requireNonNull(T object, Section section) {
+    public static @NotNull <T> T requireNonNull(T object, Section section) {
         return Objects.requireNonNull(object, createCause(section));
     }
 

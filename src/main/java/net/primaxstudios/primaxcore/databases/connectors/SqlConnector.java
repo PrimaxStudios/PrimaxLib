@@ -53,39 +53,33 @@ public abstract class SqlConnector implements DatabaseConnector {
     }
 
     @Blocking
-    public void execute(String sql, Object... objects) {
+    public void execute(String sql, Object... params) {
         try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            for (int i = 0; i < objects.length; i++) {
-                statement.setObject(i + 1, objects[i]);
-            }
-            statement.execute();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            bindParams(stmt, params);
+            stmt.execute();
         } catch (SQLException exp) {
             throw new RuntimeException(exp);
         }
     }
 
     @Blocking
-    public void update(String sql, Object... objects) {
+    public void update(String sql, Object... params) {
         try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            for (int i = 0; i < objects.length; i++) {
-                statement.setObject(i + 1, objects[i]);
-            }
-            statement.executeUpdate();
-        }catch (SQLException exp) {
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            bindParams(stmt, params);
+            stmt.executeUpdate();
+        } catch (SQLException exp) {
             throw new RuntimeException(exp);
         }
     }
 
     @Blocking
-    public void executeQuery(String sql, ResultExecutor executor, Object... objects) {
+    public void executeQuery(String sql, ResultExecutor executor, Object... params) {
         try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            for (int i = 0; i < objects.length; i++) {
-                statement.setObject(i + 1, objects[i]);
-            }
-            try (ResultSet result = statement.executeQuery()) {
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            bindParams(stmt, params);
+            try (ResultSet result = stmt.executeQuery()) {
                 executor.process(result);
             }
         } catch (SQLException e) {
@@ -94,13 +88,11 @@ public abstract class SqlConnector implements DatabaseConnector {
     }
 
     @Blocking
-    public <T> T query(String sql, ResultQuery<T> query, Object... objects) {
+    public <T> T query(String sql, ResultQuery<T> query, Object... params) {
         try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            for (int i = 0; i < objects.length; i++) {
-                statement.setObject(i + 1, objects[i]);
-            }
-            try (ResultSet result = statement.executeQuery()) {
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            bindParams(stmt, params);
+            try (ResultSet result = stmt.executeQuery()) {
                 return query.process(result);
             }
         } catch (SQLException e) {
@@ -112,6 +104,12 @@ public abstract class SqlConnector implements DatabaseConnector {
     public void close() {
         if (source != null) {
             source.close();
+        }
+    }
+
+    private void bindParams(PreparedStatement stmt, Object... params) throws SQLException {
+        for (int i = 0; i < params.length; i++) {
+            stmt.setObject(i + 1, params[i]);
         }
     }
 }

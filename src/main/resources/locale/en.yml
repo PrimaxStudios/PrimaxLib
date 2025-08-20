@@ -7,3 +7,11 @@ invalid-world: "&cPlease enter a valid world"
 command-success: "&aSuccessfully executed the command"
 give-item-success: "&aSuccessfully gave &e{0}x {1} &ato &b{2}"
 open-success: "&aSuccessfully opened the menu"
+
+########################################################
+##                  DO NOT CHANGE                     ##
+########################################################
+
+# Configuration file version.
+# Changing this may break compatibility with the plugin.
+config_version: 1
