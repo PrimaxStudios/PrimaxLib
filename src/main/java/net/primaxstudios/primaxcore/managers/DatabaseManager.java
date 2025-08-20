@@ -8,6 +8,7 @@ import net.primaxstudios.primaxcore.databases.DatabaseConnector;
 import net.primaxstudios.primaxcore.databases.PoolSettings;
 import net.primaxstudios.primaxcore.databases.connectors.MongodbConnector;
 import net.primaxstudios.primaxcore.databases.connectors.MySqlConnector;
+import net.primaxstudios.primaxcore.databases.connectors.PostgresqlConnector;
 import net.primaxstudios.primaxcore.databases.connectors.SqliteConnector;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,6 +32,7 @@ public class DatabaseManager {
         return switch (type) {
             case "sqlite" -> getSqliteConnector(plugin, poolSettings);
             case "mysql" -> getMySqlConnector(poolSettings, credentials);
+            case "postgresql" -> getPostgresqlConnector(poolSettings, credentials);
             case "mongodb" -> getMongoDBConnector(credentials, section.getSection("mongodb_settings"));
             default -> null;
         };
@@ -42,6 +44,10 @@ public class DatabaseManager {
 
     public MySqlConnector getMySqlConnector(PoolSettings poolSettings, Credentials credentials) {
         return new MySqlConnector(poolSettings, credentials);
+    }
+
+    public PostgresqlConnector getPostgresqlConnector(PoolSettings poolSettings, Credentials credentials) {
+        return new PostgresqlConnector(poolSettings, credentials);
     }
 
     public MongodbConnector getMongoDBConnector(Credentials credentials, Section section) {
