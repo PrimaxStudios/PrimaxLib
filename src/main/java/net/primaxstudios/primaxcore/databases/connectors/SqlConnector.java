@@ -53,16 +53,6 @@ public abstract class SqlConnector implements DatabaseConnector {
     }
 
     @Blocking
-    public void execute(String sql) {
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.execute(sql);
-        }catch (SQLException exp) {
-            throw new RuntimeException(exp);
-        }
-    }
-
-    @Blocking
     public void execute(String sql, Object... objects) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -71,16 +61,6 @@ public abstract class SqlConnector implements DatabaseConnector {
             }
             statement.execute();
         } catch (SQLException exp) {
-            throw new RuntimeException(exp);
-        }
-    }
-
-    @Blocking
-    public void update(String sql) {
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
-        }catch (SQLException exp) {
             throw new RuntimeException(exp);
         }
     }
@@ -99,17 +79,6 @@ public abstract class SqlConnector implements DatabaseConnector {
     }
 
     @Blocking
-    public void executeQuery(String sql, ResultExecutor executor) {
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet result = statement.executeQuery(sql)) {
-            executor.process(result);
-        } catch (SQLException exp) {
-            throw new RuntimeException(exp);
-        }
-    }
-
-    @Blocking
     public void executeQuery(String sql, ResultExecutor executor, Object... objects) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -121,17 +90,6 @@ public abstract class SqlConnector implements DatabaseConnector {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    @Blocking
-    public <T> T query(String sql, ResultQuery<T> query) {
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet result = statement.executeQuery(sql)) {
-            return query.process(result);
-        } catch (SQLException exp) {
-            throw new RuntimeException(exp);
         }
     }
 
