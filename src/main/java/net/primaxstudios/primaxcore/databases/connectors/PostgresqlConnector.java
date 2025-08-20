@@ -21,6 +21,7 @@ public class PostgresqlConnector extends SqlConnector {
     @Override
     public HikariConfig getConfig() {
         HikariConfig config = super.getConfig();
+        config.setDriverClassName("net.primaxstudios.primaxcore.libs.postgresql.Driver");
         config.setJdbcUrl(getUrl());
         config.setUsername(credentials.getUsername());
         if (credentials.getPassword() != null) {

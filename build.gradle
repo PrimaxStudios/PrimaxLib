@@ -114,11 +114,15 @@ tasks {
         relocate("de.tr7zw.changeme.nbtapi", "net.primaxstudios.primaxcore.libs.nbtapi")
         relocate("com.jeff_media.customblockdata", "net.primaxstudios.primaxcore.libs.customblockdata")
         relocate("com.zaxxer.hikari", "net.primaxstudios.primaxcore.libs.hikari")
+        relocate("org.postgresql", "net.primaxstudios.primaxcore.libs.postgresql")
         relocate("com.mongodb", "net.primaxstudios.primaxcore.libs.mongodb")
         relocate("redis.clients.jedis", "net.primaxstudios.primaxcore.libs.jedis")
 
         exclude 'META-INF/native-image/native-image.properties'
         exclude 'META-INF/native-image/reflect-config.json'
+        exclude 'META-INF/LICENSE*'
+        exclude 'META-INF/NOTICE*'
+        exclude 'META-INF/DEPENDENCIES'
     }
 
     build {
