@@ -18,6 +18,7 @@ public final class PrimaxCore extends JavaPlugin {
     public static final String NAMESPACE = "primaxcore";
     public static final NamespacedKey IDENTIFIER_KEY = new NamespacedKey(NAMESPACE, "key");
     private static PrimaxCore instance;
+    private CoreDependencyManager dependencyManager;
     private Economy economy;
     private Permission permission;
     private HeadDatabaseAPI headDatabaseAPI;
@@ -29,6 +30,12 @@ public final class PrimaxCore extends JavaPlugin {
     private CurrencyManager currencyManager;
     private ItemManager itemManager;
     private MenuManager menuManager;
+
+    @Override
+    public void onLoad() {
+        dependencyManager = new CoreDependencyManager();
+        dependencyManager.loadLibraries();
+    }
 
     @Override
     public void onEnable() {

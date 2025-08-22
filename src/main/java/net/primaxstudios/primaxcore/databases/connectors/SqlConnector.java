@@ -64,6 +64,20 @@ public abstract class SqlConnector implements DatabaseConnector {
     }
 
     @Blocking
+    public void executeBatch(String sql, Object[][] batchParams) {
+        try (Connection connection = getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            for (Object[] params : batchParams) {
+                bindParams(stmt, params);
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Blocking
     public void update(String sql, Object... params) {
         try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
