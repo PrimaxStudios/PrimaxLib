@@ -32,14 +32,11 @@ public final class PrimaxCore extends JavaPlugin {
     private MenuManager menuManager;
 
     @Override
-    public void onLoad() {
-        dependencyManager = new CoreDependencyManager();
-        dependencyManager.loadLibraries();
-    }
-
-    @Override
     public void onEnable() {
         instance = this;
+
+        dependencyManager = new CoreDependencyManager();
+        dependencyManager.loadLibraries();
 
         if (getServer().getPluginManager().getPlugin("Vault") != null) {
             economy = findEconomy();

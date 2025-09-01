@@ -66,7 +66,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
-    implementation("com.alessiodp.libby:libby-paper:2.0.0-SNAPSHOT")
+    implementation("com.alessiodp.libby:libby-bukkit:2.0.0-SNAPSHOT")
     implementation("dev.dejvokep:boosted-yaml:1.3.7")
     compileOnly("com.zaxxer:HikariCP:6.3.0")
     compileOnly("com.mysql:mysql-connector-j:9.3.0")
@@ -119,11 +119,16 @@ tasks {
         relocate("de.tr7zw.changeme.nbtapi", "net.primaxstudios.primaxcore.libs.nbtapi")
         relocate("com.jeff_media.customblockdata", "net.primaxstudios.primaxcore.libs.customblockdata")
 
-        exclude 'META-INF/native-image/native-image.properties'
-        exclude 'META-INF/native-image/reflect-config.json'
+        // Exclude duplicate META-INF files that break Paper’s remapper
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
         exclude 'META-INF/LICENSE*'
         exclude 'META-INF/NOTICE*'
         exclude 'META-INF/DEPENDENCIES'
+
+        // Prevent duplicate file entries inside the jar
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
 
     build {

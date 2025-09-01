@@ -10,6 +10,7 @@ public class CoreDependencyManager extends DependencyManager {
 
     public CoreDependencyManager() {
         super(PrimaxCore.inst());
+        addMavenCentral();
     }
 
     @Override
@@ -20,7 +21,7 @@ public class CoreDependencyManager extends DependencyManager {
                         .groupId("com{}zaxxer")
                         .artifactId("HikariCP")
                         .version("6.3.0")
-                        .relocate("com{}zaxxer{}hikari", "net{}primaxstudios{}primaxcore{}hikari")
+                        .relocate("com{}zaxxer{}hikari", "net{}primaxstudios{}primaxcore{}libs{}hikari")
                         .build(),
                 //Postgresql Driver
                 Library.builder()

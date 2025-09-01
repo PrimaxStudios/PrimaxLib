@@ -1,13 +1,13 @@
 package net.primaxstudios.primaxcore.dependency;
 
+import com.alessiodp.libby.BukkitLibraryManager;
 import com.alessiodp.libby.Library;
-import com.alessiodp.libby.PaperLibraryManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public abstract class DependencyManager extends PaperLibraryManager {
+public abstract class DependencyManager extends BukkitLibraryManager {
 
     public DependencyManager(@NotNull JavaPlugin plugin) {
         super(plugin);
