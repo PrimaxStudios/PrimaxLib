@@ -65,7 +65,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.17-R0.1-SNAPSHOT")
     implementation("com.alessiodp.libby:libby-paper:2.0.0-SNAPSHOT")
     implementation("dev.dejvokep:boosted-yaml:1.3.7")
     compileOnly("com.zaxxer:HikariCP:6.3.0")
@@ -75,6 +75,7 @@ dependencies {
     implementation ("redis.clients:jedis:5.2.0")
     implementation("org.projectlombok:lombok:1.18.38")
     annotationProcessor "org.projectlombok:lombok:1.18.38"
+    implementation("com.github.cryptomorin:XSeries:13.3.3")
     implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
     annotationProcessor("co.aikar:acf-paper:0.5.1-SNAPSHOT")
     implementation("de.tr7zw:item-nbt-api:2.15.1")
