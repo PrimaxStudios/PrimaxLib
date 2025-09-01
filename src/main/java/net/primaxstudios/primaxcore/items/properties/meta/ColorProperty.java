@@ -27,12 +27,17 @@ public class ColorProperty extends MetaProperty {
             return false;
         }
 
-        switch (meta) {
-            case LeatherArmorMeta leatherArmorMeta -> leatherArmorMeta.setColor(color);
-            case FireworkEffectMeta fireworkEffectMeta -> fireworkEffectMeta.setEffect(FireworkEffect.builder().withColor(color).build());
-            case PotionMeta potionMeta -> potionMeta.setColor(color);
-            case MapMeta mapMeta -> mapMeta.setColor(color);
-            default -> Config.warn(logger, section, "Unsupported ItemMeta type for '{}'", ID);
+        if (meta instanceof LeatherArmorMeta leatherArmorMeta) {
+            leatherArmorMeta.setColor(color);
+        }else if (meta instanceof FireworkEffectMeta fireworkEffectMeta) {
+            fireworkEffectMeta.setEffect(FireworkEffect.builder().withColor(color).build());
+        }else if (meta instanceof PotionMeta potionMeta) {
+            potionMeta.setColor(color);
+        }else if (meta instanceof MapMeta mapMeta) {
+            mapMeta.setColor(color);
+        }else {
+            Config.warn(logger, section, "Unsupported ItemMeta type for '{}'", ID);
+            return false;
         }
         return true;
     }

@@ -1,4 +1,21 @@
 package net.primaxstudios.primaxcore.versions;
 
-public class VersionAdapter {
+import org.bukkit.NamespacedKey;
+import org.bukkit.block.banner.PatternType;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
+import org.bukkit.inventory.meta.trim.TrimPattern;
+import org.bukkit.potion.PotionEffectType;
+
+public interface VersionAdapter {
+
+    Enchantment getEnchantment(NamespacedKey key);
+
+    TrimMaterial getTrimMaterial(NamespacedKey key);
+
+    TrimPattern getTrimPattern(NamespacedKey key);
+
+    PotionEffectType getPotionEffectType(NamespacedKey key);
+
+    PatternType getPatternType(NamespacedKey key);
 }

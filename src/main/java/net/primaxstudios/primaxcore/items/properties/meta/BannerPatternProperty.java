@@ -1,12 +1,14 @@
 package net.primaxstudios.primaxcore.items.properties.meta;
 
-import com.cryptomorin.xseries.XPatternType;
 import net.primaxstudios.primaxcore.configs.Config;
 import net.primaxstudios.primaxcore.items.properties.AdvancedMetaProperty;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import net.primaxstudios.primaxcore.versions.VersionManager;
 import org.bukkit.DyeColor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -44,15 +46,19 @@ public class BannerPatternProperty extends AdvancedMetaProperty<BannerMeta> {
             DyeColor color = ConfigUtils.parseEnum(section, "color", DyeColor.class);
             if (color == null) continue;
 
-            String key = section.getString("type");
+            NamespacedKey key = ConfigUtils.parseNamespacedKey(section, "type");
             if (key == null) {
                 Config.warn(logger, section, "Pattern 'type' is missing.");
                 continue;
             }
 
-            XPatternType.of(key).map(XPatternType::get)
-                    .ifPresentOrElse(type -> patterns.add(new Pattern(color, type)),
-                            () -> Config.warn(logger, section, "No PatternType found for key '{}'", key));
+            PatternType patternType = VersionManager.get().getPatternType(key);
+            if (patternType == null) {
+                Config.warn(logger, section, "No PatternType found for key '{}'", key);
+                continue;
+            }
+
+            patterns.add(new Pattern(color, patternType));
         }
 
         return patterns;

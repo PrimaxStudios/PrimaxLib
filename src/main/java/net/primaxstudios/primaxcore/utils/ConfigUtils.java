@@ -1,7 +1,5 @@
 package net.primaxstudios.primaxcore.utils;
 
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import net.primaxstudios.primaxcore.PrimaxCore;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -9,6 +7,7 @@ import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import net.primaxstudios.primaxcore.configs.Config;
+import net.primaxstudios.primaxcore.versions.VersionManager;
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -129,7 +128,7 @@ public final class ConfigUtils {
         NamespacedKey key = parseNamespacedKey(section, "type");
         if (key == null) return null;
 
-        PotionEffectType type = RegistryAccess.registryAccess().getRegistry(RegistryKey.MOB_EFFECT).get(key);
+        PotionEffectType type = VersionManager.get().getPotionEffectType(key);
         if (type == null) {
             Config.warn(logger, section, "Unknown potion effect key '{}'", key);
             return null;

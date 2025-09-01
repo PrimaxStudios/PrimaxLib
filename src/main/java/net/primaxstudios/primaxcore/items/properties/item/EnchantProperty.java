@@ -1,11 +1,10 @@
 package net.primaxstudios.primaxcore.items.properties.item;
 
-import com.cryptomorin.xseries.XEnchantment;
 import net.primaxstudios.primaxcore.configs.Config;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.primaxstudios.primaxcore.items.properties.MetaProperty;
+import net.primaxstudios.primaxcore.versions.VersionManager;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -55,15 +54,13 @@ public class EnchantProperty extends MetaProperty {
                 continue;
             }
 
-            Enchantment enchantment = RegistryAccess.registryAccess()
-                    .getRegistry(RegistryKey.ENCHANTMENT)
-                    .get(key);
+            Enchantment enchantment = VersionManager.get().getEnchantment(key);
+            if (enchantment == null) {
+                Config.warn(logger, section, "Unknown enchantment key '{}'", key);
+                continue;
+            }
 
-            Enchantment enchantment2 = Registry.ENCHANTMENT.get(key);
-
-            XEnchantment.of(key).map(XEnchantment::get)
-                    .ifPresentOrElse(enchantment -> enchantments.put(enchantment, level),
-                            () -> Config.warn(logger, section, "Unknown enchantment key '{}'", key));
+            enchantments.put(enchantment, level);
         }
         return enchantments;
     }

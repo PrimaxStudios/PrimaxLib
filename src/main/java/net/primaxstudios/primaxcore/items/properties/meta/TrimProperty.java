@@ -3,9 +3,8 @@ package net.primaxstudios.primaxcore.items.properties.meta;
 import net.primaxstudios.primaxcore.configs.Config;
 import net.primaxstudios.primaxcore.items.properties.AdvancedMetaProperty;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
+import net.primaxstudios.primaxcore.versions.VersionManager;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
@@ -32,12 +31,8 @@ public class TrimProperty extends AdvancedMetaProperty<ArmorMeta> {
         NamespacedKey patternKey = ConfigUtils.parseNamespacedKey(section, "pattern");
         if (patternKey == null) return false;
 
-        TrimMaterial material = RegistryAccess.registryAccess()
-                .getRegistry(RegistryKey.TRIM_MATERIAL)
-                .get(materialKey);
-        TrimPattern pattern = RegistryAccess.registryAccess()
-                .getRegistry(RegistryKey.TRIM_PATTERN)
-                .get(patternKey);
+        TrimMaterial material = VersionManager.get().getTrimMaterial(materialKey);
+        TrimPattern pattern = VersionManager.get().getTrimPattern(patternKey);
         if (material == null || pattern == null) {
             Config.warn(logger, section, "Invalid material or pattern '{}' / '{}'", materialKey, patternKey);
             return false;
