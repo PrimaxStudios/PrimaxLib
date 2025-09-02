@@ -72,12 +72,10 @@ public final class ConfigUtils {
     }
 
     public static List<String> getStringList(JavaPlugin plugin, Section section, String route) {
-        List<String> list = new ArrayList<>();
-        for (String value : section.getStringList(route)) {
-            String localeValue = PrimaxCore.inst().getLocale().getSimpleMessage(CommonUtils.getNamespace(plugin), value);
-            list.add(localeValue != null ? localeValue : value);
-        }
-        return list;
+        return section.getStringList(route).stream()
+                .map(value -> PrimaxCore.inst().getLocale().getSimpleMessage(CommonUtils.getNamespace(plugin), value))
+                .flatMap(line -> Arrays.stream(line.split("\n")))
+                .toList();
     }
 
     public static <T extends Enum<T>> T parseEnum(Section section, String route, Class<T> eClass) {

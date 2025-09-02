@@ -7,14 +7,20 @@ import net.primaxstudios.primaxcore.menus.item.slot.SlotBoundItem;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
 
 @Getter @Setter
 public class FillerItem extends AbstractMenuItem implements SlotBoundItem, OptionalItem {
 
+    private final JavaPlugin plugin;
     private boolean enabled;
     private List<Integer> slots;
+
+    public FillerItem(JavaPlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public String getId() {

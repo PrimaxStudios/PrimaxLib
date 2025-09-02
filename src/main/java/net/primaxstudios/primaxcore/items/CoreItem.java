@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
 
@@ -74,7 +75,7 @@ public class CoreItem extends CustomItem {
         return bukkitItem.clone();
     }
 
-    public void setProperty(ItemProperty property, Section section) {
-        property.setProperty(bukkitItem, section);
+    public void setProperty(ItemProperty property, JavaPlugin plugin, Section section) {
+        property.setProperty(bukkitItem, plugin, section);
     }
 }

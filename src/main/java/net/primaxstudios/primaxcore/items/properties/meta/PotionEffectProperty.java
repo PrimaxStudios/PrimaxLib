@@ -4,6 +4,7 @@ import net.primaxstudios.primaxcore.items.properties.AdvancedMetaProperty;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public class PotionEffectProperty extends AdvancedMetaProperty<PotionMeta> {
     }
 
     @Override
-    public boolean setProperty(@NotNull PotionMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull PotionMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
         List<PotionEffect> effects = createEffects(section);
         effects.forEach(effect -> meta.addCustomEffect(effect, true));
         return true;

@@ -8,6 +8,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class PersistentDataProperty extends MetaProperty {
     }
 
     @Override
-    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
         PersistentDataContainer container = meta.getPersistentDataContainer();
         for (PersistentObject object : createObjects(section)) {
             object.setData(container, section);

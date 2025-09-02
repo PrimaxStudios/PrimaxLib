@@ -4,6 +4,7 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.primaxstudios.primaxcore.PrimaxCore;
 import net.primaxstudios.primaxcore.items.CustomItem;
 import net.primaxstudios.primaxcore.randomizer.Randomizer;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.function.Function;
 
@@ -33,7 +34,7 @@ public class RandomizerManager {
         return randomizer;
     }
 
-    public Randomizer<CustomItem> getCustomItemRandomizer(Section randomizerSection) {
-        return getRandomizer(randomizerSection, section -> PrimaxCore.inst().getItemManager().getItem(section));
+    public Randomizer<CustomItem> getCustomItemRandomizer(JavaPlugin plugin, Section randomizerSection) {
+        return getRandomizer(randomizerSection, section -> PrimaxCore.inst().getItemManager().getItem(plugin, section));
     }
 }

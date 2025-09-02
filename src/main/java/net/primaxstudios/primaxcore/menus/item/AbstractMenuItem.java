@@ -6,14 +6,17 @@ import lombok.Setter;
 import net.primaxstudios.primaxcore.PrimaxCore;
 import net.primaxstudios.primaxcore.items.CustomItem;
 import net.primaxstudios.primaxcore.menus.MenuHolder;
+import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter @Setter
 public abstract class AbstractMenuItem implements MenuItem {
 
     private CustomItem customItem;
 
+    public abstract JavaPlugin getPlugin();
+
     public void reload(Section section) {
-        customItem = PrimaxCore.inst().getItemManager().getItem(section);
+        customItem = PrimaxCore.inst().getItemManager().getItem(getPlugin(), section);
     }
 
     @Override

@@ -37,7 +37,7 @@ public abstract class CustomMenu implements MenuHandler {
 
     public CustomMenu(MenuItem... menuItems) {
         if (getSettings().isAddFiller()) {
-            this.menuItems.add(new FillerItem());
+            this.menuItems.add(new FillerItem(getPlugin()));
         }
         this.menuItems.addAll(Arrays.asList(menuItems));
     }

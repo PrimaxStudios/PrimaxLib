@@ -44,15 +44,15 @@ public class ItemManager {
         return container.get(PrimaxCore.IDENTIFIER_KEY, PersistentDataType.STRING);
     }
 
-    public CustomItem getItem(Section section) {
+    public CustomItem getItem(JavaPlugin plugin, Section section) {
         CustomItem hookItem = createHookItem(section);
         if (hookItem != null) {
             return hookItem;
         }
-        return createCoreItem(section);
+        return createCoreItem(plugin, section);
     }
 
-    private CoreItem createCoreItem(Section section) {
+    private CoreItem createCoreItem(JavaPlugin plugin, Section section) {
         ItemStack item = propertyManager.getRegistry().getMaterialProperty().getItem(section);
         if (item == null) {
             logger.warn("Failed to create ItemStack from section '{}' of '{}'", section.getName(), section.getRoot().getFile());
@@ -63,7 +63,7 @@ public class ItemManager {
                 : new CoreItem(item);
 
         for (ItemProperty property : propertyManager.getProperties(section)) {
-            coreItem.setProperty(property, section);
+            coreItem.setProperty(property, plugin, section);
         }
         return coreItem;
     }
@@ -94,23 +94,23 @@ public class ItemManager {
 
     public List<CustomItem> load(JavaPlugin plugin, String folder) throws IOException {
         File newFolder = new File(plugin.getDataFolder() + "/" + folder);
-        return getItems(ConfigUtils.listFilesDeep(newFolder));
+        return getItems(plugin, ConfigUtils.listFilesDeep(newFolder));
     }
 
-    public CustomItem getItem(File file) throws IOException {
-        return getItem(ConfigUtils.load(file));
+    public CustomItem getItem(JavaPlugin plugin, File file) throws IOException {
+        return getItem(plugin, ConfigUtils.load(file));
     }
 
-    public List<CustomItem> getItems(Section objectsSection) {
+    public List<CustomItem> getItems(JavaPlugin plugin, Section objectsSection) {
         return objectsSection.getRoutesAsStrings(false).stream()
-                .map((route) -> getItem(objectsSection.getSection(route)))
+                .map((route) -> getItem(plugin, objectsSection.getSection(route)))
                 .toList();
     }
 
-    public List<CustomItem> getItems(List<File> files) throws IOException {
+    public List<CustomItem> getItems(JavaPlugin plugin, List<File> files) throws IOException {
         List<CustomItem> items = new ArrayList<>();
         for (File file : files) {
-            items.add(getItem(file));
+            items.add(getItem(plugin, file));
         }
         return items;
     }

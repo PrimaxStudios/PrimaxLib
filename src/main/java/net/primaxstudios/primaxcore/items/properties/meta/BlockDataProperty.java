@@ -9,6 +9,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ public class BlockDataProperty extends MetaProperty {
     }
 
     @Override
-    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
         String blockDataString = section.getString(ID);
         if (blockDataString == null) {
             Config.warn(logger, section, "Missing or empty '{}' value", ID);

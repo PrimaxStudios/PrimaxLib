@@ -6,6 +6,7 @@ import net.primaxstudios.primaxcore.items.properties.AdvancedMetaProperty;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.inventory.meta.AxolotlBucketMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ public class AxolotlProperty extends AdvancedMetaProperty<AxolotlBucketMeta> {
     }
 
     @Override
-    public boolean setProperty(@NotNull AxolotlBucketMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull AxolotlBucketMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
         String variantStr = section.getString(ID);
         if (variantStr == null) {
             Config.warn(logger, section, "Missing '{}' key");

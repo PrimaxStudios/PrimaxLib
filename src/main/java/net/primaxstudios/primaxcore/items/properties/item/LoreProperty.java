@@ -2,12 +2,11 @@ package net.primaxstudios.primaxcore.items.properties.item;
 
 import net.primaxstudios.primaxcore.configs.Config;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import net.primaxstudios.primaxcore.items.properties.AdvancedMetaProperty;
-import net.primaxstudios.primaxcore.items.properties.ItemProperty;
 import net.primaxstudios.primaxcore.items.properties.MetaProperty;
 import net.primaxstudios.primaxcore.utils.ColorUtils;
-import org.bukkit.inventory.ItemStack;
+import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +23,9 @@ public class LoreProperty extends MetaProperty {
     }
 
     @Override
-    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
-        List<String> lore = section.getStringList(ID);
-        if (lore == null || lore.isEmpty()) {
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
+        List<String> lore = ConfigUtils.getStringList(plugin, section, ID);
+        if (lore.isEmpty()) {
             Config.warn(logger, section, "Missing or empty '{}' key", ID);
             return false;
         }

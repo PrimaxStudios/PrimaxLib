@@ -1,20 +1,18 @@
 package net.primaxstudios.primaxcore.menus.item;
 
 import net.primaxstudios.primaxcore.events.menu.CustomMenuClickEvent;
-import net.primaxstudios.primaxcore.menus.MenuHolder;
 import net.primaxstudios.primaxcore.menus.item.slot.SingleSlotItem;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit;
 
-public abstract class RefreshItem extends SingleSlotItem implements ClickableItem {
+public abstract class CloseItem extends SingleSlotItem implements ClickableItem {
 
     @Override
     public String getId() {
-        return "refresh";
+        return "close";
     }
 
     @Override
     public void onClick(CustomMenuClickEvent e) {
-        MenuHolder holder = e.getHolder();
-        holder.getCustomMenu().refresh(holder);
+        Bukkit.getScheduler().runTask(getPlugin(), () -> e.getHolder().getPlayer().closeInventory());
     }
 }

@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class TrimProperty extends AdvancedMetaProperty<ArmorMeta> {
     }
 
     @Override
-    public boolean setProperty(@NotNull ArmorMeta meta, @NotNull Section section) {
+    public boolean setProperty(@NotNull ArmorMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
         NamespacedKey materialKey = ConfigUtils.parseNamespacedKey(section, "material");
         if (materialKey == null) return false;
 
