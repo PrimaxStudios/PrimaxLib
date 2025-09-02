@@ -5,7 +5,7 @@ plugins {
 
 group = "net.primaxstudios"
 version = "1.0.14"
-description = "My Paper Plugin"
+description = "The library for Primax plugins"
 
 def targetJavaVersion = 21
 java {
