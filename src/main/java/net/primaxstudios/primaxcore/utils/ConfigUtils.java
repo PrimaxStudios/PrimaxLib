@@ -73,7 +73,7 @@ public final class ConfigUtils {
 
     public static List<String> getStringList(JavaPlugin plugin, Section section, String route) {
         return section.getStringList(route).stream()
-                .map(value -> PrimaxCore.inst().getLocale().getSimpleMessage(CommonUtils.getNamespace(plugin), value))
+                .map(value -> Objects.requireNonNullElse(PrimaxCore.inst().getLocale().getSimpleMessage(CommonUtils.getNamespace(plugin), value), value))
                 .flatMap(line -> Arrays.stream(line.split("\n")))
                 .toList();
     }
