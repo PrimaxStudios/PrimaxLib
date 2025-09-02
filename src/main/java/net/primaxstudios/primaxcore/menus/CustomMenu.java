@@ -69,8 +69,7 @@ public abstract class CustomMenu implements MenuHandler {
     }
 
     public void reload(Section document) {
-        menuTitle = ColorUtils.getComponent(Objects.requireNonNull(document.getString("menu_title"), "Menu title is missing"));
-
+        menuTitle = ColorUtils.getComponent(Objects.requireNonNull(ConfigUtils.getString(getPlugin(), document, "menu_title"), "Menu title is missing"));
         menuType = Objects.requireNonNull(PrimaxCore.inst().getMenuManager().getMenuType(document), "Menu Type is missing");
 
         Section itemsSection = document.getSection("items");
