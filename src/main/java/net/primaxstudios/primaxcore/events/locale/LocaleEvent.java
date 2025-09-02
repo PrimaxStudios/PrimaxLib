@@ -10,6 +10,7 @@ public abstract class LocaleEvent extends Event {
     private final String namespace;
 
     protected LocaleEvent(String namespace) {
+        super(true);
         this.namespace = namespace;
     }
 
