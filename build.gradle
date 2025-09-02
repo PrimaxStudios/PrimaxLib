@@ -11,7 +11,7 @@ def targetJavaVersion = 21
 java {
     sourceCompatibility = targetJavaVersion
     targetCompatibility = targetJavaVersion
-    toolchain.languageVersion.set(JavaLanguageVersion.of(targetJavaVersion)) // Use the version compatible with Paper
+    toolchain.languageVersion.set(JavaLanguageVersion.of(targetJavaVersion))
 }
 
 repositories {
