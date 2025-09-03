@@ -17,7 +17,7 @@ public class RowMenuType implements MenuType {
 
     @Override
     public Inventory createInventory(MenuHolder holder, Component menuTitle) {
-        return Bukkit.createInventory(holder, rows, menuTitle);
+        return Bukkit.createInventory(holder, getSize(), menuTitle);
     }
 
     public int getSize() {
