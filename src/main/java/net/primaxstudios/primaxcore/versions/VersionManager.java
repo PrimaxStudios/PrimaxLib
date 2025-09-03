@@ -7,12 +7,12 @@ public class VersionManager {
     private static final VersionAdapter ADAPTER;
 
     static {
-        String ver = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-        switch (ver) {
-            case "v1_19_R1", "v1_19_R2", "v1_19_R3", "v1_19_R4", "v1_20_R1", "v1_20_R2", "v1_20_R3", "v1_20_R4",
-                 "v1_20_R5", "v1_20_R6" -> ADAPTER = new VersionAdapter_1_20();
-            case "v1_21_R1", "v1_21_R2", "v1_21_R3", "v1_21_R4", "v1_21_R5", "v1_21_R6", "v1_21_R7", "v1_21_R8" -> ADAPTER = new VersionAdapter_1_21();
-            default -> throw new IllegalStateException("Unsupported version: " + ver);
+        String version = Bukkit.getServer().getMinecraftVersion();
+        switch (version) {
+            case "1.19", "1.19.1", "1.19.2", "1.19.3", "1.19.4",
+                 "1.20", "1.20.1", "1.20.2", "1.20.3", "1.20.4", "1.20.5", "1.20.6" -> ADAPTER = new VersionAdapter_1_20();
+            case "1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8" -> ADAPTER = new VersionAdapter_1_21();
+            default -> throw new IllegalStateException("Unsupported version: " + version);
         }
     }
 
