@@ -4,6 +4,8 @@ import net.primaxstudios.primaxcore.configs.Config;
 import net.primaxstudios.primaxcore.items.properties.AdvancedMetaProperty;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
+import net.primaxstudios.primaxcore.versions.VersionManager;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
@@ -30,8 +32,14 @@ public class EntityTypeProperty extends AdvancedMetaProperty<BlockStateMeta> {
             return false;
         }
 
-        EntityType type = ConfigUtils.parseEnum(section, ID, EntityType.class);
-        if (type == null) return false;
+        NamespacedKey key = ConfigUtils.parseNamespacedKey(section, ID);
+        if (key == null) return false;
+
+        EntityType type = VersionManager.get().getEntityType(key);
+        if (type == null) {
+            Config.warn(logger, section, "Invalid entity type key '{}'", key);
+            return false;
+        }
 
         spawner.setSpawnedType(type);
         meta.setBlockState(spawner);

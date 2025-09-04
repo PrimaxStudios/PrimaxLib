@@ -9,24 +9,24 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DurabilityProperty extends AdvancedMetaProperty<Damageable> {
+public class DamageProperty extends AdvancedMetaProperty<Damageable> {
 
-    public static final String ID = "durability";
-    private static final Logger logger = LoggerFactory.getLogger(DurabilityProperty.class);
+    public static final String ID = "damage";
+    private static final Logger logger = LoggerFactory.getLogger(DamageProperty.class);
 
-    public DurabilityProperty() {
+    public DamageProperty() {
         super(logger, Damageable.class);
     }
 
     @Override
     public boolean setProperty(@NotNull Damageable meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
-        int durability = section.getInt(ID, -1);
-        if (durability < 0) {
-            Config.warn(logger, section, "Invalid or missing '{}' value '{}'. Durability must be 0 or greater.", ID, durability);
+        int damage = section.getInt(ID, -1);
+        if (damage < 0) {
+            Config.warn(logger, section, "Invalid or missing '{}' value '{}'. Damage must be 0 or greater.", ID, damage);
             return false;
         }
 
-        meta.setDamage(durability);
+        meta.setDamage(damage);
         return true;
     }
 }

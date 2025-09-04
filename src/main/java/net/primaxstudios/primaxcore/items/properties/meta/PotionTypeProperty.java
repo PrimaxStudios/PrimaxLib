@@ -1,8 +1,11 @@
 package net.primaxstudios.primaxcore.items.properties.meta;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
+import net.primaxstudios.primaxcore.configs.Config;
 import net.primaxstudios.primaxcore.items.properties.AdvancedMetaProperty;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
+import net.primaxstudios.primaxcore.versions.VersionManager;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionType;
@@ -21,8 +24,14 @@ public class PotionTypeProperty extends AdvancedMetaProperty<PotionMeta> {
 
     @Override
     public boolean setProperty(@NotNull PotionMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
-        PotionType type = ConfigUtils.parseEnum(section, ID, PotionType.class);
-        if (type == null) return false;
+        NamespacedKey key = ConfigUtils.parseNamespacedKey(section, ID);
+        if (key == null) return false;
+
+        PotionType type = VersionManager.get().getPotionType(key);
+        if (type == null) {
+            Config.warn(logger, section, "Invalid potion type key '{}'", key);
+            return false;
+        }
 
         meta.setBasePotionType(type);
         return true;

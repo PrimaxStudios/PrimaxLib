@@ -7,11 +7,8 @@ import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import net.primaxstudios.primaxcore.configs.Config;
-import net.primaxstudios.primaxcore.versions.VersionManager;
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,31 +117,6 @@ public final class ConfigUtils {
             Config.warn(logger, section, "Invalid namespaced key '{}'", key);
             return null;
         }
-    }
-
-    public static PotionEffect parsePotionEffect(Section section) {
-        NamespacedKey key = parseNamespacedKey(section, "type");
-        if (key == null) return null;
-
-        PotionEffectType type = VersionManager.get().getPotionEffectType(key);
-        if (type == null) {
-            Config.warn(logger, section, "Unknown potion effect key '{}'", key);
-            return null;
-        }
-
-        if (!section.contains("duration")) {
-            Config.warn(logger, section, "Missing 'duration' key");
-            return null;
-        }
-        int duration = section.getInt("duration");
-
-        if (!section.contains("amplifier")) {
-            Config.warn(logger, section, "Missing 'amplifier' key");
-            return null;
-        }
-        int amplifier = section.getInt("amplifier");
-
-        return new PotionEffect(type, duration, amplifier);
     }
 
     public static Location parseLocation(Section section) {
