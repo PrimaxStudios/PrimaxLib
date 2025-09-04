@@ -11,4 +11,4 @@ command_success_reload: "<green>Plugin reloaded successfully"
 
 # Configuration file version.
 # Changing this may break compatibility with the plugin.
-config_version: 1
+config_version: 2
