@@ -27,13 +27,16 @@ public class EnchantProperty extends MetaProperty {
     @Override
     public boolean setProperty(@NotNull ItemMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
         Map<Enchantment, Integer> enchantments = createEnchantments(section);
+        if (enchantments.isEmpty()) {
+            Config.warn(logger, section, "Missing or empty '{}' key", ID);
+            return false;
+        }
         enchantments.forEach((enchant, level) -> meta.addEnchant(enchant, level, true));
         return true;
     }
 
     public Map<Enchantment, Integer> createEnchantments(Section section) {
         Map<Enchantment, Integer> enchantments = new HashMap<>();
-
         for (String rawEnchant : section.getStringList(ID)) {
             String[] parts = rawEnchant.split(";");
             if (parts.length != 2) {

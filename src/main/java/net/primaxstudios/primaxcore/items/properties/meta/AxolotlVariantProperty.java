@@ -11,12 +11,12 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AxolotlProperty extends AdvancedMetaProperty<AxolotlBucketMeta> {
+public class AxolotlVariantProperty extends AdvancedMetaProperty<AxolotlBucketMeta> {
 
     public static final String ID = "axolotl_variant";
-    private static final Logger logger = LoggerFactory.getLogger(AxolotlProperty.class);
+    private static final Logger logger = LoggerFactory.getLogger(AxolotlVariantProperty.class);
 
-    public AxolotlProperty() {
+    public AxolotlVariantProperty() {
         super(logger, AxolotlBucketMeta.class);
     }
 

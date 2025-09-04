@@ -3,7 +3,6 @@ package net.primaxstudios.primaxcore.items.properties.meta;
 import net.primaxstudios.primaxcore.configs.Config;
 import net.primaxstudios.primaxcore.items.properties.AdvancedMetaProperty;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import net.primaxstudios.primaxcore.versions.VersionManager;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.ArmorMeta;
@@ -15,27 +14,45 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TrimProperty extends AdvancedMetaProperty<ArmorMeta> {
+public class ArmorTrimProperty extends AdvancedMetaProperty<ArmorMeta> {
 
     public static final String ID = "armor_trim";
-    private static final Logger logger = LoggerFactory.getLogger(TrimProperty.class);
+    private static final Logger logger = LoggerFactory.getLogger(ArmorTrimProperty.class);
 
-    public TrimProperty() {
+    public ArmorTrimProperty() {
         super(logger, ArmorMeta.class);
     }
 
     @Override
     public boolean setProperty(@NotNull ArmorMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
-        NamespacedKey materialKey = ConfigUtils.parseNamespacedKey(section, "material");
-        if (materialKey == null) return false;
+        String string = section.getString(ID);
+        String[] split = string.split(";");
 
-        NamespacedKey patternKey = ConfigUtils.parseNamespacedKey(section, "pattern");
-        if (patternKey == null) return false;
+        NamespacedKey materialKey;
+        try {
+            materialKey = NamespacedKey.fromString(split[0]);
+        } catch (Exception e) {
+            Config.warn(logger, section, "Invalid material namespaced key '{}'", split[0]);
+            return false;
+        }
+
+        NamespacedKey patternKey;
+        try {
+            patternKey = NamespacedKey.fromString(split[1]);
+        } catch (Exception e) {
+            Config.warn(logger, section, "Invalid pattern namespaced key '{}'", split[1]);
+            return false;
+        }
 
         TrimMaterial material = VersionManager.get().getTrimMaterial(materialKey);
+        if (material == null) {
+            Config.warn(logger, section, "Invalid material '{}'", materialKey);
+            return false;
+        }
+
         TrimPattern pattern = VersionManager.get().getTrimPattern(patternKey);
-        if (material == null || pattern == null) {
-            Config.warn(logger, section, "Invalid material or pattern '{}' / '{}'", materialKey, patternKey);
+        if (pattern == null) {
+            Config.warn(logger, section, "Invalid pattern '{}'", materialKey, patternKey);
             return false;
         }
 

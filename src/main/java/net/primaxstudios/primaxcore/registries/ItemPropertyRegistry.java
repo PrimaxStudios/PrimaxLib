@@ -24,15 +24,15 @@ public final class ItemPropertyRegistry extends IdRegistry<ItemProperty> {
         put(FlagProperty.ID, new FlagProperty());
         put(UnbreakableProperty.ID, new UnbreakableProperty());
         put(PersistentDataProperty.ID, new PersistentDataProperty());
-        put(AxolotlProperty.ID, new AxolotlProperty());
+        put(AxolotlVariantProperty.ID, new AxolotlVariantProperty());
         put(BannerPatternProperty.ID, new BannerPatternProperty());
         put(BlockDataProperty.ID, new BlockDataProperty());
         put(ColorProperty.ID, new ColorProperty());
-        put(DurabilityProperty.ID, new DurabilityProperty());
+        put(DamageProperty.ID, new DamageProperty());
         put(EntityTypeProperty.ID, new EntityTypeProperty());
         put(PotionEffectProperty.ID, new PotionEffectProperty());
         put(PotionTypeProperty.ID, new PotionTypeProperty());
-        put(TrimProperty.ID, new TrimProperty());
+        put(ArmorTrimProperty.ID, new ArmorTrimProperty());
     }
 
     public Collection<ItemProperty> getProperties() {

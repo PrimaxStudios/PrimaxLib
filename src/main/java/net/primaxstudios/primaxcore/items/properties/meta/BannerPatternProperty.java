@@ -2,7 +2,6 @@ package net.primaxstudios.primaxcore.items.properties.meta;
 
 import net.primaxstudios.primaxcore.configs.Config;
 import net.primaxstudios.primaxcore.items.properties.AdvancedMetaProperty;
-import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.primaxstudios.primaxcore.versions.VersionManager;
 import org.bukkit.DyeColor;
@@ -30,38 +29,49 @@ public class BannerPatternProperty extends AdvancedMetaProperty<BannerMeta> {
     @Override
     public boolean setProperty(@NotNull BannerMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
         List<Pattern> patterns = createPatterns(section);
+        if (patterns.isEmpty()) {
+            Config.warn(logger, section, "Missing or empty '{}' key", ID);
+            return false;
+        }
+
         patterns.forEach(meta::addPattern);
         return true;
     }
 
     public List<Pattern> createPatterns(Section section) {
         List<Pattern> patterns = new ArrayList<>();
-
-        for (String route : section.getRoutesAsStrings(false)) {
-            Section patternSection = section.getSection(route);
-            if (patternSection == null) {
-                Config.warn(logger, section, "Pattern section '{}' is missing", route);
+        for (String string : section.getStringList(ID)) {
+            String[] split = string.split(";");
+            if (split.length != 2) {
+                Config.warn(logger, section, "Unknown format '{}'", string);
                 continue;
             }
 
-            DyeColor color = ConfigUtils.parseEnum(section, "color", DyeColor.class);
-            if (color == null) continue;
+            DyeColor dyeColor;
+            try {
+                dyeColor = DyeColor.valueOf(split[0]);
+            } catch (IllegalArgumentException e) {
+                Config.warn(logger, section, "Unknown dye color '{}'", split[0]);
+                continue;
+            }
 
-            NamespacedKey key = ConfigUtils.parseNamespacedKey(section, "type");
-            if (key == null) {
-                Config.warn(logger, section, "Pattern 'type' is missing.");
+            NamespacedKey key;
+            try {
+                key = NamespacedKey.fromString(split[0]);
+            } catch (Exception e) {
+                Config.warn(logger, section, "Invalid namespaced key '{}'", split[0]);
                 continue;
             }
 
             PatternType patternType = VersionManager.get().getPatternType(key);
             if (patternType == null) {
-                Config.warn(logger, section, "No PatternType found for key '{}'", key);
+                Config.warn(logger, section, "Unknown pattern type key '{}'", key);
                 continue;
             }
 
-            patterns.add(new Pattern(color, patternType));
+            Pattern pattern = new Pattern(dyeColor, patternType);
+            patterns.add(pattern);
         }
-
         return patterns;
     }
 }
