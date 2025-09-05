@@ -4,6 +4,7 @@ import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -48,6 +49,11 @@ public class VersionAdapter_1_21 implements VersionAdapter {
     @Override
     public EntityType getEntityType(NamespacedKey key) {
         return getByRegistry(RegistryKey.ENTITY_TYPE, key);
+    }
+
+    @Override
+    public Sound getSound(NamespacedKey key) {
+        return getByRegistry(RegistryKey.SOUND_EVENT, key);
     }
 
     private <T extends Keyed> T getByRegistry(RegistryKey<@NotNull T> registryKey, NamespacedKey key) {

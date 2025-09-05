@@ -7,6 +7,8 @@ import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import net.primaxstudios.primaxcore.configs.Config;
+import net.primaxstudios.primaxcore.menus.MenuSound;
+import net.primaxstudios.primaxcore.versions.VersionManager;
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;

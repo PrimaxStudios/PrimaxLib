@@ -1,13 +1,15 @@
-package net.primaxstudios.primaxcore.menus.item;
+package net.primaxstudios.primaxcore.menus.item.impl;
 
 import lombok.Getter;
 import net.primaxstudios.primaxcore.events.menu.CustomMenuClickEvent;
 import net.primaxstudios.primaxcore.menus.MenuHolder;
-import net.primaxstudios.primaxcore.menus.item.slot.SingleSlotItem;
+import net.primaxstudios.primaxcore.menus.MenuSound;
+import net.primaxstudios.primaxcore.menus.ClickResult;
+import net.primaxstudios.primaxcore.menus.item.SingleSlotItem;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
-public class RefreshItem extends SingleSlotItem implements ClickableItem {
+public class RefreshItem extends SingleSlotItem {
 
     private final JavaPlugin plugin;
 
@@ -21,8 +23,14 @@ public class RefreshItem extends SingleSlotItem implements ClickableItem {
     }
 
     @Override
-    public void onClick(CustomMenuClickEvent e) {
+    public MenuSound getSound() {
+        return null;
+    }
+
+    @Override
+    public ClickResult onClick(CustomMenuClickEvent e) {
         MenuHolder holder = e.getHolder();
         holder.getCustomMenu().refresh(holder);
+        return ClickResult.SUCCESS;
     }
 }
