@@ -7,8 +7,6 @@ import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import net.primaxstudios.primaxcore.configs.Config;
-import net.primaxstudios.primaxcore.menus.MenuSound;
-import net.primaxstudios.primaxcore.versions.VersionManager;
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
@@ -36,14 +34,6 @@ public final class ConfigUtils {
         return load(new File(plugin.getDataFolder(), fileName));
     }
 
-    public static YamlDocument loadDefault(JavaPlugin plugin, String fileName) throws IOException {
-        File file = new File(plugin.getDataFolder(), fileName);
-        InputStream defaults = Objects.requireNonNull(plugin.getResource(fileName));
-        return YamlDocument.create(file, defaults, LOADER_SETTINGS, UpdaterSettings.builder()
-                .setVersioning(new BasicVersioning("config_version"))
-                .build());
-    }
-
     public static File saveDefault(JavaPlugin plugin, String fileName) {
         File file = new File(plugin.getDataFolder(), fileName);
         if (!file.exists()) {
@@ -52,10 +42,28 @@ public final class ConfigUtils {
         return file;
     }
 
-    public static List<File> saveDefaults(JavaPlugin plugin, String folder, String... fileNames) {
+    public static List<File> saveDefaults(JavaPlugin plugin, String folder, String... filenames) {
         List<File> files = new ArrayList<>();
-        for (String fileName : fileNames) {
+        for (String fileName : filenames) {
             File file = saveDefault(plugin, folder + "/" + fileName);
+            files.add(file);
+        }
+        return files;
+    }
+
+    public static File saveVersionedDefault(JavaPlugin plugin, String fileName) throws IOException {
+        File file = new File(plugin.getDataFolder(), fileName);
+        InputStream defaults = Objects.requireNonNull(plugin.getResource(fileName));
+        YamlDocument.create(file, defaults, LOADER_SETTINGS, UpdaterSettings.builder()
+                .setVersioning(new BasicVersioning("config_version"))
+                .build());
+        return file;
+    }
+
+    public static List<File> saveVersionedDefaults(JavaPlugin plugin, String folder, String... filenames) throws IOException {
+        List<File> files = new ArrayList<>();
+        for (String fileName : filenames) {
+            File file = saveVersionedDefault(plugin, folder + "/" + fileName);
             files.add(file);
         }
         return files;

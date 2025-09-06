@@ -3,14 +3,16 @@ package net.primaxstudios.primaxcore;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import net.primaxstudios.primaxcore.locale.Locale;
-import net.primaxstudios.primaxcore.configs.core.Configs;
 import net.primaxstudios.primaxcore.locale.PluginLocale;
 import net.primaxstudios.primaxcore.managers.*;
 import lombok.Getter;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
+import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.IOException;
 
 @Getter
 public final class PrimaxCore extends JavaPlugin {
@@ -22,7 +24,6 @@ public final class PrimaxCore extends JavaPlugin {
     private Economy economy;
     private Permission permission;
     private HeadDatabaseAPI headDatabaseAPI;
-    private Configs configs;
     private Locale locale;
     private PluginLocale coreLocale;
     private DatabaseManager databaseManager;
@@ -35,6 +36,8 @@ public final class PrimaxCore extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        saveConfigs();
+
         dependencyManager = new CoreDependencyManager();
         dependencyManager.loadLibraries();
 
@@ -45,8 +48,6 @@ public final class PrimaxCore extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("HeadDatabase") != null) {
             headDatabaseAPI = new HeadDatabaseAPI();
         }
-
-        configs = new Configs();
 
         locale = new Locale();
         locale.reload(this);
@@ -65,8 +66,16 @@ public final class PrimaxCore extends JavaPlugin {
     }
 
     public void reload() {
-        configs.reload();
         locale.reload(this);
+    }
+
+    private void saveConfigs() {
+        try {
+            ConfigUtils.saveVersionedDefault(PrimaxCore.inst(), "config.yml");
+            ConfigUtils.saveVersionedDefaults(PrimaxCore.inst(), "locale", "en.yml");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Economy findEconomy() {

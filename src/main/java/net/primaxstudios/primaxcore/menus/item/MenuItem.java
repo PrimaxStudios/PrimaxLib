@@ -32,17 +32,29 @@ public abstract class MenuItem {
     public abstract MenuSound getSound();
 
     public boolean isSlot(int slot) {
-        return getSlots().contains(slot);
+        List<Integer> slots = getSlots();
+        if (slots == null) {
+            return false;
+        }
+        return slots.contains(slot);
     }
 
     public void setItem(Inventory inventory, ItemStack item) {
-        for (int slot : getSlots()) {
+        List<Integer> slots = getSlots();
+        if (slots == null) {
+            return;
+        }
+        for (int slot : slots) {
             inventory.setItem(slot, item);
         }
     }
 
     public void clear(Inventory inventory) {
-        for (int slot : getSlots()) {
+        List<Integer> slots = getSlots();
+        if (slots == null) {
+            return;
+        }
+        for (int slot : slots) {
             inventory.setItem(slot, null);
         }
     }
@@ -73,13 +85,11 @@ public abstract class MenuItem {
         }
 
         Sound success = section.contains("success")
-                ? Config.requireNonNull(VersionManager.get().getSound(
-                        Config.requireNonNull(ConfigUtils.parseNamespacedKey(section, "success"), section)), section)
+                ? VersionManager.get().getSound(Config.requireNonNull(ConfigUtils.parseNamespacedKey(section, "success"), section))
                 : null;
 
         Sound failure = section.contains("failure")
-                ?  Config.requireNonNull(VersionManager.get().getSound(
-                        Config.requireNonNull(ConfigUtils.parseNamespacedKey(section, "failure"), section)), section)
+                ?  VersionManager.get().getSound( Config.requireNonNull(ConfigUtils.parseNamespacedKey(section, "failure"), section))
                 : null;
 
         if (success == null && failure == null) {

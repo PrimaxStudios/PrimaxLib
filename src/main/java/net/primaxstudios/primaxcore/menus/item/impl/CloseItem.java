@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.primaxstudios.primaxcore.events.menu.CustomMenuClickEvent;
 import net.primaxstudios.primaxcore.menus.ClickResult;
 import net.primaxstudios.primaxcore.menus.item.SingleSlotItem;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
@@ -22,7 +23,7 @@ public class CloseItem extends SingleSlotItem {
 
     @Override
     public ClickResult onClick(CustomMenuClickEvent e) {
-        e.getHolder().getPlayer().closeInventory();
+        Bukkit.getScheduler().runTask(plugin, () -> e.getHolder().getPlayer().closeInventory());
         return ClickResult.SUCCESS;
     }
 }
