@@ -2,7 +2,7 @@ package net.primaxstudios.primaxlib.factory;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import net.primaxstudios.primaxlib.PrimaxLib;
-import net.primaxstudios.primaxlib.config.Config;
+import net.primaxstudios.primaxlib.configuration.Config;
 import net.primaxstudios.primaxlib.item.CoreItem;
 import net.primaxstudios.primaxlib.item.CustomItem;
 import net.primaxstudios.primaxlib.item.DataItem;

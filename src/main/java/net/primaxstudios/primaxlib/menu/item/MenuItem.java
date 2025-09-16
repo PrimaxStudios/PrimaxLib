@@ -1,7 +1,7 @@
 package net.primaxstudios.primaxlib.menu.item;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import net.primaxstudios.primaxlib.config.Config;
+import net.primaxstudios.primaxlib.configuration.Config;
 import net.primaxstudios.primaxlib.event.menu.CustomMenuClickEvent;
 import net.primaxstudios.primaxlib.menu.ClickResult;
 import net.primaxstudios.primaxlib.menu.MenuHolder;

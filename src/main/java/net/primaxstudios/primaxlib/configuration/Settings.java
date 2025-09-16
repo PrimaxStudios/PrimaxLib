@@ -1,4 +1,4 @@
-package net.primaxstudios.primaxlib.config;
+package net.primaxstudios.primaxlib.configuration;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 

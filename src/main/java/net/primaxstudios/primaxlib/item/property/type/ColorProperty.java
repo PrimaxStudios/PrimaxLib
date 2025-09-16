@@ -1,6 +1,6 @@
 package net.primaxstudios.primaxlib.item.property.type;
 
-import net.primaxstudios.primaxlib.config.Config;
+import net.primaxstudios.primaxlib.configuration.Config;
 import net.primaxstudios.primaxlib.item.property.MetaProperty;
 import net.primaxstudios.primaxlib.util.ConfigUtils;
 import dev.dejvokep.boostedyaml.block.implementation.Section;

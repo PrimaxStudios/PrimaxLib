@@ -2,7 +2,7 @@ package net.primaxstudios.primaxlib.item.property;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
-import net.primaxstudios.primaxlib.config.Config;
+import net.primaxstudios.primaxlib.configuration.Config;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;

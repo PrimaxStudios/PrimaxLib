@@ -1,7 +1,7 @@
 package net.primaxstudios.primaxlib.item.property.type;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import net.primaxstudios.primaxlib.config.Config;
+import net.primaxstudios.primaxlib.configuration.Config;
 import net.primaxstudios.primaxlib.item.property.MetaProperty;
 import net.primaxstudios.primaxlib.util.ColorUtils;
 import net.primaxstudios.primaxlib.util.ConfigUtils;

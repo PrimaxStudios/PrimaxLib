@@ -1,6 +1,6 @@
 package net.primaxstudios.primaxlib.item.property.type;
 
-import net.primaxstudios.primaxlib.config.Config;
+import net.primaxstudios.primaxlib.configuration.Config;
 import net.primaxstudios.primaxlib.item.property.SpecificMetaProperty;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.inventory.meta.Damageable;

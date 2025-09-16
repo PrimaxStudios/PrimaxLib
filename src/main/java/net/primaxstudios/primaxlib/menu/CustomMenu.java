@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.primaxstudios.primaxlib.PrimaxLib;
-import net.primaxstudios.primaxlib.config.Config;
+import net.primaxstudios.primaxlib.configuration.Config;
 import net.primaxstudios.primaxlib.event.menu.CustomMenuClickEvent;
 import net.primaxstudios.primaxlib.event.menu.CustomMenuDragEvent;
 import net.primaxstudios.primaxlib.menu.item.impl.FillerItem;
