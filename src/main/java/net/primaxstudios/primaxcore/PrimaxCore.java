@@ -9,22 +9,22 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
-public class PrimaxCore {
+public abstract class PrimaxCore extends JavaPlugin {
 
-    public static final String NAMESPACE = "primaxcore";
-    public static final NamespacedKey IDENTIFIER_KEY = new NamespacedKey(NAMESPACE, "key");
     private static PrimaxCore instance;
-    private final Locale locale;
-    private final DatabaseManager databaseManager;
-    private final RandomizerManager randomizerManager;
-    private final CurrencyManager currencyManager;
-    private final ItemManager itemManager;
-    private final MenuManager menuManager;
+    private Locale locale;
+    private DatabaseManager databaseManager;
+    private RandomizerManager randomizerManager;
+    private CurrencyManager currencyManager;
+    private ItemManager itemManager;
+    private MenuManager menuManager;
 
-    public PrimaxCore() {
+    @Override
+    public void onEnable() {
         instance = this;
 
         locale = new Locale();
+        locale.reload(this);
 
         databaseManager = new DatabaseManager();
 
@@ -37,12 +37,18 @@ public class PrimaxCore {
         menuManager = new MenuManager();
     }
 
-    public void registerEvents(JavaPlugin plugin) {
-        Bukkit.getServer().getPluginManager().registerEvents(new MenuListener(menuManager), plugin);
+    public abstract String getNamespace();
+
+    public NamespacedKey getIdentifierKey() {
+        return new NamespacedKey(getNamespace(), "key");
     }
 
-    public void reload(JavaPlugin plugin) {
-        locale.reload(plugin);
+    public void registerEvents() {
+        Bukkit.getServer().getPluginManager().registerEvents(new MenuListener(menuManager), this);
+    }
+
+    public void reload() {
+        locale.reload(this);
     }
 
     public static PrimaxCore inst() {

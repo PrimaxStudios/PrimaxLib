@@ -33,7 +33,7 @@ public class ItemManager {
             return null;
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        return container.get(PrimaxCore.IDENTIFIER_KEY, PersistentDataType.STRING);
+        return container.get(PrimaxCore.inst().getIdentifierKey(), PersistentDataType.STRING);
     }
 
     public CustomItem getItem(Section section) {

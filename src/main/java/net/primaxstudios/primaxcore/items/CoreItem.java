@@ -37,7 +37,7 @@ public class CoreItem extends CustomItem {
         if (meta == null) {
             return;
         }
-        meta.getPersistentDataContainer().set(PrimaxCore.IDENTIFIER_KEY, PersistentDataType.STRING, key);
+        meta.getPersistentDataContainer().set(PrimaxCore.inst().getIdentifierKey(), PersistentDataType.STRING, key);
         bukkitItem.setItemMeta(meta);
     }
 
@@ -46,7 +46,7 @@ public class CoreItem extends CustomItem {
         if (meta == null) {
             return false;
         }
-        String key = meta.getPersistentDataContainer().get(PrimaxCore.IDENTIFIER_KEY, PersistentDataType.STRING);
+        String key = meta.getPersistentDataContainer().get(PrimaxCore.inst().getIdentifierKey(), PersistentDataType.STRING);
         if (!Objects.equals(this.key, key)) {
             return false;
         }
