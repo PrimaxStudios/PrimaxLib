@@ -28,6 +28,8 @@ public abstract class PrimaxLib extends JavaPlugin {
         BukkitLibraryManager libraryManager = new BukkitLibraryManager(this);
         libraries().forEach(libraryManager::loadLibrary);
 
+        saveConfigs();
+
         try {
             if (isDatabaseRequired()) {
                 connector = ConnectorFactory.fromPlugin(this);
@@ -50,6 +52,8 @@ public abstract class PrimaxLib extends JavaPlugin {
     public abstract String getNamespace();
 
     public abstract List<Library> libraries();
+
+    public abstract void saveConfigs();
 
     protected abstract boolean isDatabaseRequired();
 
