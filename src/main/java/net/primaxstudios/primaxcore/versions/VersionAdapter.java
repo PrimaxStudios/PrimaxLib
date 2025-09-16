@@ -1,6 +1,7 @@
 package net.primaxstudios.primaxcore.versions;
 
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -24,4 +25,6 @@ public interface VersionAdapter {
     PotionType getPotionType(NamespacedKey key);
 
     EntityType getEntityType(NamespacedKey key);
+
+    Sound getSound(NamespacedKey key);
 }

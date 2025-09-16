@@ -2,6 +2,7 @@ package net.primaxstudios.primaxcore.versions;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
+import org.bukkit.Sound;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -46,5 +47,10 @@ public class VersionAdapter_1_20 implements VersionAdapter {
     @Override
     public EntityType getEntityType(NamespacedKey key) {
         return Registry.ENTITY_TYPE.get(key);
+    }
+
+    @Override
+    public Sound getSound(NamespacedKey key) {
+        return Registry.SOUNDS.get(key);
     }
 }

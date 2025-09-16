@@ -34,14 +34,6 @@ public final class ConfigUtils {
         return load(new File(plugin.getDataFolder(), fileName));
     }
 
-    public static YamlDocument loadDefault(JavaPlugin plugin, String fileName) throws IOException {
-        File file = new File(plugin.getDataFolder(), fileName);
-        InputStream defaults = Objects.requireNonNull(plugin.getResource(fileName));
-        return YamlDocument.create(file, defaults, LOADER_SETTINGS, UpdaterSettings.builder()
-                .setVersioning(new BasicVersioning("config_version"))
-                .build());
-    }
-
     public static File saveDefault(JavaPlugin plugin, String fileName) {
         File file = new File(plugin.getDataFolder(), fileName);
         if (!file.exists()) {
@@ -50,27 +42,45 @@ public final class ConfigUtils {
         return file;
     }
 
-    public static List<File> saveDefaults(JavaPlugin plugin, String folder, String... fileNames) {
+    public static List<File> saveDefaults(JavaPlugin plugin, String folder, String... filenames) {
         List<File> files = new ArrayList<>();
-        for (String fileName : fileNames) {
+        for (String fileName : filenames) {
             File file = saveDefault(plugin, folder + "/" + fileName);
             files.add(file);
         }
         return files;
     }
 
-    public static String getString(Section section, String route) {
+    public static File saveVersionedDefault(JavaPlugin plugin, String fileName) throws IOException {
+        File file = new File(plugin.getDataFolder(), fileName);
+        InputStream defaults = Objects.requireNonNull(plugin.getResource(fileName));
+        YamlDocument.create(file, defaults, LOADER_SETTINGS, UpdaterSettings.builder()
+                .setVersioning(new BasicVersioning("config_version"))
+                .build());
+        return file;
+    }
+
+    public static List<File> saveVersionedDefaults(JavaPlugin plugin, String folder, String... filenames) throws IOException {
+        List<File> files = new ArrayList<>();
+        for (String fileName : filenames) {
+            File file = saveVersionedDefault(plugin, folder + "/" + fileName);
+            files.add(file);
+        }
+        return files;
+    }
+
+    public static String getString(JavaPlugin plugin, Section section, String route) {
         String value = section.getString(route);
         if (value == null) {
             return null;
         }
-        String localeValue = PrimaxCore.inst().getLocale().getSimpleMessage(value);
+        String localeValue = PrimaxCore.inst().getLocale().getSimpleMessage(CommonUtils.getNamespace(plugin), value);
         return localeValue != null ? localeValue : value;
     }
 
-    public static List<String> getStringList(Section section, String route) {
+    public static List<String> getStringList(JavaPlugin plugin, Section section, String route) {
         return section.getStringList(route).stream()
-                .map(value -> Objects.requireNonNullElse(PrimaxCore.inst().getLocale().getSimpleMessage(value), value))
+                .map(value -> Objects.requireNonNullElse(PrimaxCore.inst().getLocale().getSimpleMessage(CommonUtils.getNamespace(plugin), value), value))
                 .flatMap(line -> Arrays.stream(line.split("\n")))
                 .toList();
     }

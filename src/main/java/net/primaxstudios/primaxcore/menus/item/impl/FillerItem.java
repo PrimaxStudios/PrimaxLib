@@ -1,9 +1,10 @@
-package net.primaxstudios.primaxcore.menus.item;
+package net.primaxstudios.primaxcore.menus.item.impl;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
 import lombok.Setter;
-import net.primaxstudios.primaxcore.menus.item.slot.SlotBoundItem;
+import net.primaxstudios.primaxcore.menus.item.AbstractMenuItem;
+import net.primaxstudios.primaxcore.menus.item.OptionalItem;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 
 @Getter @Setter
-public class FillerItem extends AbstractMenuItem implements SlotBoundItem, OptionalItem {
+public class FillerItem extends AbstractMenuItem implements OptionalItem {
 
     private final JavaPlugin plugin;
     private boolean enabled;

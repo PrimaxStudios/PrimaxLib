@@ -6,14 +6,15 @@ import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.primaxstudios.primaxcore.PrimaxCore;
+import net.primaxstudios.primaxcore.configs.Config;
 import net.primaxstudios.primaxcore.events.menu.CustomMenuClickEvent;
 import net.primaxstudios.primaxcore.events.menu.CustomMenuDragEvent;
-import net.primaxstudios.primaxcore.menus.item.ClickableItem;
-import net.primaxstudios.primaxcore.menus.item.FillerItem;
+import net.primaxstudios.primaxcore.menus.item.impl.FillerItem;
 import net.primaxstudios.primaxcore.menus.item.MenuItem;
 import net.primaxstudios.primaxcore.menus.item.OptionalItem;
 import net.primaxstudios.primaxcore.menus.types.MenuType;
 import net.primaxstudios.primaxcore.utils.ColorUtils;
+import net.primaxstudios.primaxcore.utils.CommonUtils;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -68,14 +69,14 @@ public abstract class CustomMenu implements MenuHandler {
     }
 
     public void reload(Section document) {
-        menuTitle = ColorUtils.getComponent(Objects.requireNonNull(ConfigUtils.getString(document, "menu_title"), "Menu title is missing"));
-        menuType = Objects.requireNonNull(PrimaxCore.inst().getMenuManager().getMenuType(document), "Menu Type is missing");
+        menuTitle = ColorUtils.getComponent(Config.requireNonNull(ConfigUtils.getString(getPlugin(), document, "menu_title"), document, "Menu title is missing"));
+        menuType = Config.requireNonNull(PrimaxCore.inst().getMenuManager().getMenuType(document), document, "Menu Type is missing");
 
         Section itemsSection = document.getSection("items");
-        if (!menuItems.isEmpty()) Objects.requireNonNull(itemsSection, "'items' section is missing");
+        if (!menuItems.isEmpty()) Config.requireNonNull(itemsSection, document, "'items' section is missing");
 
         for (MenuItem item : menuItems) {
-            Section section = Objects.requireNonNull(itemsSection.getSection(item.getId()), "'" + item.getId() + "'" + "section is missing");
+            Section section = Config.requireNonNull(itemsSection.getSection(item.getId()), itemsSection, "'" + item.getId() + "'" + "section is missing");
             item.reload(section);
         }
     }
@@ -88,7 +89,7 @@ public abstract class CustomMenu implements MenuHandler {
                     item.setItem(holder);
                 } catch (Exception ex) {
                     Player player = holder.getPlayer();
-                    PrimaxCore.inst().getLocale().sendMessage(player, "error_occurred");
+                    PrimaxCore.inst().getLocale().sendMessage(player, CommonUtils.getNamespace(getPlugin()), "error_occurred");
                     Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
                     throw new RuntimeException(ex);
                 }
@@ -104,7 +105,7 @@ public abstract class CustomMenu implements MenuHandler {
                     item.setItem(holder);
                 } catch (Exception ex) {
                     Player player = holder.getPlayer();
-                    PrimaxCore.inst().getLocale().sendMessage(player, "error_occurred");
+                    PrimaxCore.inst().getLocale().sendMessage(player, CommonUtils.getNamespace(getPlugin()), "error_occurred");
                     Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
                     throw new RuntimeException(ex);
                 }
@@ -117,15 +118,15 @@ public abstract class CustomMenu implements MenuHandler {
         if (getSettings().isCancelClickEvent()) {
             e.setCancelled(true);
         }
-
         for (MenuItem item : menuItems) {
             if (item instanceof OptionalItem optional && !optional.isEnabled()) continue;
-            if (!(item instanceof ClickableItem clickable) || !item.isSlot(e.getOriginalEvent().getSlot())) continue;
+            if (!item.isSlot(e.getOriginalEvent().getSlot()))
+                continue;
             try {
-                clickable.onClick(e);
+                item.click(e);
             } catch (Exception ex) {
                 Player player = e.getHolder().getPlayer();
-                PrimaxCore.inst().getLocale().sendMessage(player, "error_occurred");
+                PrimaxCore.inst().getLocale().sendMessage(player, CommonUtils.getNamespace(getPlugin()), "error_occurred");
                 Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
                 throw new RuntimeException(ex);
             }

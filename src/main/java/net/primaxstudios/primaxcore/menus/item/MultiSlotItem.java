@@ -1,15 +1,14 @@
-package net.primaxstudios.primaxcore.menus.item.slot;
+package net.primaxstudios.primaxcore.menus.item;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
 import lombok.Setter;
-import net.primaxstudios.primaxcore.menus.item.AbstractMenuItem;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
 
 import java.util.List;
 
 @Getter @Setter
-public abstract class MultiSlotItem extends AbstractMenuItem implements SlotBoundItem {
+public abstract class MultiSlotItem extends AbstractMenuItem {
 
     private List<Integer> slots;
 

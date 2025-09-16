@@ -1,6 +1,6 @@
 package net.primaxstudios.primaxcore.menus.item;
 
-public interface OptionalItem extends MenuItem {
+public interface OptionalItem {
 
     boolean isEnabled();
 }
