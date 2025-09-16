@@ -5,19 +5,29 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Getter @Setter
+@Getter
+@Setter
 public abstract class RandomizerEntry<T> {
 
     private final double weight;
-    private double accumulatedWeight;
+    private double accumulatedWeight; // Used for weighted random selection
 
-    public RandomizerEntry(double weight) {
+    protected RandomizerEntry(double weight) {
         this.weight = weight;
     }
 
+    /**
+     * Returns all objects this entry can produce.
+     */
     public abstract List<T> getObjects();
 
+    /**
+     * Returns one or more randomly selected objects from this entry.
+     */
     public abstract List<T> getRandom();
 
+    /**
+     * Returns a single randomly selected object from this entry.
+     */
     public abstract T getSingleRandom();
 }

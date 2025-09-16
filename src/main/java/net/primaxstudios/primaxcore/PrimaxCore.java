@@ -1,50 +1,64 @@
 package net.primaxstudios.primaxcore;
 
-import net.primaxstudios.primaxcore.listeners.MenuListener;
+import com.alessiodp.libby.BukkitLibraryManager;
+import com.alessiodp.libby.Library;
+import net.primaxstudios.primaxcore.database.DatabaseConnector;
+import net.primaxstudios.primaxcore.factory.ConnectorFactory;
+import net.primaxstudios.primaxcore.listener.MenuListener;
 import net.primaxstudios.primaxcore.locale.Locale;
-import net.primaxstudios.primaxcore.managers.*;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+import java.util.List;
+
 @Getter
 public abstract class PrimaxCore extends JavaPlugin {
 
     private static PrimaxCore instance;
+    private DatabaseConnector connector;
     private Locale locale;
-    private DatabaseManager databaseManager;
-    private RandomizerManager randomizerManager;
-    private CurrencyManager currencyManager;
-    private ItemManager itemManager;
-    private MenuManager menuManager;
 
     @Override
     public void onEnable() {
         instance = this;
 
+        BukkitLibraryManager libraryManager = new BukkitLibraryManager(this);
+        libraries().forEach(libraryManager::loadLibrary);
+
+        try {
+            if (isDatabaseRequired()) {
+                connector = ConnectorFactory.fromPlugin(this);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         locale = new Locale();
         locale.reload(this);
+    }
 
-        databaseManager = new DatabaseManager();
-
-        randomizerManager = new RandomizerManager();
-
-        currencyManager = new CurrencyManager();
-
-        itemManager = new ItemManager();
-
-        menuManager = new MenuManager();
+    @Override
+    public void onDisable() {
+        if (connector != null) {
+            connector.close();
+        }
     }
 
     public abstract String getNamespace();
+
+    public abstract List<Library> libraries();
+
+    protected abstract boolean isDatabaseRequired();
 
     public NamespacedKey getIdentifierKey() {
         return new NamespacedKey(getNamespace(), "key");
     }
 
     public void registerEvents() {
-        Bukkit.getServer().getPluginManager().registerEvents(new MenuListener(menuManager), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new MenuListener(), this);
     }
 
     public void reload() {

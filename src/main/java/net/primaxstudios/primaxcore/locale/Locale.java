@@ -1,8 +1,8 @@
 package net.primaxstudios.primaxcore.locale;
 
-import net.primaxstudios.primaxcore.placeholders.Placeholder;
-import net.primaxstudios.primaxcore.utils.ColorUtils;
-import net.primaxstudios.primaxcore.utils.ConfigUtils;
+import net.primaxstudios.primaxcore.placeholder.Placeholder;
+import net.primaxstudios.primaxcore.util.ColorUtils;
+import net.primaxstudios.primaxcore.util.ConfigUtils;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
@@ -13,19 +13,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
 @Getter
 public class Locale {
 
-    private Map<String, String> messageById = new HashMap<>();
+    private Map<String, String> messageById;
 
     public void reload(JavaPlugin plugin) {
         try {
-            this.messageById = loadMessageById(getDocument(plugin));
+            YamlDocument document = getDocument(plugin);
+            this.messageById = loadMessageById(document);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -112,7 +110,7 @@ public class Locale {
                 messageById.put(route, message);
             }
         }
-        return messageById;
+        return Collections.unmodifiableMap(messageById);
     }
 
     private String loadMessages(List<String> list) {

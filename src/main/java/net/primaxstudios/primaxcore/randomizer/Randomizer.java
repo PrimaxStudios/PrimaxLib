@@ -2,31 +2,46 @@ package net.primaxstudios.primaxcore.randomizer;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.primaxstudios.primaxcore.randomizer.entries.ObjectEntry;
-import net.primaxstudios.primaxcore.randomizer.entries.SelfEntry;
+import net.primaxstudios.primaxcore.randomizer.entry.NestedRandomizerEntry;
+import net.primaxstudios.primaxcore.randomizer.entry.ObjectEntry;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-@Getter @Setter
+/**
+ * A weighted randomizer that supports multiple draws, uniqueness, and constant entries.
+ * @param <T> type of object being randomized
+ */
+@Getter
+@Setter
 public class Randomizer<T> {
 
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
-    private final List<RandomizerEntry<T>> entries = new ArrayList<>();
-    private final List<RandomizerEntry<T>> constantEntries = new ArrayList<>();
-    private double accumulatedWeight = 0;
-    private int rolls = 1;
-    private boolean uniqueItems = false;
+
+    private final List<RandomizerEntry<T>> weightedEntries = new ArrayList<>();
+    private final List<RandomizerEntry<T>> guaranteedEntries = new ArrayList<>();
+
+    private double totalWeight = 0;
+    private final int draws;
+    private final boolean unique;
+
+    public Randomizer(int draws, boolean unique) {
+        this.draws = draws;
+        this.unique = unique;
+    }
+
+    /* ------------------------- ENTRY ADDITION ------------------------- */
 
     public void addEntry(double weight, RandomizerEntry<T> entry) {
-        if (weight >= 100) {
-            constantEntries.add(entry);
+        if (weight >= 100) { // treat "100+" as a constant entry
+            guaranteedEntries.add(entry);
             return;
         }
-        accumulatedWeight += weight;
-        entry.setAccumulatedWeight(accumulatedWeight);
-        entries.add(entry);
+        totalWeight += weight;
+        entry.setAccumulatedWeight(totalWeight);
+        weightedEntries.add(entry);
     }
 
     public void addEntry(double weight, T object) {
@@ -34,94 +49,95 @@ public class Randomizer<T> {
     }
 
     public void addEntry(double weight, Randomizer<T> randomizer) {
-        addEntry(weight, new SelfEntry<>(weight, randomizer));
+        addEntry(weight, new NestedRandomizerEntry<>(weight, randomizer));
     }
 
-    public boolean hasConstantEntries() {
-        return !constantEntries.isEmpty();
+    /* ------------------------- ENTRY ACCESS ------------------------- */
+
+    public boolean hasGuaranteedEntries() {
+        return !guaranteedEntries.isEmpty();
     }
 
     public List<RandomizerEntry<T>> getAllEntries() {
-        List<RandomizerEntry<T>> allEntries = new ArrayList<>(entries);
-        if (hasConstantEntries()) {
-            allEntries.addAll(constantEntries);
-        }
-        return allEntries;
+        List<RandomizerEntry<T>> all = new ArrayList<>(weightedEntries);
+        all.addAll(guaranteedEntries);
+        return Collections.unmodifiableList(all);
     }
 
-    public List<T> getObjects() {
-        List<T> objects = new ArrayList<>();
+    public List<T> getAllObjects() {
+        List<T> result = new ArrayList<>();
         for (RandomizerEntry<T> entry : getAllEntries()) {
-            objects.addAll(entry.getObjects());
+            result.addAll(entry.getObjects());
         }
-        return objects;
+        return result;
     }
 
-    public T getConstantSingleRandom() {
-        int index = random.nextInt(0, constantEntries.size());
-        RandomizerEntry<T> entry = constantEntries.get(index);
-        return entry.getSingleRandom();
-    }
+    /* ------------------------- RANDOM SELECTION ------------------------- */
 
-    public T getSingleRandom() {
-        if (hasConstantEntries()) {
-            return getConstantSingleRandom();
+    public T getRandomSingle() {
+        if (hasGuaranteedEntries()) {
+            return pickGuaranteedSingle();
         }
-        return getWeighedEntry().getSingleRandom();
+        return pickWeightedEntry(weightedEntries, totalWeight).getSingleRandom();
     }
 
-    public List<T> getConstantRandom() {
-        List<T> objects = new ArrayList<>();
-        for (RandomizerEntry<T> entry : constantEntries) {
-            objects.addAll(entry.getRandom());
+    public List<T> getRandomObjects() {
+        if (hasGuaranteedEntries()) {
+            return pickAllGuaranteed();
         }
-        return objects;
+        return unique ? pickUniqueRandomObjects() : pickRandomObjects();
     }
 
-    private RandomizerEntry<T> getWeighedEntry(List<RandomizerEntry<T>> entries, double accumulatedWeight) {
-        double r = random.nextDouble() * accumulatedWeight;
-        for (RandomizerEntry<T> entry : entries) {
+    /* ------------------------- CONSTANTS ------------------------- */
+
+    private T pickGuaranteedSingle() {
+        int index = random.nextInt(guaranteedEntries.size());
+        return guaranteedEntries.get(index).getSingleRandom();
+    }
+
+    private List<T> pickAllGuaranteed() {
+        List<T> result = new ArrayList<>();
+        for (RandomizerEntry<T> entry : guaranteedEntries) {
+            result.addAll(entry.getRandom());
+        }
+        return result;
+    }
+
+    /* ------------------------- WEIGHTED ------------------------- */
+
+    private RandomizerEntry<T> pickWeightedEntry(List<RandomizerEntry<T>> pool, double weightSum) {
+        double r = random.nextDouble() * weightSum;
+        for (RandomizerEntry<T> entry : pool) {
             if (entry.getAccumulatedWeight() >= r) {
                 return entry;
             }
         }
-        return null;
+        return pool.getLast(); // fallback, should never happen
     }
 
-    private RandomizerEntry<T> getWeighedEntry() {
-        return getWeighedEntry(entries, accumulatedWeight);
+    private List<T> pickRandomObjects() {
+        List<T> result = new ArrayList<>();
+        for (int i = 0; i < draws; i++) {
+            result.addAll(pickWeightedEntry(weightedEntries, totalWeight).getRandom());
+        }
+        return result;
     }
 
-    public List<T> getRandom() {
-        if (hasConstantEntries()) {
-            return getConstantRandom();
+    private List<T> pickUniqueRandomObjects() {
+        List<T> result = new ArrayList<>();
+        List<RandomizerEntry<T>> pool = new ArrayList<>(weightedEntries);
+        double weightSum = totalWeight;
+
+        int available = pool.size();
+        int picks = Math.min(draws, available);
+
+        for (int i = 0; i < picks; i++) {
+            RandomizerEntry<T> entry = pickWeightedEntry(pool, weightSum);
+            result.addAll(entry.getRandom());
+            pool.remove(entry);
+            weightSum -= entry.getWeight(); // remove its weight
         }
-        List<T> objects = new ArrayList<>();
-        if (uniqueItems) {
-            int size = entries.size();
-            if (rolls == size) {
-                for (RandomizerEntry<T> entry : entries) {
-                    objects.addAll(entry.getRandom());
-                }
-                return objects;
-            }else if (rolls < size) {
-                List<RandomizerEntry<T>> entries = new ArrayList<>(this.entries);
-                double accumulatedWeight = this.accumulatedWeight;
-                for (int i = 0; i < rolls; i++) {
-                    RandomizerEntry<T> entry = getWeighedEntry(entries, accumulatedWeight);
-                    if (entry == null) {
-                        continue;
-                    }
-                    entries.remove(entry);
-                    accumulatedWeight -= entry.getAccumulatedWeight();
-                    objects.addAll(entry.getRandom());
-                }
-                return objects;
-            }
-        }
-        for (int i = 0; i < rolls; i++) {
-            objects.addAll(getWeighedEntry().getRandom());
-        }
-        return objects;
+
+        return result;
     }
 }
