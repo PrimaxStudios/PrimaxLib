@@ -56,7 +56,7 @@ public class VersionAdapter_1_21 implements VersionAdapter {
         return getByRegistry(RegistryKey.SOUND_EVENT, key);
     }
 
-    private <T extends Keyed> T getByRegistry(RegistryKey<@NotNull T> registryKey, NamespacedKey key) {
+    private <T extends Keyed> T getByRegistry(RegistryKey<T> registryKey, NamespacedKey key) {
         return RegistryAccess.registryAccess()
                 .getRegistry(registryKey)
                 .get(key);

@@ -69,18 +69,18 @@ public final class ConfigUtils {
         return files;
     }
 
-    public static String getString(JavaPlugin plugin, Section section, String route) {
+    public static String getString(Section section, String route) {
         String value = section.getString(route);
         if (value == null) {
             return null;
         }
-        String localeValue = PrimaxCore.inst().getLocale().getSimpleMessage(CommonUtils.getNamespace(plugin), value);
+        String localeValue = PrimaxCore.inst().getLocale().getSimpleMessage(value);
         return localeValue != null ? localeValue : value;
     }
 
-    public static List<String> getStringList(JavaPlugin plugin, Section section, String route) {
+    public static List<String> getStringList(Section section, String route) {
         return section.getStringList(route).stream()
-                .map(value -> Objects.requireNonNullElse(PrimaxCore.inst().getLocale().getSimpleMessage(CommonUtils.getNamespace(plugin), value), value))
+                .map(value -> Objects.requireNonNullElse(PrimaxCore.inst().getLocale().getSimpleMessage(value), value))
                 .flatMap(line -> Arrays.stream(line.split("\n")))
                 .toList();
     }

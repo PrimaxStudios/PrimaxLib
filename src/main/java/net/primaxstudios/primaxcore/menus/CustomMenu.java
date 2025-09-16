@@ -14,7 +14,6 @@ import net.primaxstudios.primaxcore.menus.item.MenuItem;
 import net.primaxstudios.primaxcore.menus.item.OptionalItem;
 import net.primaxstudios.primaxcore.menus.types.MenuType;
 import net.primaxstudios.primaxcore.utils.ColorUtils;
-import net.primaxstudios.primaxcore.utils.CommonUtils;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -69,7 +68,7 @@ public abstract class CustomMenu implements MenuHandler {
     }
 
     public void reload(Section document) {
-        menuTitle = ColorUtils.getComponent(Config.requireNonNull(ConfigUtils.getString(getPlugin(), document, "menu_title"), document, "Menu title is missing"));
+        menuTitle = ColorUtils.getComponent(Config.requireNonNull(ConfigUtils.getString(document, "menu_title"), document, "Menu title is missing"));
         menuType = Config.requireNonNull(PrimaxCore.inst().getMenuManager().getMenuType(document), document, "Menu Type is missing");
 
         Section itemsSection = document.getSection("items");
@@ -89,7 +88,7 @@ public abstract class CustomMenu implements MenuHandler {
                     item.setItem(holder);
                 } catch (Exception ex) {
                     Player player = holder.getPlayer();
-                    PrimaxCore.inst().getLocale().sendMessage(player, CommonUtils.getNamespace(getPlugin()), "error_occurred");
+                    PrimaxCore.inst().getLocale().sendMessage(player, "error_occurred");
                     Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
                     throw new RuntimeException(ex);
                 }
@@ -105,7 +104,7 @@ public abstract class CustomMenu implements MenuHandler {
                     item.setItem(holder);
                 } catch (Exception ex) {
                     Player player = holder.getPlayer();
-                    PrimaxCore.inst().getLocale().sendMessage(player, CommonUtils.getNamespace(getPlugin()), "error_occurred");
+                    PrimaxCore.inst().getLocale().sendMessage(player, "error_occurred");
                     Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
                     throw new RuntimeException(ex);
                 }
@@ -126,7 +125,7 @@ public abstract class CustomMenu implements MenuHandler {
                 item.click(e);
             } catch (Exception ex) {
                 Player player = e.getHolder().getPlayer();
-                PrimaxCore.inst().getLocale().sendMessage(player, CommonUtils.getNamespace(getPlugin()), "error_occurred");
+                PrimaxCore.inst().getLocale().sendMessage(player, "error_occurred");
                 Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
                 throw new RuntimeException(ex);
             }

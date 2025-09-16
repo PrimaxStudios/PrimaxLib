@@ -18,7 +18,7 @@ public abstract class AbstractMenuItem extends MenuItem {
     public abstract JavaPlugin getPlugin();
 
     public void reload(Section section) {
-        customItem = PrimaxCore.inst().getItemManager().getItem(getPlugin(), section);
+        customItem = PrimaxCore.inst().getItemManager().getItem(section);
         sound = MenuItem.getSound(section.getSection("sound"));
     }
 
