@@ -1,10 +1,9 @@
 plugins {
     id 'java'
-    id("com.gradleup.shadow") version "9.0.0-beta17"
 }
 
 group = "net.primaxstudios"
-version = "1.0.16"
+version = "1.0.17"
 description = "The library for Primax plugins"
 
 def targetJavaVersion = 21
@@ -61,77 +60,26 @@ repositories {
         name = "nightexpressdev"
         url = 'https://repo.nightexpressdev.com/releases'
     }
-    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
-    implementation("com.alessiodp.libby:libby-bukkit:2.0.0-SNAPSHOT")
-    implementation("dev.dejvokep:boosted-yaml:1.3.7")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7") { exclude group: "org.bukkit", module: "bukkit" }
+    compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("org.black_ixx:playerpoints:3.3.2")
+    compileOnly("su.nightexpress.coinsengine:CoinsEngine:2.5.0")
+    compileOnly("com.alessiodp.libby:libby-bukkit:2.0.0-SNAPSHOT")
+    compileOnly("dev.dejvokep:boosted-yaml:1.3.7")
     compileOnly("com.zaxxer:HikariCP:6.3.0")
     compileOnly("com.mysql:mysql-connector-j:9.3.0")
     compileOnly("org.postgresql:postgresql:42.7.7")
-    implementation("org.mongodb:mongodb-driver-sync:5.5.1")
-    implementation("redis.clients:jedis:5.2.0")
-    implementation("org.projectlombok:lombok:1.18.38")
-    annotationProcessor "org.projectlombok:lombok:1.18.38"
-    implementation("co.aikar:acf-paper:0.5.1-SNAPSHOT")
-    annotationProcessor("co.aikar:acf-paper:0.5.1-SNAPSHOT")
-    implementation("de.tr7zw:item-nbt-api:2.15.1")
-    compileOnly("com.jeff-media:custom-block-data:2.2.3")
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7") { exclude group: "org.bukkit", module: "bukkit" }
-    compileOnly("me.clip:placeholderapi:2.11.6")
-    compileOnly("com.github.LoneDev6:api-itemsadder:3.6.3-beta-14")
-    compileOnly files("libs/SCore-5.25.6.15.jar")
-    compileOnly("com.willfp:EcoItems:5.62.0")
-    compileOnly("com.willfp:libreforge-loader:4.13.0")
-    compileOnly("com.willfp:libreforge:4.75.1")
-    compileOnly("com.arcaniax:HeadDatabase-API:1.3.2")
-    compileOnly("org.black_ixx:playerpoints:3.3.2")
-    compileOnly("su.nightexpress.coinsengine:CoinsEngine:2.5.0")
+    compileOnly("org.mongodb:mongodb-driver-sync:5.5.1")
+    compileOnly("redis.clients:jedis:5.2.0")
+    compileOnly("org.projectlombok:lombok:1.18.38")
+    annotationProcessor("org.projectlombok:lombok:1.18.38")
 }
 
-tasks {
-    compileJava {
-        options.encoding = "UTF-8"
-        options.release.set(targetJavaVersion)
-    }
-
-    processResources {
-        def props = [version: version]
-        inputs.properties props
-        filteringCharset 'UTF-8'
-        filesMatching('plugin.yml') {
-            expand props
-        }
-    }
-
-    shadowJar {
-        archiveClassifier.set("") // overrides default "-all"
-        relocate("com.alessiodp.libby", "net.primaxstudios.primaxcore.libs.libby")
-        relocate("dev.dejvokep.boostedyaml", "net.primaxstudios.primaxcore.libs.boostedyaml")
-        relocate("com.zaxxer.hikari", "net.primaxstudios.primaxcore.libs.hikari")
-        relocate("org.postgresql", "net.primaxstudios.primaxcore.libs.postgresql")
-        relocate("com.mongodb", "net.primaxstudios.primaxcore.libs.mongodb")
-        relocate("redis.clients.jedis", "net.primaxstudios.primaxcore.libs.jedis")
-        relocate("co.aikar.commands", "net.primaxstudios.primaxcore.libs.acf")
-        relocate("co.aikar.locales", "net.primaxstudios.primaxcore.libs.locales")
-        relocate("de.tr7zw.changeme.nbtapi", "net.primaxstudios.primaxcore.libs.nbtapi")
-        relocate("com.jeff_media.customblockdata", "net.primaxstudios.primaxcore.libs.customblockdata")
-
-        // Exclude duplicate META-INF files that break Paper’s remapper
-        exclude 'META-INF/*.SF'
-        exclude 'META-INF/*.DSA'
-        exclude 'META-INF/*.RSA'
-        exclude 'META-INF/LICENSE*'
-        exclude 'META-INF/NOTICE*'
-        exclude 'META-INF/DEPENDENCIES'
-
-        // Prevent duplicate file entries inside the jar
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    }
-
-    build {
-        dependsOn(shadowJar)
-    }
+tasks.compileJava {
+    options.encoding = "UTF-8"
+    options.release.set(targetJavaVersion)
 }

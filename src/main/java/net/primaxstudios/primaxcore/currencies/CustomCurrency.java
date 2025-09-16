@@ -13,9 +13,9 @@ public class CustomCurrency extends Currency {
 
     public CustomCurrency(Section section) {
         super(section);
-        this.depositCommand = section.getString("deposit-command");
-        this.withdrawCommand = section.getString("withdraw-command");
-        this.balancePlaceholder = section.getString("balance-placeholder");
+        this.depositCommand = section.getString("deposit_command");
+        this.withdrawCommand = section.getString("withdraw_command");
+        this.balancePlaceholder = section.getString("balance_placeholder");
     }
 
     @Override
@@ -34,7 +34,7 @@ public class CustomCurrency extends Currency {
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
-        Placeholder placeholder = new Placeholder(offlinePlayer);
+        Placeholder placeholder = getPlaceholder(offlinePlayer);
         return Double.parseDouble(placeholder.setPlaceholders(balancePlaceholder));
     }
 
@@ -42,9 +42,15 @@ public class CustomCurrency extends Currency {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
     }
 
+    private Placeholder getPlaceholder(OfflinePlayer offlinePlayer) {
+        Placeholder placeholder = new Placeholder();
+        placeholder.addReplacement("{player_name}", offlinePlayer.getName());
+        return placeholder;
+    }
+
     private Placeholder getPlaceholder(OfflinePlayer offlinePlayer, double amount) {
-        Placeholder placeholder = new Placeholder(offlinePlayer);
-        placeholder.addReplacement("%amount%", String.valueOf(amount));
+        Placeholder placeholder = getPlaceholder(offlinePlayer);
+        placeholder.addReplacement("{amount}", String.valueOf(amount));
         return placeholder;
     }
 }

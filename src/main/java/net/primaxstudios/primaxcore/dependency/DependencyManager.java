@@ -13,6 +13,8 @@ public abstract class DependencyManager extends BukkitLibraryManager {
         super(plugin);
     }
 
+    protected abstract List<String> declareRepositories();
+
     /**
      * Subclasses must declare their required dependencies.
      */
@@ -22,6 +24,13 @@ public abstract class DependencyManager extends BukkitLibraryManager {
      * Load and resolve all declared dependencies.
      */
     public void loadLibraries() {
+        addMavenCentral();
+        addSonatype();
+        addJitPack();
+        addJCenter();
+        for (String repository : declareRepositories()) {
+            addRepository(repository);
+        }
         for (Library lib : declareLibraries()) {
             loadLibrary(lib);
         }

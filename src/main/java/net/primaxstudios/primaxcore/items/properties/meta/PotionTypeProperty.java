@@ -7,7 +7,6 @@ import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import net.primaxstudios.primaxcore.versions.VersionManager;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -23,7 +22,7 @@ public class PotionTypeProperty extends AdvancedMetaProperty<PotionMeta> {
     }
 
     @Override
-    public boolean setProperty(@NotNull PotionMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
+    public boolean setProperty(@NotNull PotionMeta meta, @NotNull Section section) {
         NamespacedKey key = ConfigUtils.parseNamespacedKey(section, ID);
         if (key == null) return false;
 

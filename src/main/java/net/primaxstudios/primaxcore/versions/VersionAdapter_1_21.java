@@ -11,7 +11,6 @@ import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
-import org.jetbrains.annotations.NotNull;
 
 public class VersionAdapter_1_21 implements VersionAdapter {
 
@@ -50,7 +49,7 @@ public class VersionAdapter_1_21 implements VersionAdapter {
         return getByRegistry(RegistryKey.ENTITY_TYPE, key);
     }
 
-    private <T extends Keyed> T getByRegistry(RegistryKey<@NotNull T> registryKey, NamespacedKey key) {
+    private <T extends Keyed> T getByRegistry(RegistryKey<T> registryKey, NamespacedKey key) {
         return RegistryAccess.registryAccess()
                 .getRegistry(registryKey)
                 .get(key);

@@ -16,7 +16,7 @@ public abstract class AbstractMenuItem implements MenuItem {
     public abstract JavaPlugin getPlugin();
 
     public void reload(Section section) {
-        customItem = PrimaxCore.inst().getItemManager().getItem(getPlugin(), section);
+        customItem = PrimaxCore.inst().getItemManager().getItem(section);
     }
 
     @Override

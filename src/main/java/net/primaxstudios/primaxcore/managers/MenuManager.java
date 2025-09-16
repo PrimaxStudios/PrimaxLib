@@ -2,14 +2,11 @@ package net.primaxstudios.primaxcore.managers;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
-import net.primaxstudios.primaxcore.PrimaxCore;
-import net.primaxstudios.primaxcore.listeners.MenuListener;
 import net.primaxstudios.primaxcore.menus.MenuHolder;
 import net.primaxstudios.primaxcore.menus.types.InventoryMenuType;
 import net.primaxstudios.primaxcore.menus.types.MenuType;
 import net.primaxstudios.primaxcore.menus.types.RowMenuType;
 import net.primaxstudios.primaxcore.menus.types.SizeMenuType;
-import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.slf4j.Logger;
@@ -21,10 +18,6 @@ import java.util.Locale;
 public class MenuManager {
 
     private static final Logger logger = LoggerFactory.getLogger(MenuManager.class);
-
-    public MenuManager() {
-        Bukkit.getServer().getPluginManager().registerEvents(new MenuListener(this), PrimaxCore.inst());
-    }
 
     public MenuHolder getMenuHolder(Inventory inventory) {
         if (!(inventory.getHolder() instanceof MenuHolder holder)) {

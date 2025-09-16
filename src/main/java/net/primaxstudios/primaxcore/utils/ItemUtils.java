@@ -13,14 +13,14 @@ public final class ItemUtils {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
     }
 
-    public static String serialize(ItemStack item) {
+    public static String serializeAsString(ItemStack item) {
         if (item == null) {
             return null;
         }
         return Base64.getEncoder().encodeToString(item.serializeAsBytes());
     }
 
-    public static ItemStack deserialize(String rawItem) {
+    public static ItemStack deserializeFromString(String rawItem) {
         if (rawItem == null) {
             return null;
         }

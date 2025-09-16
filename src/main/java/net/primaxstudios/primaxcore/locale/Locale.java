@@ -1,13 +1,7 @@
 package net.primaxstudios.primaxcore.locale;
 
-import net.primaxstudios.primaxcore.PrimaxCore;
-import net.primaxstudios.primaxcore.events.locale.LocaleAddEvent;
-import net.primaxstudios.primaxcore.events.locale.LocaleReloadEvent;
-import net.primaxstudios.primaxcore.events.locale.LocaleRemoveEvent;
-import net.primaxstudios.primaxcore.events.locale.LocaleUseEvent;
 import net.primaxstudios.primaxcore.placeholders.Placeholder;
 import net.primaxstudios.primaxcore.utils.ColorUtils;
-import net.primaxstudios.primaxcore.utils.CommonUtils;
 import net.primaxstudios.primaxcore.utils.ConfigUtils;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -27,61 +21,41 @@ import java.util.StringJoiner;
 @Getter
 public class Locale {
 
-    private final Map<String, Map<String, String>> messagesByNamespace = new HashMap<>();
+    private Map<String, String> messageById = new HashMap<>();
 
     public void reload(JavaPlugin plugin) {
-        String namespace = CommonUtils.getNamespace(plugin);
-
-        clear(namespace);
-
-        Map<String, String> messageById;
         try {
-            messageById = loadMessageById(getDocument(plugin));
+            this.messageById = loadMessageById(getDocument(plugin));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        LocaleReloadEvent event = new LocaleReloadEvent(namespace, messageById);
-        event.callEvent();
-
-        messagesByNamespace.put(namespace, event.getMessageById());
     }
 
-    private String getCoreSimpleMessage(String id) {
-        return messagesByNamespace.getOrDefault(PrimaxCore.NAMESPACE, new HashMap<>()).get(id);
+    public String getSimpleMessage(String id) {
+        return messageById.get(id);
     }
 
-    public String getSimpleMessage(String namespace, String id) {
-        String message = messagesByNamespace.getOrDefault(namespace, new HashMap<>()).getOrDefault(id, getCoreSimpleMessage(id));
-        if (message == null) {
-            return null;
-        }
-        LocaleUseEvent event = new LocaleUseEvent(namespace, id, message);
-        event.callEvent();
-        return event.getMessage();
-    }
-
-    public Component getMessage(String namespace, String id) {
-        String simpleMessage = getSimpleMessage(namespace, id);
+    public Component getMessage(String id) {
+        String simpleMessage = getSimpleMessage(id);
         if (simpleMessage == null) {
             return null;
         }
         return ColorUtils.getComponent(simpleMessage);
     }
 
-    public void sendMessage(Audience audience, String namespace, String id) {
+    public void sendMessage(Audience audience, String id) {
         if (audience == null) {
             return;
         }
-        Component message = getMessage(namespace, id);
+        Component message = getMessage(id);
         if (message == null) {
             return;
         }
         audience.sendMessage(message);
     }
 
-    public void broadcastMessage(String namespace, String id) {
-        Component message = getMessage(namespace, id);
+    public void broadcastMessage(String id) {
+        Component message = getMessage(id);
         if (message == null) {
             return;
         }
@@ -90,27 +64,27 @@ public class Locale {
         }
     }
 
-    public Component getPlaceholderMessage(String namespace, String id, Placeholder placeholder) {
-        String simpleMessage = getSimpleMessage(namespace, id);
+    public Component getPlaceholderMessage(String id, Placeholder placeholder) {
+        String simpleMessage = getSimpleMessage(id);
         if (simpleMessage == null) {
             return null;
         }
         return ColorUtils.getComponent(placeholder.setPlaceholders(simpleMessage));
     }
 
-    public void sendPlaceholderMessage(Audience audience, String namespace, String id, Placeholder placeholder) {
+    public void sendPlaceholderMessage(Audience audience, String id, Placeholder placeholder) {
         if (audience == null) {
             return;
         }
-        Component message = getPlaceholderMessage(namespace, id, placeholder);
+        Component message = getPlaceholderMessage(id, placeholder);
         if (message == null) {
             return;
         }
         audience.sendMessage(message);
     }
 
-    public void broadcastPlaceholderMessage(String namespace, String id, Placeholder placeholder) {
-        Component message = getPlaceholderMessage(namespace, id, placeholder);
+    public void broadcastPlaceholderMessage(String id, Placeholder placeholder) {
+        Component message = getPlaceholderMessage(id, placeholder);
         if (message == null) {
             return;
         }
@@ -119,8 +93,8 @@ public class Locale {
         }
     }
 
-    public String getSimplePlaceholderMessage(String namespace, String id, Placeholder placeholder) {
-        String simpleMessage = getSimpleMessage(namespace, id);
+    public String getSimplePlaceholderMessage(String id, Placeholder placeholder) {
+        String simpleMessage = getSimpleMessage(id);
         if (simpleMessage == null) {
             return null;
         }
@@ -149,32 +123,24 @@ public class Locale {
         return joiner.toString();
     }
 
-    public void addMessage(String namespace, String id, String message) {
-        LocaleAddEvent event = new LocaleAddEvent(namespace, id, message);
-        event.callEvent();
-
-        messagesByNamespace.computeIfAbsent(namespace, k -> new HashMap<>()).put(id, event.getMessage());
+    public void addMessage(String id, String message) {
+        messageById.put(id, message);
     }
 
-    public void addMessage(String namespace, String id, List<String> list) {
+    public void addMessage(String id, List<String> list) {
         StringJoiner joiner = new StringJoiner("\n");
         for (String message : list) {
             joiner.add(message);
         }
-        addMessage(namespace, id, joiner.toString());
+        addMessage(id, joiner.toString());
     }
 
-    public void removeMessage(String namespace, String id) {
-        String message = messagesByNamespace.computeIfAbsent(namespace, k -> new HashMap<>()).remove(id);
-        if (message == null) {
-            return;
-        }
-        LocaleRemoveEvent event = new LocaleRemoveEvent(namespace, id, message);
-        event.callEvent();
+    public void removeMessage(String id) {
+        messageById.remove(id);
     }
 
-    public void clear(String namespace) {
-        messagesByNamespace.remove(namespace);
+    public void clear() {
+        messageById.clear();
     }
 
     private String getName(JavaPlugin plugin) throws IOException {

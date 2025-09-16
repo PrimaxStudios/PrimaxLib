@@ -5,7 +5,6 @@ import lombok.Getter;
 import net.primaxstudios.primaxcore.configs.Config;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -18,17 +17,17 @@ public abstract class MetaProperty implements ItemProperty {
         this.logger = logger;
     }
 
-    public abstract boolean setProperty(@NotNull ItemMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section);
+    public abstract boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section);
 
     @Override
-    public boolean setProperty(@NotNull ItemStack item, @NotNull JavaPlugin plugin, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemStack item, @NotNull Section section) {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) {
             Config.warn(logger, section, "ItemMeta is null for item '{}'", item.getType());
             return false;
         }
 
-        setProperty(meta, plugin, section);
+        setProperty(meta, section);
         item.setItemMeta(meta);
         return true;
     }

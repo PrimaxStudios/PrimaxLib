@@ -75,7 +75,7 @@ public class CoreItem extends CustomItem {
         return bukkitItem.clone();
     }
 
-    public void setProperty(ItemProperty property, JavaPlugin plugin, Section section) {
-        property.setProperty(bukkitItem, plugin, section);
+    public void setProperty(ItemProperty property, Section section) {
+        property.setProperty(bukkitItem, section);
     }
 }

@@ -2,7 +2,7 @@ package net.primaxstudios.primaxcore.currencies;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.milkbowl.vault.economy.Economy;
-import net.primaxstudios.primaxcore.PrimaxCore;
+import net.primaxstudios.primaxcore.utils.PluginUtils;
 import org.bukkit.OfflinePlayer;
 
 public class VaultCurrency extends Currency {
@@ -11,7 +11,7 @@ public class VaultCurrency extends Currency {
 
     public VaultCurrency(Section section) {
         super(section);
-        this.economy = PrimaxCore.inst().getEconomy();
+        this.economy = PluginUtils.findEconomy();
     }
 
     @Override

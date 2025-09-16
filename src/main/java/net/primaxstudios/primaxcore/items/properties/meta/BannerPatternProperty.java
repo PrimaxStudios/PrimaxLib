@@ -9,7 +9,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,7 @@ public class BannerPatternProperty extends AdvancedMetaProperty<BannerMeta> {
     }
 
     @Override
-    public boolean setProperty(@NotNull BannerMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
+    public boolean setProperty(@NotNull BannerMeta meta, @NotNull Section section) {
         List<Pattern> patterns = createPatterns(section);
         if (patterns.isEmpty()) {
             Config.warn(logger, section, "Missing or empty '{}' key", ID);

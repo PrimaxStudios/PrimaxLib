@@ -4,14 +4,13 @@ import lombok.Getter;
 import net.primaxstudios.primaxcore.items.properties.ItemProperty;
 import net.primaxstudios.primaxcore.items.properties.MaterialProperty;
 import net.primaxstudios.primaxcore.items.properties.item.*;
-import net.primaxstudios.primaxcore.items.properties.item.persistentdata.PersistentDataProperty;
 import net.primaxstudios.primaxcore.items.properties.meta.*;
-import net.primaxstudios.primaxcore.registries.types.IdRegistry;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 @Getter
-public final class ItemPropertyRegistry extends IdRegistry<ItemProperty> {
+public final class ItemPropertyRegistry extends HashMap<String, ItemProperty> {
 
     private final MaterialProperty materialProperty = new MaterialProperty();
 
@@ -23,7 +22,6 @@ public final class ItemPropertyRegistry extends IdRegistry<ItemProperty> {
         put(GlowProperty.ID, new GlowProperty());
         put(FlagProperty.ID, new FlagProperty());
         put(UnbreakableProperty.ID, new UnbreakableProperty());
-        put(PersistentDataProperty.ID, new PersistentDataProperty());
         put(AxolotlVariantProperty.ID, new AxolotlVariantProperty());
         put(BannerPatternProperty.ID, new BannerPatternProperty());
         put(BlockDataProperty.ID, new BlockDataProperty());

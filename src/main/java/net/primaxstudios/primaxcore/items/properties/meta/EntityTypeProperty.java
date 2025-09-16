@@ -10,7 +10,6 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +24,7 @@ public class EntityTypeProperty extends AdvancedMetaProperty<BlockStateMeta> {
     }
 
     @Override
-    public boolean setProperty(@NotNull BlockStateMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
+    public boolean setProperty(@NotNull BlockStateMeta meta, @NotNull Section section) {
         BlockState state = meta.getBlockState();
         if (!(state instanceof CreatureSpawner spawner)) {
             Config.warn(logger, section, "BlockState is not a CreatureSpawner. Cannot set entity type.");

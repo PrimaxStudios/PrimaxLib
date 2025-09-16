@@ -21,8 +21,8 @@ public class DisplayNameProperty extends MetaProperty {
     }
 
     @Override
-    public boolean setProperty(@NotNull ItemMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
-        String displayName = ConfigUtils.getString(plugin, section, ID);
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
+        String displayName = ConfigUtils.getString(section, ID);
         if (displayName == null) {
             Config.warn(logger, section, "Missing '{}' key", ID);
             return false;

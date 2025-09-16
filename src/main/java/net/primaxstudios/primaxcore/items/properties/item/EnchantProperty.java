@@ -7,7 +7,6 @@ import net.primaxstudios.primaxcore.versions.VersionManager;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +24,7 @@ public class EnchantProperty extends MetaProperty {
     }
 
     @Override
-    public boolean setProperty(@NotNull ItemMeta meta, @NotNull JavaPlugin plugin, @NotNull Section section) {
+    public boolean setProperty(@NotNull ItemMeta meta, @NotNull Section section) {
         Map<Enchantment, Integer> enchantments = createEnchantments(section);
         if (enchantments.isEmpty()) {
             Config.warn(logger, section, "Missing or empty '{}' key", ID);

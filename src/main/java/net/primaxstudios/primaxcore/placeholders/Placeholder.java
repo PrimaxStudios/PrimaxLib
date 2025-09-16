@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.primaxstudios.primaxcore.utils.ColorUtils;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -14,8 +13,6 @@ import java.util.stream.Collectors;
 @Getter @Setter
 public class Placeholder extends HashMap<String, String> {
 
-    private OfflinePlayer offlinePlayer;
-
     public Placeholder() {}
 
     public Placeholder(String placeholder, String replacement) {
@@ -24,10 +21,6 @@ public class Placeholder extends HashMap<String, String> {
 
     public Placeholder(String placeholder, List<String> replacement) {
         addReplacement(placeholder, replacement);
-    }
-
-    public Placeholder(OfflinePlayer offlinePlayer) {
-        this.offlinePlayer = offlinePlayer;
     }
 
     public Placeholder(Placeholder placeholder) {

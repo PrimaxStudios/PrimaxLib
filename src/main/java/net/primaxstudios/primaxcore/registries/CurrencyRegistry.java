@@ -1,9 +1,10 @@
 package net.primaxstudios.primaxcore.registries;
 
 import net.primaxstudios.primaxcore.currencies.*;
-import net.primaxstudios.primaxcore.registries.types.IdClassRegistry;
 
-public class CurrencyRegistry extends IdClassRegistry<Currency> {
+import java.util.HashMap;
+
+public class CurrencyRegistry extends HashMap<String, Class<? extends Currency>> {
 
     public CurrencyRegistry() {
         put("vault", VaultCurrency.class);
