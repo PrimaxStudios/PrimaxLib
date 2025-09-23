@@ -1,12 +1,12 @@
 package net.primaxstudios.primaxlib.util;
 
-import net.primaxstudios.primaxlib.PrimaxLib;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import net.primaxstudios.primaxlib.configuration.Config;
+import net.primaxstudios.primaxlib.locale.Locale;
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.slf4j.Logger;
@@ -15,7 +15,10 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public final class ConfigUtils {
 
@@ -74,13 +77,13 @@ public final class ConfigUtils {
         if (value == null) {
             return null;
         }
-        String localeValue = PrimaxLib.inst().getLocale().getSimpleMessage(value);
+        String localeValue = Locale.inst().getSimpleMessage(value);
         return localeValue != null ? localeValue : value;
     }
 
     public static List<String> getStringList(Section section, String route) {
         return section.getStringList(route).stream()
-                .map(value -> Objects.requireNonNullElse(PrimaxLib.inst().getLocale().getSimpleMessage(value), value))
+                .map(value -> Objects.requireNonNullElse(Locale.inst().getSimpleMessage(value), value))
                 .flatMap(line -> Arrays.stream(line.split("\n")))
                 .toList();
     }
@@ -93,7 +96,7 @@ public final class ConfigUtils {
         }
 
         try {
-            return Enum.valueOf(eClass, value.toUpperCase(Locale.ROOT));
+            return Enum.valueOf(eClass, value.toUpperCase());
         }catch (IllegalArgumentException | NullPointerException ex) {
             Config.warn(logger, section, "Invalid enum value '{}'", value);
             return null;
@@ -104,7 +107,7 @@ public final class ConfigUtils {
         return section.getStringList(route).stream()
                 .map(line -> {
                     try {
-                        return Enum.valueOf(aClass, line.toUpperCase(Locale.ROOT));
+                        return Enum.valueOf(aClass, line.toUpperCase());
                     } catch (IllegalArgumentException | NullPointerException e) {
                         Config.warn(logger, section, "Invalid enum value '{}'", line);
                         return null;

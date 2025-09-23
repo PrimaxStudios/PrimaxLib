@@ -16,9 +16,15 @@ import java.io.IOException;
 import java.util.*;
 
 @Getter
-public class Locale {
+public final class Locale {
+
+    private static volatile Locale instance;
 
     private Map<String, String> messageById;
+
+    private Locale() {
+        this.messageById = new HashMap<>();
+    }
 
     public void reload(JavaPlugin plugin) {
         try {
@@ -147,5 +153,16 @@ public class Locale {
 
     private YamlDocument getDocument(JavaPlugin plugin) throws IOException {
         return ConfigUtils.load(plugin, "locale/" + getName(plugin) + ".yml");
+    }
+
+    public static Locale inst() {
+        if (instance == null) {
+            synchronized (Locale.class) {
+                if (instance == null) {
+                    instance = new Locale();
+                }
+            }
+        }
+        return instance;
     }
 }

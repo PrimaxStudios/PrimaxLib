@@ -177,6 +177,6 @@ public final class CustomItemFactory {
     public static String getKey(ItemStack item) {
         if (item == null || !item.hasItemMeta()) return null;
         return item.getItemMeta().getPersistentDataContainer()
-                .get(PrimaxLib.inst().getIdentifierKey(), org.bukkit.persistence.PersistentDataType.STRING);
+                .get(PrimaxLib.IDENTIFIER_KEY, org.bukkit.persistence.PersistentDataType.STRING);
     }
 }

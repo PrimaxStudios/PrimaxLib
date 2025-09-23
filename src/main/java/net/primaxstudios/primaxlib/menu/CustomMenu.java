@@ -5,10 +5,10 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
-import net.primaxstudios.primaxlib.PrimaxLib;
 import net.primaxstudios.primaxlib.configuration.Config;
 import net.primaxstudios.primaxlib.event.menu.CustomMenuClickEvent;
 import net.primaxstudios.primaxlib.event.menu.CustomMenuDragEvent;
+import net.primaxstudios.primaxlib.locale.Locale;
 import net.primaxstudios.primaxlib.menu.item.impl.FillerItem;
 import net.primaxstudios.primaxlib.menu.item.MenuItem;
 import net.primaxstudios.primaxlib.menu.item.OptionalItem;
@@ -89,7 +89,7 @@ public abstract class CustomMenu implements MenuHandler {
                     item.setItem(holder);
                 } catch (Exception ex) {
                     Player player = holder.getPlayer();
-                    PrimaxLib.inst().getLocale().sendMessage(player, "error_occurred");
+                    Locale.inst().sendMessage(player, "error_occurred");
                     Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
                     throw new RuntimeException(ex);
                 }
@@ -105,7 +105,7 @@ public abstract class CustomMenu implements MenuHandler {
                     item.setItem(holder);
                 } catch (Exception ex) {
                     Player player = holder.getPlayer();
-                    PrimaxLib.inst().getLocale().sendMessage(player, "error_occurred");
+                    Locale.inst().sendMessage(player, "error_occurred");
                     Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
                     throw new RuntimeException(ex);
                 }
@@ -126,7 +126,7 @@ public abstract class CustomMenu implements MenuHandler {
                 item.click(e);
             } catch (Exception ex) {
                 Player player = e.getHolder().getPlayer();
-                PrimaxLib.inst().getLocale().sendMessage(player, "error_occurred");
+                Locale.inst().sendMessage(player, "error_occurred");
                 Bukkit.getScheduler().runTask(getPlugin(), () -> player.closeInventory());
                 throw new RuntimeException(ex);
             }

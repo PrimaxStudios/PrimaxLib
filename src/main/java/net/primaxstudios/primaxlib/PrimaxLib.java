@@ -7,6 +7,7 @@ import net.primaxstudios.primaxlib.factory.ConnectorFactory;
 import net.primaxstudios.primaxlib.listener.MenuListener;
 import net.primaxstudios.primaxlib.locale.Locale;
 import lombok.Getter;
+import net.primaxstudios.primaxlib.manager.DatabaseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,18 +18,17 @@ import java.util.List;
 @Getter
 public abstract class PrimaxLib extends JavaPlugin {
 
-    private static PrimaxLib instance;
+    private NamespacedKey identifierKey;
     private DatabaseConnector connector;
-    private Locale locale;
 
     @Override
     public void onEnable() {
-        instance = this;
-
         BukkitLibraryManager libraryManager = new BukkitLibraryManager(this);
         libraries().forEach(libraryManager::loadLibrary);
 
         saveConfigs();
+
+        identifierKey = new NamespacedKey(getNamespace(), "key");
 
         try {
             if (isDatabaseRequired()) {
@@ -38,8 +38,17 @@ public abstract class PrimaxLib extends JavaPlugin {
             throw new RuntimeException(e);
         }
 
-        locale = new Locale();
-        locale.reload(this);
+        Locale.inst().reload(this);
+
+        try {
+            DatabaseManager.init(this);
+            DatabaseManager.get().
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        registerEvents();
     }
 
     @Override
@@ -49,27 +58,19 @@ public abstract class PrimaxLib extends JavaPlugin {
         }
     }
 
+    public void reload() {
+        Locale.inst().reload(this);
+    }
+
     public abstract String getNamespace();
 
     public abstract List<Library> libraries();
 
     public abstract void saveConfigs();
 
-    protected abstract boolean isDatabaseRequired();
-
-    public NamespacedKey getIdentifierKey() {
-        return new NamespacedKey(getNamespace(), "key");
-    }
+    public abstract boolean isDatabaseRequired();
 
     public void registerEvents() {
         Bukkit.getServer().getPluginManager().registerEvents(new MenuListener(), this);
-    }
-
-    public void reload() {
-        locale.reload(this);
-    }
-
-    public static PrimaxLib inst() {
-        return instance;
     }
 }
