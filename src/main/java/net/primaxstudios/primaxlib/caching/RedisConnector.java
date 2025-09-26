@@ -1,8 +1,8 @@
-package net.primaxstudios.primaxlib.database.connector;
+package net.primaxstudios.primaxlib.caching;
 
 import lombok.Getter;
-import net.primaxstudios.primaxlib.database.mapper.JedisExecutor;
-import net.primaxstudios.primaxlib.database.mapper.JedisQuery;
+import net.primaxstudios.primaxlib.caching.mapper.JedisExecutor;
+import net.primaxstudios.primaxlib.caching.mapper.JedisQuery;
 import org.jetbrains.annotations.Blocking;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;

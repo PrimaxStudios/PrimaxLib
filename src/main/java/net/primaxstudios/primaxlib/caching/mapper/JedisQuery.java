@@ -1,4 +1,4 @@
-package net.primaxstudios.primaxlib.database.mapper;
+package net.primaxstudios.primaxlib.caching.mapper;
 
 import redis.clients.jedis.Jedis;
 

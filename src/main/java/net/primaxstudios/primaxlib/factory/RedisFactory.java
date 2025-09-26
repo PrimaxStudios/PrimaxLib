@@ -2,7 +2,7 @@ package net.primaxstudios.primaxlib.factory;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import net.primaxstudios.primaxlib.database.connector.RedisConnector;
+import net.primaxstudios.primaxlib.caching.RedisConnector;
 import net.primaxstudios.primaxlib.util.ConfigUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 

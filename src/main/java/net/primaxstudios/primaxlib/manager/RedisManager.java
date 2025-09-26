@@ -1,29 +1,28 @@
 package net.primaxstudios.primaxlib.manager;
 
-import net.primaxstudios.primaxlib.database.DatabaseConnector;
-import net.primaxstudios.primaxlib.factory.ConnectorFactory;
+import net.primaxstudios.primaxlib.caching.RedisConnector;
+import net.primaxstudios.primaxlib.factory.RedisFactory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 
-public final class DatabaseManager {
+public final class RedisManager {
 
-    // volatile ensures visibility across threads
-    private static volatile DatabaseConnector instance;
+    private static volatile RedisConnector instance;
 
-    private DatabaseManager() {
+    private RedisManager() {
         throw new UnsupportedOperationException("Utility class cannot be instantiated");
     }
 
     /**
-     * Initializes the database connector for the plugin.
+     * Initializes the Redis connector.
      * Should be called once during plugin startup.
      */
     public static void init(JavaPlugin plugin) throws IOException {
         if (instance == null) {
-            synchronized (DatabaseManager.class) {
+            synchronized (RedisManager.class) {
                 if (instance == null) {
-                    instance = ConnectorFactory.fromPlugin(plugin);
+                    instance = RedisFactory.fromPlugin(plugin);
                     instance.connect();
                 }
             }
@@ -31,18 +30,18 @@ public final class DatabaseManager {
     }
 
     /**
-     * Get the singleton database connector.
+     * Returns the Redis connector instance.
      * Throws if init() was never called.
      */
-    public static DatabaseConnector get() {
+    public static RedisConnector get() {
         if (instance == null) {
-            throw new IllegalStateException("DatabaseManager not initialized. Call init() first.");
+            throw new IllegalStateException("CacheManager not initialized. Call init() first.");
         }
         return instance;
     }
 
     /**
-     * Closes the database connection (optional, during plugin shutdown).
+     * Closes the Redis connection (during plugin shutdown).
      */
     public static void shutdown() {
         if (instance != null) {
