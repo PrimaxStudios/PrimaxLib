@@ -28,18 +28,21 @@ public abstract class PrimaxLib extends JavaPlugin {
 
         identifierKey = new NamespacedKey(getNamespace(), "key");
 
-        try {
-            if (isDatabaseRequired()) {
-                DatabaseManager.init(this);
-                DatabaseManager.get().connect();
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            try {
+                if (isDatabaseRequired()) {
+                    DatabaseManager.init(this);
+                    DatabaseManager.get().connect();
+                }
+                if (isRedisRequired()) {
+                    RedisManager.init(this);
+                    RedisManager.get().connect();
+                }
+                onConnect();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            if (isRedisRequired()) {
-                RedisManager.init(this);
-                RedisManager.get().connect();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        });
 
         Locale.inst().reload(this);
 
@@ -64,6 +67,8 @@ public abstract class PrimaxLib extends JavaPlugin {
     public abstract boolean isDatabaseRequired();
 
     public abstract boolean isRedisRequired();
+
+    public abstract void onConnect();
 
     public void registerEvents() {
         Bukkit.getServer().getPluginManager().registerEvents(new MenuListener(), this);
