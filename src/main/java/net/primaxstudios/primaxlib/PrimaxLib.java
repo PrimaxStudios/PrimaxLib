@@ -22,6 +22,8 @@ public abstract class PrimaxLib extends JavaPlugin {
     @Override
     public void onEnable() {
         BukkitLibraryManager libraryManager = new BukkitLibraryManager(this);
+        libraryManager.addMavenCentral();
+        libraryManager.addJitPack();
         libraries().forEach(libraryManager::loadLibrary);
 
         saveConfigs();
