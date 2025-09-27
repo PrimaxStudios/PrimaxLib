@@ -78,6 +78,39 @@ public abstract class SqlConnector implements DatabaseConnector {
     }
 
     @Blocking
+    public int insert(String sql, Object... params) {
+        try (Connection connection = getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            bindParams(stmt, params);
+            stmt.executeUpdate();
+
+            try (ResultSet keys = stmt.getGeneratedKeys()) {
+                if (keys.next()) {
+                    return keys.getInt(1); // return the first generated key
+                }
+            }
+            return -1; // no key generated
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Blocking
+    public <T> T insert(String sql, ResultQuery<T> keyHandler, Object... params) {
+        try (Connection connection = getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            bindParams(stmt, params);
+            stmt.executeUpdate();
+
+            try (ResultSet keys = stmt.getGeneratedKeys()) {
+                return keyHandler.process(keys); // caller decides what to do
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Blocking
     public int update(String sql, Object... params) {
         try (Connection connection = getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
