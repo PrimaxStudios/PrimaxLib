@@ -1,7 +1,7 @@
 package net.primaxstudios.primaxlib.database.connector;
 
 import com.zaxxer.hikari.HikariConfig;
-import net.primaxstudios.primaxlib.database.DatabaseType;
+import net.primaxstudios.primaxlib.database.ConnectorType;
 import net.primaxstudios.primaxlib.database.PoolSettings;
 
 import java.io.File;
@@ -35,7 +35,7 @@ public class SqliteConnector extends SqlConnector {
     }
 
     @Override
-    public DatabaseType getDatabaseType() {
-        return DatabaseType.SQLITE;
+    public ConnectorType getDatabaseType() {
+        return ConnectorType.SQLITE;
     }
 }

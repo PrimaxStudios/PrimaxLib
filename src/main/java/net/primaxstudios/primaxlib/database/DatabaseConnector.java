@@ -2,7 +2,7 @@ package net.primaxstudios.primaxlib.database;
 
 public interface DatabaseConnector {
 
-    DatabaseType getDatabaseType();
+    ConnectorType getConnectorType();
     void connect();
     void close();
 }

@@ -4,7 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import lombok.Getter;
 import lombok.Setter;
 import net.primaxstudios.primaxlib.database.Credentials;
-import net.primaxstudios.primaxlib.database.DatabaseType;
+import net.primaxstudios.primaxlib.database.ConnectorType;
 import net.primaxstudios.primaxlib.database.PoolSettings;
 
 @Getter @Setter
@@ -33,7 +33,7 @@ public class MySqlConnector extends SqlConnector {
     }
 
     @Override
-    public DatabaseType getDatabaseType() {
-        return DatabaseType.MYSQL;
+    public ConnectorType getDatabaseType() {
+        return ConnectorType.MYSQL;
     }
 }

@@ -1,6 +1,6 @@
 package net.primaxstudios.primaxlib.database;
 
-public enum DatabaseType {
+public enum ConnectorType {
 
     SQLITE,
     MYSQL,
