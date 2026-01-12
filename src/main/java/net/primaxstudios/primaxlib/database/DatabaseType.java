@@ -4,6 +4,4 @@ public enum DatabaseType {
 
     SQLITE,
     MYSQL,
-    POSTGRESQL,
-    MONGODB
 }

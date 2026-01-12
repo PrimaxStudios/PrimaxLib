@@ -5,9 +5,7 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import net.primaxstudios.primaxlib.database.Credentials;
 import net.primaxstudios.primaxlib.database.DatabaseConnector;
 import net.primaxstudios.primaxlib.database.PoolSettings;
-import net.primaxstudios.primaxlib.database.connector.MongodbConnector;
 import net.primaxstudios.primaxlib.database.connector.MySqlConnector;
-import net.primaxstudios.primaxlib.database.connector.PostgresqlConnector;
 import net.primaxstudios.primaxlib.database.connector.SqliteConnector;
 import net.primaxstudios.primaxlib.util.ConfigUtils;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,10 +39,6 @@ public final class ConnectorFactory {
         return switch (type) {
             case "sqlite"     -> new SqliteConnector(poolSettings, plugin.getDataFolder());
             case "mysql"      -> new MySqlConnector(poolSettings, credentials);
-            case "postgresql" -> new PostgresqlConnector(poolSettings, credentials);
-            case "mongodb"    -> new MongodbConnector(
-                    applyMongoSettings(credentials, section.getSection("mongodb_settings")),
-                    section.getBoolean("mongodb_settings.atlas"));
             default -> throw new IllegalArgumentException("Unsupported database type: " + type);
         };
     }

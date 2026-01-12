@@ -4,7 +4,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.Getter;
 import lombok.Setter;
-import net.primaxstudios.primaxlib.database.ConnectorType;
 import net.primaxstudios.primaxlib.database.DatabaseConnector;
 import net.primaxstudios.primaxlib.database.PoolSettings;
 import net.primaxstudios.primaxlib.database.mapper.ResultExecutor;
@@ -21,11 +20,6 @@ public abstract class SqlConnector implements DatabaseConnector {
 
     protected SqlConnector(PoolSettings settings) {
         this.settings = settings;
-    }
-
-    @Override
-    public ConnectorType getConnectorType() {
-        return ConnectorType.SQL;
     }
 
     @Override
