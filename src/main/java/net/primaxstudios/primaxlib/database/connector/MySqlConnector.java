@@ -33,7 +33,7 @@ public class MySqlConnector extends SqlConnector {
     }
 
     @Override
-    public ConnectorType getDatabaseType() {
+    public ConnectorType getConnectorType() {
         return ConnectorType.MYSQL;
     }
 }

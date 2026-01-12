@@ -35,7 +35,7 @@ public class SqliteConnector extends SqlConnector {
     }
 
     @Override
-    public ConnectorType getDatabaseType() {
+    public ConnectorType getConnectorType() {
         return ConnectorType.SQLITE;
     }
 }
